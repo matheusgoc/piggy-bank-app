@@ -1,6 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import store from './store';
+import { Provider } from 'react-redux';
 import Onboard from './features/onboard/Onboard';
 import { ThemeProvider } from 'react-native-elements';
 import SignUp from './features/signup/SignUp';
@@ -9,20 +11,24 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Terms from './features/terms/Terms';
 import SignIn from './features/signin/SignIn';
 
+
+
 export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <RootStack.Navigator>
-          <RootStack.Screen name='Onboard' component={ Onboard } options={{ headerShown: false }} />
-          <RootStack.Screen name='Terms'
-                            component={ Terms }
-                            options={{ headerBackTitleVisible: false, title: 'Terms of service' }} />
-          <RootStack.Screen name='SignUp' component={ SignUp } options={{ headerBackTitleVisible: false }} />
-          <RootStack.Screen name='SignIn' component={ SignIn } options={{ headerBackTitleVisible: false }} />
-        </RootStack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <RootStack.Navigator>
+            <RootStack.Screen name='Onboard' component={ Onboard } options={{ headerShown: false }} />
+            <RootStack.Screen name='Terms'
+                              component={ Terms }
+                              options={{ headerBackTitleVisible: false, title: 'Terms of service' }} />
+            <RootStack.Screen name='SignUp' component={ SignUp } options={{ headerBackTitleVisible: false }} />
+            <RootStack.Screen name='SignIn' component={ SignIn } options={{ headerBackTitleVisible: false }} />
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </ThemeProvider>
   );
 }
