@@ -25,7 +25,9 @@ export default function App() {
                               component={ Terms }
                               options={{ headerBackTitleVisible: false, title: 'Terms of service' }} />
             <RootStack.Screen name='SignUp' component={ SignUp } options={{ headerBackTitleVisible: false }} />
-            <RootStack.Screen name='SignIn' component={ SignIn } options={{ headerBackTitleVisible: false }} />
+            <RootStack.Screen name='SignIn'
+                              component={ SignIn }
+                              options={{ headerBackTitleVisible: false, headerShown: false }} />
           </RootStack.Navigator>
         </NavigationContainer>
       </Provider>

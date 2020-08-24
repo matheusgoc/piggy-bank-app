@@ -1,9 +1,48 @@
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
-import { Image, StatusBar } from "react-native";
-import { Button, Icon } from "react-native-elements";
+import { Image, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
 
 export default function Onboard(props) {
+
+  const startView = (
+    <View style={{ marginTop: 20 }}>
+      <Button
+        title={'Get Started'}
+        buttonStyle={{
+          backgroundColor: 'white',
+          paddingLeft: 30,
+          paddingRight: 30,
+          paddingTop: 15,
+          paddingBottom: 15,
+          borderRadius: 30,
+        }}
+        titleStyle={{ color: '#006600', fontWeight: 'bold', }}
+        onPress={() => {
+          StatusBar.setBarStyle('default');
+          props.navigation.navigate('Terms');
+        }}
+      />
+      <Text style={{ color: '#ffffff', marginTop: 20, }}>
+        Do you have an account?
+      </Text>
+      <Button
+        title='Sign In'
+        type='clear'
+        titleStyle={{
+          color: '#ffffff',
+          fontWeight: 'bold',
+          fontSize: 16,
+          textDecorationLine: 'underline',
+        }}
+        onPress={() => {
+          StatusBar.setBarStyle('default');
+          props.navigation.navigate('SignIn');
+        }}
+      />
+    </View>
+  );
+
   return (
     <Onboarding
       showDone={ false }
@@ -21,7 +60,7 @@ export default function Onboard(props) {
           subtitle: 'Take control over your balance!',
           backgroundColor: '#006633',
           image: (
-              <Icon name="exchange-alt" type="font-awesome-5" size={100} color="white" />
+              <Icon name='exchange-alt' type='font-awesome-5' size={100} color='white' />
           ),
         },
         {
@@ -29,36 +68,15 @@ export default function Onboard(props) {
           subtitle: 'Analyse your savings and outgoings!',
           backgroundColor: '#669999',
           image: (
-              <Icon name="chart-line" type="font-awesome-5" size={100} color="white" />
+              <Icon name='chart-line' type='font-awesome-5' size={100} color='white' />
           ),
         },
         {
-          title: "Ready to save money?",
-          subtitle: (
-            <Button
-              title={'Get Started'}
-              containerStyle={{ marginTop: 20 }}
-              buttonStyle={{
-                backgroundColor: 'white',
-                paddingLeft: 30,
-                paddingRight: 30,
-                paddingTop: 15,
-                paddingBottom: 15,
-                borderRadius: 30,
-              }}
-              titleStyle={{
-                color: '#006600',
-                fontWeight: 'bold',
-              }}
-              onPress={() => {
-                // StatusBar.setBarStyle('default');
-                props.navigation.navigate('Terms');
-              }}
-            />
-          ),
+          title: 'Ready to save money?',
+          subtitle: startView,
           backgroundColor: '#339933',
           image: (
-            <Icon name="coins" type="font-awesome-5" size={100} color="white" />
+            <Icon name='coins' type='font-awesome-5' size={100} color='white' />
           ),
         },
       ]}
