@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import { Button, CheckBox } from 'react-native-elements';
@@ -29,11 +29,11 @@ export default function Terms(props) {
     if (!terms) {
       Alert.alert(
         "Sorry!",
-        "You must accept this Terms of service to proceed!",
+        "You must accept the Terms of service to proceed!",
         [{ text: "OK" }]
       );
     } else {
-      props.navigation.navigate('SignIn');
+      props.navigation.navigate('SignUp');
     }
   }
 
