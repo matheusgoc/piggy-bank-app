@@ -3,11 +3,11 @@ import { StyleSheet, Text, SafeAreaView, ScrollView, Alert } from 'react-native'
 import Constants from 'expo-constants';
 import { Button, CheckBox } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTerms, toggleTerms } from './TermsSlice';
+import { getTerms, toggleTerms } from '../../reducers/ProfileSlice';
 
 export default function Terms(props) {
 
-  const terms = useSelector(selectTerms);
+  const terms = useSelector(getTerms);
   const dispatch = useDispatch();
 
   const styles = StyleSheet.create({

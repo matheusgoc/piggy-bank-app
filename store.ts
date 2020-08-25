@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import AsyncStorage from '@react-native-community/async-storage';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import termsReducer from './features/terms/TermsSlice';
+import profileSlice from './reducers/ProfileSlice';
 
 const persistConfig = {
   key: 'root',
@@ -10,7 +10,7 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  terms: termsReducer,
+  profile: profileSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,6 +1,6 @@
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
-import { Image, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { Image, StatusBar, Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 
 export default function Onboard(props) {
