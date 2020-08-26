@@ -30,7 +30,7 @@ export default function Terms(props) {
         [{ text: "OK" }]
       );
     } else {
-      props.navigation.navigate('SignUp');
+      props.navigation.navigate('Profile');
     }
   }
 

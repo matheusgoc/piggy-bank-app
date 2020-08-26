@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View } from "react-native";
 
-export default function SignUp() {
+export default function Profile() {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Sign Up</Text>
+      <Text>Profile</Text>
     </View>
   )
 }

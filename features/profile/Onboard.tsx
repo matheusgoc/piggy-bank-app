@@ -23,8 +23,7 @@ export default function Onboard(props) {
         }}
         titleStyle={{ color: '#006600', fontWeight: 'bold', }}
         onPress={() => {
-          dispatch(setOnboard(false));
-          StatusBar.setBarStyle('default');
+          StatusBar.setBarStyle('dark-content');
           props.navigation.navigate('Terms');
         }}
       />
@@ -42,7 +41,7 @@ export default function Onboard(props) {
         }}
         onPress={() => {
           dispatch(setOnboard(false));
-          StatusBar.setBarStyle('default');
+          StatusBar.setBarStyle('dark-content');
           props.navigation.navigate('SignIn');
         }}
       />

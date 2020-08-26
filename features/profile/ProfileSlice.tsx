@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const profileSlice = createSlice({
   name: 'profile',
   initialState: {
-    onboard: false,
+    onboard: true,
   },
   reducers: {
     setOnboard: (state, action) => {

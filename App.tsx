@@ -1,27 +1,23 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './store';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from 'react-native-elements';
-import Onboard from './features/profile/Onboard';
-import SignUp from './features/profile/SignUp';
-import Terms from './features/profile/Terms';
-import SignIn from './features/profile/SignIn';
+import Navigation from './features/navigation/Navigation';
 
-const RootStack = createStackNavigator();
+export default function App() {
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#006600',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return (
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Navigation />
+        </PersistGate>
+      </Provider>
+    </ThemeProvider>
+  );
+}
 
 const theme = {
   colors: {
@@ -36,27 +32,3 @@ const theme = {
     },
   },
 };
-
-export default function App() {
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer>
-            <RootStack.Navigator>
-              <RootStack.Screen name='Onboard' component={ Onboard } options={{ headerShown: false }} />
-              <RootStack.Screen name='Terms'
-                                component={ Terms }
-                                options={{ headerBackTitleVisible: false, title: 'Terms of service' }} />
-              <RootStack.Screen name='SignUp' component={ SignUp } options={{ headerBackTitleVisible: false }} />
-              <RootStack.Screen name='SignIn'
-                                component={ SignIn }
-                                options={{ headerBackTitleVisible: false, headerShown: false }} />
-            </RootStack.Navigator>
-          </NavigationContainer>
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
-  );
-}
