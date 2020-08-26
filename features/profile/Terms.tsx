@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import { Button, CheckBox } from 'react-native-elements';
-import { useSelector, useDispatch } from 'react-redux';
-import { getTerms, toggleTerms } from './ProfileSlice';
 
 export default function Terms(props) {
 
-  const terms = useSelector(getTerms);
-  const dispatch = useDispatch();
+  const [terms, setTerms] = useState(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -36,6 +33,10 @@ export default function Terms(props) {
       props.navigation.navigate('SignUp');
     }
   }
+
+  // useEffect(() => {
+  //   dispatch(setTerms(false));
+  // });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -117,7 +118,7 @@ export default function Terms(props) {
         title='I agree to the terms of service'
         checked={ terms }
         onPress={() => {
-          dispatch(toggleTerms());
+          setTerms(!terms);
         }}/>
       <Button title="Next" onPress={ onNext } />
     </SafeAreaView>

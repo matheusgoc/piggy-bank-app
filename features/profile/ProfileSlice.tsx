@@ -3,21 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 export const profileSlice = createSlice({
   name: 'profile',
   initialState: {
-    terms: false,
     onboard: false,
   },
   reducers: {
-    toggleTerms: state => {
-      state.terms = !state.terms;
-    },
-    setOnboardAsSeen: state => {
-      state.onboard = true;
+    setOnboard: (state, action) => {
+      state.onboard = action.payload;
     },
   },
 });
 
 //actions
-export const { toggleTerms, setOnboardAsSeen } = profileSlice.actions;
+export const { setOnboard } = profileSlice.actions;
 
 //selectors
 export const getTerms = state => state.profile.terms;
