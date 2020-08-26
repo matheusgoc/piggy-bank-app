@@ -3,7 +3,7 @@ import { StyleSheet, Text, SafeAreaView, ScrollView, Alert } from 'react-native'
 import Constants from 'expo-constants';
 import { Button, CheckBox } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTerms, toggleTerms } from '../../reducers/ProfileSlice';
+import { getTerms, toggleTerms } from './ProfileSlice';
 
 export default function Terms(props) {
 

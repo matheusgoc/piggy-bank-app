@@ -1,16 +1,16 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './store';
-import { Provider } from 'react-redux';
-import Onboard from './features/onboard/Onboard';
-import { ThemeProvider } from 'react-native-elements';
-import SignUp from './features/signup/SignUp';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Terms from './features/terms/Terms';
-import SignIn from './features/signin/SignIn';
+import { ThemeProvider } from 'react-native-elements';
+import Onboard from './features/profile/Onboard';
+import SignUp from './features/profile/SignUp';
+import Terms from './features/profile/Terms';
+import SignIn from './features/profile/SignIn';
 
 const RootStack = createStackNavigator();
 

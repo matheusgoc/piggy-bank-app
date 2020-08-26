@@ -2,8 +2,12 @@ import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import { Image, StatusBar, Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
+import { setOnboardAsSeen } from './ProfileSlice';
 
 export default function Onboard(props) {
+
+  const dispatch = useDispatch();
 
   const startView = (
     <View style={{ marginTop: 20 }}>
@@ -19,6 +23,7 @@ export default function Onboard(props) {
         }}
         titleStyle={{ color: '#006600', fontWeight: 'bold', }}
         onPress={() => {
+          dispatch(setOnboardAsSeen());
           StatusBar.setBarStyle('default');
           props.navigation.navigate('Terms');
         }}
@@ -36,6 +41,7 @@ export default function Onboard(props) {
           textDecorationLine: 'underline',
         }}
         onPress={() => {
+          dispatch(setOnboardAsSeen());
           StatusBar.setBarStyle('default');
           props.navigation.navigate('SignIn');
         }}
