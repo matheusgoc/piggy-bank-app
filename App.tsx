@@ -6,7 +6,7 @@ import { store, persistor } from './store';
 import { ThemeProvider } from 'react-native-elements';
 import Navigation from './features/navigation/Navigation';
 
-export default function App() {
+const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
@@ -19,16 +19,33 @@ export default function App() {
   );
 }
 
+const primaryColor = '#006600';
+const secondaryColor = '#ffffff';
 const theme = {
   colors: {
-    primary: '#006600',
-    secondary: '#ffffff',
+    primary: primaryColor,
+    secondary: secondaryColor,
   },
   Button: {
     buttonStyle: {
       borderRadius: 0,
       margin: 0,
-      height: 55
+      height: 55,
+
     },
   },
+  Input: {
+    inputContainerStyle: {
+      borderColor: primaryColor,
+      borderWidth: 2,
+      borderBottomColor: primaryColor,
+      borderBottomWidth: 2,
+      paddingLeft: 10,
+    },
+    labelStyle: {
+      color: primaryColor,
+    }
+  }
 };
+
+export default App;
