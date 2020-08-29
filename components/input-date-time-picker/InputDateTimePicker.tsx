@@ -4,7 +4,6 @@ import { Button, ThemeContext } from 'react-native-elements';
 import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
 
 interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 'onCancel'|'onConfirm'> {
-  mode?: "date" | "time" | "datetime",
   label: string,
   value?: Date,
   onPick?(Date): void,
