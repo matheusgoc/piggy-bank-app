@@ -5,11 +5,12 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './store';
 import { ThemeProvider } from 'react-native-elements';
 import Navigation from './features/navigation/Navigation';
+import { THEME } from './constants';
 
 const App = () => {
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={THEME}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Navigation />
@@ -18,34 +19,5 @@ const App = () => {
     </ThemeProvider>
   );
 }
-
-const primaryColor = '#006600';
-const secondaryColor = '#ffffff';
-const theme = {
-  colors: {
-    primary: primaryColor,
-    secondary: secondaryColor,
-  },
-  Button: {
-    buttonStyle: {
-      borderRadius: 0,
-      margin: 0,
-      height: 55,
-
-    },
-  },
-  Input: {
-    inputContainerStyle: {
-      borderColor: primaryColor,
-      borderWidth: 2,
-      borderBottomColor: primaryColor,
-      borderBottomWidth: 2,
-      paddingLeft: 10,
-    },
-    labelStyle: {
-      color: primaryColor,
-    }
-  }
-};
 
 export default App;

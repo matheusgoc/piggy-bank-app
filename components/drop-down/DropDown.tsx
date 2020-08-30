@@ -6,7 +6,10 @@ import { ThemeContext } from 'react-native-elements';
 interface DropDown extends DropDownPicker {
   label: any,
   value?: any,
+  width?: string | number,
+  errorMessage?: string,
   onChange?(item:any): void,
+
 }
 
 const DropDown = (props: DropDown) => {
@@ -15,11 +18,8 @@ const DropDown = (props: DropDown) => {
 
   const styles = StyleSheet.create({
     container: {
-      width: '95%',
-      height: 45,
-      alignSelf: 'center',
-      marginBottom: 35,
-      zIndex: 10,
+      width: props.width || '100%',
+      paddingHorizontal: 10,
     },
     label: {
       color: theme.colors.primary,
@@ -29,20 +29,19 @@ const DropDown = (props: DropDown) => {
     picker: {
       backgroundColor: 'transparent',
       padding: 0,
+      borderWidth: 0,
+      zIndex: 10,
     },
     pickerContainer: {
+      backgroundColor: '#ffffff',
       width: '100%',
-      height: '100%',
+      height: 45,
       borderColor: theme.colors.primary,
       borderRadius: 5,
       borderWidth: 2,
-      backgroundColor: '#ffffff',
     },
     pickerItem: {
-      margin: 0,
       justifyContent: 'flex-start',
-      fontSize: 16,
-      color: theme.colors.primary,
     },
     pickerDropDown: {
       backgroundColor: "#ffffff",
@@ -50,10 +49,17 @@ const DropDown = (props: DropDown) => {
       borderRadius: 5,
       borderColor: theme.colors.primary,
       borderWidth: 1,
+      zIndex: 10,
     },
     pickerLabel: {
-      color: theme.colors.primary,
       fontSize: 16,
+    },
+    errorMessage: {
+      color: theme.colors.error,
+      minHeight: 20,
+      fontSize: 12,
+      paddingLeft: 5,
+      paddingVertical: 5,
     }
   });
 
@@ -65,6 +71,7 @@ const DropDown = (props: DropDown) => {
       <DropDownPicker
         items={props.items}
         defaultValue={props.value}
+        placeholder='--'
         style={styles.picker}
         containerStyle={styles.pickerContainer}
         itemStyle={styles.pickerItem}
@@ -73,6 +80,9 @@ const DropDown = (props: DropDown) => {
         onChangeItem={(item) => props.onChange(item)}
         {...props}
       />
+      <Text style={styles.errorMessage}>
+        {props.errorMessage}
+      </Text>
     </View>
   )
 }
