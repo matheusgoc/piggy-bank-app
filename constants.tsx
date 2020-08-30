@@ -1,3 +1,5 @@
+import IMask from 'imask';
+
 export const COLORS = {
   primary: '#006600',
   secondary: '#ffffff',
@@ -101,4 +103,11 @@ export const US_STATES = {
   'WV': 'West Virginia',
   'WI': 'Wisconsin',
   'WY': 'Wyoming'
+};
+
+export const MASKS = {
+  //^([0-9]{5})([\-]{1}[0-9]{4})?$
+  zipcode: IMask.createMask({
+    mask: '0000[0]-0000'
+  })
 };
