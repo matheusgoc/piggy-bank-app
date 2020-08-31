@@ -1,21 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from "react-native";
-import { Button, ThemeContext } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
+import { FormikProps } from 'formik';
+import { COLORS } from '../../constants';
 
 interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 'onCancel'|'onConfirm'> {
   label: string,
-  value?: Date,
+  value?: Date | string,
   errorMessage?: string,
   width: number | string,
+  name?: string,
+  formik?: FormikProps<any>,
   onPick?(Date): void,
 }
 
 const InputDateTimePicker = (props: InputDateTimePicker) => {
 
-  const {theme} = useContext(ThemeContext);
   const mode: any = (props.mode) ? props.mode : 'date';
   const width = (props.width)? props.width : (mode === 'date')? 160 : 150;
+
+  const [error, showError]:any = useState(false);
+  useEffect(() => {
+    if (props.formik && props.name) {
+      showError((props.formik.touched[props.name] && props.formik.errors[props.name])
+        ?props.formik.errors[props.name]
+        : ''
+      );
+    }
+  });
 
   const styles = StyleSheet.create({
     container: {
@@ -23,7 +36,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
       paddingHorizontal: 10,
     },
     label: {
-      color: theme.colors.primary,
+      color: (error)? COLORS.error : COLORS.primary,
       fontWeight: 'bold',
       fontSize: 16,
     },
@@ -32,13 +45,14 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
       borderWidth: 2,
       borderRadius: 5,
       height: 45,
+      borderColor: (error)? COLORS.error : COLORS.primary,
     },
     buttonTitleStyle: {
-      color: null,
+      color: (error)? COLORS.error : null,
       fontWeight: 'normal',
     },
     errorMessage: {
-      color: theme.colors.error,
+      color: COLORS.error,
       minHeight: 20,
       fontSize: 12,
       paddingLeft: 5,
@@ -64,12 +78,18 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
     setFormat(formatDateTime(dt, mode));
     isVisible(false);
     if (props.onPick && typeof(props.onPick) === 'function') {
-      props.onPick(dt.toLocaleString());
+      props.onPick(dt);
+    }
+    if(props.formik && props.name){
+      props.formik.setFieldValue(props.name, dt);
     }
   }
 
   const handleCancel = () => {
     isVisible(false);
+    if(props.formik && props.name){
+      props.formik.setFieldTouched(props.name, true);
+    }
   }
 
   return (
@@ -82,7 +102,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         icon={{
           name: (mode === 'date')? 'calendar-alt' : 'clock',
           type:'font-awesome-5',
-          color:theme.colors.primary
+          color:(error)? COLORS.error : COLORS.primary,
         }}
         title={format}
         type='outline'
@@ -100,7 +120,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         {...props}
       />
       <Text style={styles.errorMessage}>
-        {props.errorMessage}
+        {props.errorMessage || error}
       </Text>
     </View>
   )

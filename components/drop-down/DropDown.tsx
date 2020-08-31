@@ -1,20 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { ThemeContext } from 'react-native-elements';
+import { FormikProps } from 'formik';
+import { COLORS } from '../../constants';
 
 interface DropDown extends DropDownPicker {
   label: any,
   value?: any,
   width?: string | number,
   errorMessage?: string,
+  name?: string,
+  formik?: FormikProps<any>,
   onChange?(item:any): void,
-
 }
 
 const DropDown = (props: DropDown) => {
 
-  const {theme} = useContext(ThemeContext);
+  const [error, showError]:any = useState(false);
+  useEffect(() => {
+    if (props.formik && props.name) {
+      showError((props.formik.touched[props.name] && props.formik.errors[props.name])
+        ?props.formik.errors[props.name]
+        : ''
+      );
+    }
+  });
 
   const styles = StyleSheet.create({
     container: {
@@ -22,7 +32,7 @@ const DropDown = (props: DropDown) => {
       paddingHorizontal: 10,
     },
     label: {
-      color: theme.colors.primary,
+      color: (error)? COLORS.error : COLORS.primary,
       fontWeight: 'bold',
       fontSize: 16,
     },
@@ -36,7 +46,7 @@ const DropDown = (props: DropDown) => {
       backgroundColor: '#ffffff',
       width: '100%',
       height: 45,
-      borderColor: theme.colors.primary,
+      borderColor: (error)? COLORS.error : COLORS.primary,
       borderRadius: 5,
       borderWidth: 2,
     },
@@ -47,7 +57,7 @@ const DropDown = (props: DropDown) => {
       backgroundColor: "#ffffff",
       alignSelf: 'flex-start',
       borderRadius: 5,
-      borderColor: theme.colors.primary,
+      borderColor: (error)? COLORS.error : COLORS.primary,
       borderWidth: 1,
       zIndex: 10,
     },
@@ -55,7 +65,7 @@ const DropDown = (props: DropDown) => {
       fontSize: 16,
     },
     errorMessage: {
-      color: theme.colors.error,
+      color: COLORS.error,
       minHeight: 20,
       fontSize: 12,
       paddingLeft: 5,
@@ -77,11 +87,27 @@ const DropDown = (props: DropDown) => {
         itemStyle={styles.pickerItem}
         labelStyle={styles.pickerLabel}
         dropDownStyle={styles.pickerDropDown}
-        onChangeItem={(item) => props.onChange(item)}
+        arrowColor={(error)? COLORS.error : null}
+        searchablePlaceholder='Search'
+        onChangeItem={(item) => {
+          if (props.onChange && typeof(props.onChange) === 'function') {
+            props.onChange(item);
+          }
+          if(props.formik && props.name){
+            props.formik.setFieldValue(props.name, item.value);
+          }
+        }}
+        onClose={() => {
+          if(props.formik && props.name){
+            setTimeout(() => {
+              props.formik.setFieldTouched(props.name, true);
+            }, 5);
+          }
+        }}
         {...props}
       />
       <Text style={styles.errorMessage}>
-        {props.errorMessage}
+        {props.errorMessage || error}
       </Text>
     </View>
   )

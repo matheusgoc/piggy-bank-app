@@ -1,4 +1,5 @@
 import IMask from 'imask';
+import { Theme } from 'react-native-elements';
 
 export const COLORS = {
   primary: '#006600',
@@ -7,7 +8,7 @@ export const COLORS = {
   error: '#860000',
 }
 
-export const THEME = {
+export const THEME:Theme = {
   colors: {
     primary: COLORS.primary,
     secondary: COLORS.secondary,
