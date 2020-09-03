@@ -13,10 +13,8 @@ const rootReducer = combineReducers({
   profile: profileSlice,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: persistReducer(persistConfig, rootReducer),
   middleware: getDefaultMiddleware({
     serializableCheck: false
   })

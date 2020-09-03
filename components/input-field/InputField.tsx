@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { FormikProps } from 'formik';
 import { Input, InputProps } from 'react-native-elements';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
-import { COLORS } from '../../constants';
+import { COLORS, MASKS } from '../../constants';
 
 export interface InputField extends InputProps {
   name?: string,
   formik?: FormikProps<any>,
   width?: string | number,
+  mask?: string,
   onChangeText?(value: string): void,
   onBlur?(e: NativeSyntheticEvent<TextInputFocusEventData>): void,
 }
@@ -17,8 +18,9 @@ const InputField = (props: InputField) => {
   const [error, showError]:any = useState('');
   useEffect(() => {
     if (props.formik && props.name) {
+
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
-        ?props.formik.errors[props.name]
+        ? props.formik.errors[props.name]
         : ''
       );
     }
@@ -43,7 +45,7 @@ const InputField = (props: InputField) => {
     <Input
       onChangeText={(value) => {
         if (props.formik && props.name) {
-          props.formik.setFieldValue(props.name, value);
+          props.formik.setFieldValue(props.name, (props.mask)? MASKS[props.mask].resolve(value) : value);
         }
       }}
       onBlur={(e) => {
@@ -55,6 +57,7 @@ const InputField = (props: InputField) => {
       containerStyle={styles.container}
       inputContainerStyle={styles.inputContainer}
       labelStyle={styles.label}
+      value={props.formik.values[props.name]}
       {...props}
     />
   )

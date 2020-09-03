@@ -8,6 +8,7 @@ import Onboard from '../profile/Onboard';
 import Profile from '../profile/Profile';
 import Terms from '../profile/Terms';
 import SignIn from '../profile/SignIn';
+import Savings from '../profile/Savings';
 
 export default function Navigation() {
 
@@ -44,6 +45,13 @@ export default function Navigation() {
                           component={ Profile }
                           options={{
                             title: 'Profile',
+                            headerBackTitleVisible: false,
+                            headerTintColor: theme.colors.primary
+                          }} />
+        <RootStack.Screen name='Savings'
+                          component={ Savings }
+                          options={{
+                            title: 'Plan my Savings',
                             headerBackTitleVisible: false,
                             headerTintColor: theme.colors.primary
                           }} />

@@ -80,7 +80,7 @@ const DropDown = (props: DropDown) => {
       </Text>
       <DropDownPicker
         items={props.items}
-        defaultValue={props.value}
+        defaultValue={(props.value)? props.value : props.formik.values[props.name]}
         placeholder='--'
         style={styles.picker}
         containerStyle={styles.pickerContainer}

@@ -62,12 +62,19 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
 
   const [visible, isVisible] = useState(false);
 
-  let initialValue = new Date();
   let formatValue = '--';
-  if (props.value && props.value instanceof Date) {
+  let initialValue:any = null;
+
+  if (props.value) {
     initialValue = props.value;
+  } else if (props.name && props.formik && props.formik.values.hasOwnProperty(props.name)) {
+    initialValue = props.formik.values[props.name];
+  }
+
+  if (initialValue && initialValue instanceof Date) {
     formatValue = formatDateTime(initialValue);
   }
+
   const [value, setValue] = useState(initialValue);
   const [format, setFormat] = useState(formatValue);
 
