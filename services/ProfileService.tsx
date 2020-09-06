@@ -2,6 +2,8 @@ import BaseService, { IService } from './BaseService';
 import { getProfile, setProfile } from '../features/profile/ProfileSlice';
 import { store } from '../store';
 import { ProfileModal } from '../modals/ProfileModal';
+import { ProfilePersonalInfoModal } from '../modals/ProfilePersonalInfoModal';
+import { ProfileSavingsModal } from '../modals/ProfileSavingsModal';
 
 export default class ProfileService extends BaseService implements IService {
 
@@ -17,7 +19,7 @@ export default class ProfileService extends BaseService implements IService {
   }
 
   syncFromStore() {
-    this.set({...getProfile(store.getState())});
+    this.set(getProfile(store.getState()));
   }
 
   get(): ProfileModal {
@@ -26,8 +28,19 @@ export default class ProfileService extends BaseService implements IService {
   }
 
   set(profile: ProfileModal): void {
-    this.profile = (profile)? profile : new ProfileModal();
+    this.profile = (profile)? {...this.profile,...profile} : new ProfileModal();
     this.castBirthdayToDate();
+  }
+
+  setPersonalInfo(personalInfo: ProfilePersonalInfoModal): void {
+    this.syncFromStore();
+    this.profile = {...this.profile,...personalInfo};
+    this.castBirthdayToDate();
+  }
+
+  setSavings(savings: ProfileSavingsModal): void {
+    this.syncFromStore();
+    this.profile = {...this.profile,...savings};
   }
 
   private castBirthdayToDate() {

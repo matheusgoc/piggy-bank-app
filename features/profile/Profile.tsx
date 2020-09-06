@@ -32,7 +32,16 @@ const Profile = withFormik<ProfileModal, ProfileModal>({
   handleSubmit: (profile: ProfileModal, bag:any)  => {
 
     // set profile on storage
-    profileService.set(profile);
+    profileService.setPersonalInfo({
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      gender: profile.gender,
+      birthday: profile.birthday,
+      state: profile.state,
+      city: profile.city,
+      postalCode: profile.postalCode,
+    });
     profileService.store();
 
     bag.props.navigation.navigate('Savings');

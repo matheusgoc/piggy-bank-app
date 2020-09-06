@@ -7,7 +7,7 @@ import { COLORS } from '../../constants';
 
 interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 'onCancel'|'onConfirm'> {
   label: string,
-  value?: Date | string,
+  value?: Date,
   errorMessage?: string,
   width: number | string,
   name?: string,
@@ -73,6 +73,8 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
 
   if (initialValue && initialValue instanceof Date) {
     formatValue = formatDateTime(initialValue);
+  } else {
+    initialValue = new Date();
   }
 
   const [value, setValue] = useState(initialValue);

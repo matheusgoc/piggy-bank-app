@@ -1,12 +1,40 @@
 import React from 'react';
-import { Text, View } from "react-native";
+import { withFormik } from 'formik';
+import ProfileService from '../../services/ProfileService';
+import { ProfileModal } from '../../modals/ProfileModal';
+import SavingsForm from './SavingsForm';
 
-const Savings = () => {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Savings</Text>
-    </View>
-  )
-}
+const profileService = new ProfileService();
 
-export default Savings
+const Savings = withFormik<ProfileModal, ProfileModal>({
+
+  mapPropsToValues: props => {
+
+    // map profile from storage
+    profileService.syncFromStore();
+
+    return profileService.get();
+  },
+
+  handleSubmit: (profile: ProfileModal, bag:any)  => {
+
+    // change balance signal
+    if (profile.balanceSignal === 'owed' && profile.balance > 0) {
+      profile.balance = -profile.balance;
+    }
+
+    // set profile on storage
+    profileService.setSavings({
+      balance: profile.balance,
+      balanceSignal: profile.balanceSignal,
+      targetTotalSavings: profile.targetTotalSavings,
+      targetMonthlySavings: profile.targetMonthlySavings,
+    });
+    profileService.store();
+
+    bag.props.navigation.navigate('Password');
+  },
+
+})(SavingsForm);
+
+export default Savings;

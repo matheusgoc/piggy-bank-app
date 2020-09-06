@@ -9,6 +9,7 @@ import Profile from '../profile/Profile';
 import Terms from '../profile/Terms';
 import SignIn from '../profile/SignIn';
 import Savings from '../profile/Savings';
+import Password from '../profile/Password';
 
 export default function Navigation() {
 
@@ -44,7 +45,7 @@ export default function Navigation() {
         <RootStack.Screen name='Profile'
                           component={ Profile }
                           options={{
-                            title: 'Profile',
+                            title: 'Create my Profile',
                             headerBackTitleVisible: false,
                             headerTintColor: theme.colors.primary
                           }} />
@@ -52,6 +53,13 @@ export default function Navigation() {
                           component={ Savings }
                           options={{
                             title: 'Plan my Savings',
+                            headerBackTitleVisible: false,
+                            headerTintColor: theme.colors.primary
+                          }} />
+        <RootStack.Screen name='Password'
+                          component={ Password }
+                          options={{
+                            title: 'Define my password',
                             headerBackTitleVisible: false,
                             headerTintColor: theme.colors.primary
                           }} />

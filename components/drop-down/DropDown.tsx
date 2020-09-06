@@ -90,9 +90,6 @@ const DropDown = (props: DropDown) => {
         arrowColor={(error)? COLORS.error : null}
         searchablePlaceholder='Search'
         onChangeItem={(item) => {
-          if (props.onChange && typeof(props.onChange) === 'function') {
-            props.onChange(item);
-          }
           if(props.formik && props.name){
             props.formik.setFieldValue(props.name, item.value);
           }

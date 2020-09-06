@@ -1,5 +1,6 @@
 import IMask from 'imask';
 import { Theme } from 'react-native-elements';
+import { trans } from './helpers';
 
 export const COLORS = {
   primary: '#006600',
@@ -110,5 +111,16 @@ export const MASKS = {
   //^([0-9]{5})([\-]{1}[0-9]{4})?$
   zipcode: IMask.createMask({
     mask: '0000[0]-0000'
-  })
+  }),
+  currency: IMask.createMask({
+    mask: '$numsep00',
+    blocks: {
+      num: {
+        mask: /^\d+$/
+      },
+      sep: {
+        mask: /^[.,]?$/
+      },
+    },
+  }),
 };

@@ -4,7 +4,7 @@ import { Input, InputProps } from 'react-native-elements';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 import { COLORS, MASKS } from '../../constants';
 
-export interface InputField extends InputProps {
+export interface InputFieldProps extends InputProps {
   name?: string,
   formik?: FormikProps<any>,
   width?: string | number,
@@ -13,7 +13,7 @@ export interface InputField extends InputProps {
   onBlur?(e: NativeSyntheticEvent<TextInputFocusEventData>): void,
 }
 
-const InputField = (props: InputField) => {
+const InputField = (props: InputFieldProps) => {
 
   const [error, showError]:any = useState('');
   useEffect(() => {

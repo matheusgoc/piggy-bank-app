@@ -18,97 +18,98 @@ const ProfileForm = (props: FormikProps<ProfileModal>) => {
   } = props;
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.style}>
       <KeyboardAwareScrollView
-        style={styles.style}
         contentContainerStyle={styles.container}
         resetScrollToCoords={{ x: 0, y: 0 }}
         scrollEnabled={true}>
-        <View style={styles.row}>
-          <InputField
-            name='firstName'
-            formik={props}
-            label='* First Name'
-            placeholder='Enter first name'
-            autoCapitalize='words'
-            textContentType='givenName'
-            keyboardType='ascii-capable'
-            width='50%'
-          />
-          <InputField
-            name='lastName'
-            formik={props}
-            label='* Last Name'
-            placeholder='Enter last name'
-            textContentType='familyName'
-            keyboardType='ascii-capable'
-            width='50%'
-          />
-        </View>
         <View>
-          <InputField
-            name='email'
-            formik={props}
-            label='* Email'
-            placeholder='Enter your email'
-            textContentType='emailAddress'
-            keyboardType='email-address'
-            autoCapitalize='none'
-            autoCorrect={false}
-            autoCompleteType='email'
-          />
-        </View>
-        <View style={[styles.row,{zIndex:11}]}>
-          <DropDown
-            name='gender'
-            formik={props}
-            label='Gender'
-            width='50%'
-            items={[
-              {label: '--', value: ''},
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
-          />
-          <InputDateTimePicker
-            name='birthday'
-            mode='date'
-            label='Birthday'
-            width='50%'
-            formik={props}
-          />
-        </View>
-        <View style={[styles.row,{zIndex:10}]}>
-          <DropDown
-            name='state'
-            formik={props}
-            label='State'
-            items={states}
-            value={values.state}
-            searchable={true}
-            width='50%'
-          />
-          <InputField
-            name='city'
-            formik={props}
-            label='City'
-            placeholder='City name'
-            textContentType='addressCity'
-            keyboardType='ascii-capable'
-            width='50%'
-          />
-        </View>
-        <View>
-          <InputField
-            name='postalCode'
-            formik={props}
-            label='Zip Code'
-            placeholder='Enter Zip Code'
-            textContentType='postalCode'
-            keyboardType='numbers-and-punctuation'
-            width='50%'
-            mask='zipcode'
-          />
+          <View style={styles.row}>
+            <InputField
+              name='firstName'
+              formik={props}
+              label='* First Name'
+              placeholder='Enter first name'
+              autoCapitalize='words'
+              textContentType='givenName'
+              keyboardType='ascii-capable'
+              width='50%'
+            />
+            <InputField
+              name='lastName'
+              formik={props}
+              label='* Last Name'
+              placeholder='Enter last name'
+              textContentType='familyName'
+              keyboardType='ascii-capable'
+              width='50%'
+            />
+          </View>
+          <View>
+            <InputField
+              name='email'
+              formik={props}
+              label='* Email'
+              placeholder='Enter your email'
+              textContentType='emailAddress'
+              keyboardType='email-address'
+              autoCapitalize='none'
+              autoCorrect={false}
+              autoCompleteType='email'
+            />
+          </View>
+          <View style={[styles.row,{zIndex:11}]}>
+            <DropDown
+              name='gender'
+              formik={props}
+              label='Gender'
+              width='50%'
+              items={[
+                {label: '--', value: ''},
+                {label: 'Male', value: 'male'},
+                {label: 'Female', value: 'female'},
+              ]}
+            />
+            <InputDateTimePicker
+              name='birthday'
+              mode='date'
+              label='Birthday'
+              width='50%'
+              formik={props}
+            />
+          </View>
+          <View style={[styles.row,{zIndex:10}]}>
+            <DropDown
+              name='state'
+              formik={props}
+              label='State'
+              items={states}
+              value={values.state}
+              searchable={true}
+              width='50%'
+            />
+            <InputField
+              name='city'
+              formik={props}
+              label='City'
+              placeholder='City name'
+              textContentType='addressCity'
+              keyboardType='ascii-capable'
+              width='50%'
+            />
+          </View>
+          <View>
+            <InputField
+              name='postalCode'
+              formik={props}
+              label='Zip Code'
+              placeholder='Enter Zip Code'
+              textContentType='postalCode'
+              keyboardType='numbers-and-punctuation'
+              width='50%'
+              mask='zipcode'
+            />
+          </View>
         </View>
         <View style={styles.save}>
           <Text style={styles.required}>
@@ -137,8 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   container: {
-    marginTop: 10,
-    height: '100%'
+    paddingTop: 5,
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   row: {
     display: 'flex',
@@ -147,11 +150,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   save: {
-    position: 'absolute',
-    bottom: 40,
-    width: '90%',
-    alignSelf: 'center',
-    textAlign: 'right',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
   },
   required: {
     color: COLORS.error,
