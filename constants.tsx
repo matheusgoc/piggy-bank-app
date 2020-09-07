@@ -7,6 +7,7 @@ export const COLORS = {
   secondary: '#ffffff',
   success: '#008600',
   error: '#860000',
+  warning: '#c85200',
 }
 
 export const THEME:Theme = {
@@ -15,6 +16,7 @@ export const THEME:Theme = {
     secondary: COLORS.secondary,
     success: COLORS.success,
     error: COLORS.error,
+    warning: COLORS.warning,
   },
   Button: {
     buttonStyle: {

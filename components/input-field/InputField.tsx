@@ -48,7 +48,7 @@ const InputField = (props: InputFieldProps) => {
           props.formik.setFieldValue(props.name, (props.mask)? MASKS[props.mask].resolve(value) : value);
         }
       }}
-      onBlur={(e) => {
+      onFocus={(e) => {
         if (props.formik && props.name) {
           props.formik.setFieldTouched(props.name, true);
         }
