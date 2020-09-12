@@ -1,6 +1,6 @@
-export class ProfileSavingsModal {
+export class ProfileSavingsModel {
   balance: number = 0;
-  balanceSignal: string = 'saved';
+  balanceSignal: 'saved'|'owed' = 'saved';
   targetTotalSavings: number = 0;
   targetMonthlySavings: number = 0;
 }

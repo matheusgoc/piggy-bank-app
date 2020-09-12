@@ -1,12 +1,12 @@
 import React from 'react';
 import { withFormik } from 'formik';
 import ProfileService from '../../services/ProfileService';
-import { ProfileModal } from '../../modals/ProfileModal';
+import { ProfileModel } from '../../models/ProfileModel';
 import SavingsForm from './SavingsForm';
 
 const profileService = new ProfileService();
 
-const Savings = withFormik<ProfileModal, ProfileModal>({
+const Savings = withFormik<ProfileModel, ProfileModel>({
 
   mapPropsToValues: props => {
 
@@ -16,7 +16,7 @@ const Savings = withFormik<ProfileModal, ProfileModal>({
     return profileService.get();
   },
 
-  handleSubmit: (profile: ProfileModal, bag:any)  => {
+  handleSubmit: (profile: ProfileModel, bag:any)  => {
 
     // change balance signal
     if (profile.balanceSignal === 'owed' && profile.balance > 0) {

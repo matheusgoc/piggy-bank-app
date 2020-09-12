@@ -7,9 +7,9 @@ import InputDateTimePicker from '../../components/input-date-time-picker/InputDa
 import DropDown from '../../components/drop-down/DropDown';
 import { COLORS, US_STATES } from '../../constants';
 import InputField from '../../components/input-field/InputField';
-import { ProfileModal } from '../../modals/ProfileModal';
+import { ProfileModel } from '../../models/ProfileModel';
 
-const ProfileForm = (props: FormikProps<ProfileModal>) => {
+const ProfileForm = (props: FormikProps<ProfileModel>) => {
 
   const {
     handleSubmit,
@@ -66,8 +66,8 @@ const ProfileForm = (props: FormikProps<ProfileModal>) => {
               width='50%'
               items={[
                 {label: '--', value: ''},
-                {label: 'Male', value: 'male'},
-                {label: 'Female', value: 'female'},
+                {label: 'Male', value: 'M'},
+                {label: 'Female', value: 'F'},
               ]}
             />
             <InputDateTimePicker
@@ -128,10 +128,12 @@ const ProfileForm = (props: FormikProps<ProfileModal>) => {
   )
 }
 
-const blankState = {label: '--', value: ''};
-const states = Object.entries(US_STATES).map(([abbr, name]) => {
-  return {label: abbr, value: abbr, name}
-});
+const states = [
+  {label: '--', value: '', name: ''},
+  ...Object.entries(US_STATES).map(([abbr, name]) => {
+    return {label: abbr, value: abbr, name}
+  })
+];
 
 const styles = StyleSheet.create({
   style: {

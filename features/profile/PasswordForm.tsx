@@ -5,12 +5,12 @@ import { FormikProps } from 'formik';
 import { Button, Divider } from 'react-native-elements';
 import * as Progress from 'react-native-progress';
 import InputField from '../../components/input-field/InputField';
-import { ProfilePasswordModal } from '../../modals/ProfilePasswordModal';
+import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
 import { COLORS } from '../../constants';
 import TextIcon from '../../components/text-icon/TextIcon';
 
 
-const PasswordForm = (props: FormikProps<ProfilePasswordModal>) => {
+const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
 
   const {
     handleSubmit,

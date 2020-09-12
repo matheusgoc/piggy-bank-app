@@ -2,15 +2,18 @@ import { combineReducers } from "redux";
 import AsyncStorage from '@react-native-community/async-storage';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import profileSlice from './features/profile/ProfileSlice';
+import ProfileSlice from './features/profile/ProfileSlice';
+import NavigationSlice from './features/navigation/NavigationSlice';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  blacklist: ['navigation'],
 }
 
 const rootReducer = combineReducers({
-  profile: profileSlice,
+  profile: ProfileSlice,
+  navigation: NavigationSlice,
 });
 
 export const store = configureStore({

@@ -3,11 +3,11 @@ import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import ProfileService from '../../services/ProfileService';
 import ProfileForm from './ProfileForm';
-import { ProfileModal } from '../../modals/ProfileModal';
+import { ProfileModel } from '../../models/ProfileModel';
 
 const profileService = new ProfileService();
 
-const Profile = withFormik<ProfileModal, ProfileModal>({
+const Profile = withFormik<ProfileModel, ProfileModel>({
 
   mapPropsToValues: props => {
 
@@ -29,7 +29,7 @@ const Profile = withFormik<ProfileModal, ProfileModal>({
       .required('Required'),
   }),
 
-  handleSubmit: (profile: ProfileModal, bag:any)  => {
+  handleSubmit: (profile: ProfileModel, bag:any)  => {
 
     // set profile on storage
     profileService.setPersonalInfo({

@@ -1,6 +1,6 @@
 import IMask from 'imask';
 import { Theme } from 'react-native-elements';
-import { trans } from './helpers';
+import DropdownAlert from 'react-native-dropdownalert';
 
 export const COLORS = {
   primary: '#006600',
@@ -8,6 +8,12 @@ export const COLORS = {
   success: '#008600',
   error: '#860000',
   warning: '#c85200',
+}
+
+export const LOADING = {
+  overlayColor: 'rgba(0,0,0,0.5)',
+  textStyle: { color: '#FFF' },
+  animation: 'fade',
 }
 
 export const THEME:Theme = {
@@ -126,3 +132,17 @@ export const MASKS = {
     },
   }),
 };
+
+export const TOAST: { ref: DropdownAlert } = {
+  ref: null,
+}
+
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+}

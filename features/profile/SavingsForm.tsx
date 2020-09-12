@@ -5,10 +5,10 @@ import { FormikProps } from 'formik';
 import { Button, Card, Icon, Overlay } from 'react-native-elements';
 import DropDown from '../../components/drop-down/DropDown';
 import { COLORS, MASKS } from '../../constants';
-import { ProfileModal } from '../../modals/ProfileModal';
+import { ProfileModel } from '../../models/ProfileModel';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 
-const SavingsForm = (props: FormikProps<ProfileModal>) => {
+const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
   const {
     handleSubmit,
@@ -19,22 +19,43 @@ const SavingsForm = (props: FormikProps<ProfileModal>) => {
   const [overlay, setOverlay] = useState(false);
   const [resultMessage, setResultMessage] = useState(null);
 
+  /**
+   * Handle form's submission to display the savings' plan summary
+   */
   const onNext = () => {
 
+    if (!values.targetMonthlySavings || !values.targetTotalSavings) {
+      handleSubmit();
+      return;
+    }
+
     const mask = MASKS.currency;
+
+    // format monthly target
     const monthlyTarget = mask.resolve(values.targetMonthlySavings.toString());
+
+    // format total target
     const totalTarget = (values.targetMonthlySavings > values.targetTotalSavings)
       ? monthlyTarget
       : mask.resolve(values.targetTotalSavings.toString());
+
+    // calculate the time prediction for the target
     const savingsMonths = Math.ceil(values.targetTotalSavings / values.targetMonthlySavings);
-    const currentBalance = (values.balanceSignal === 'saved')? values.balance : -values.balance;
-    let balance:any = currentBalance + values.targetTotalSavings;
-    if (balance < 0) {
-      balance = '- (' + mask.resolve(balance.toString()) + ')';
-    } else {
-      balance = mask.resolve(balance.toString());
+
+    // determine balance signal
+    values.balance = Math.abs(values.balance);
+    if (values.balanceSignal === 'owed') {
+      values.balance = -values.balance;
     }
 
+    // calculate new balance with target and format it
+    let newBalance:any = values.balance + values.targetTotalSavings;
+    newBalance = mask.resolve(newBalance.toString());
+    if (newBalance < 0) {
+      newBalance = '- (' + newBalance + ')';
+    }
+
+    // display the modal message
     setResultMessage((
       <Text style={styles.resultText}>
         In <Text style={{fontWeight: 'bold'}}>{savingsMonths} month{(savingsMonths > 1)? 's ' : ' '}</Text>
@@ -43,11 +64,10 @@ const SavingsForm = (props: FormikProps<ProfileModal>) => {
         {(savingsMonths > 1)? (
           <>by saving <Text style={{fontWeight: 'bold'}}>{monthlyTarget}</Text> per month </>
         ) : null}
-        and your balance will be {'\n'}
-        <Text style={{fontWeight: 'bold'}}>{balance}</Text>
+        and your total balance will be
+        <Text style={{fontWeight: 'bold'}}> {newBalance}</Text>
       </Text>
     ));
-
     setOverlay(true);
   }
 
@@ -110,10 +130,7 @@ const SavingsForm = (props: FormikProps<ProfileModal>) => {
         </View>
         ): null }
       </KeyboardAwareScrollView>
-      <Overlay isVisible={overlay} overlayStyle={styles.overlay}
-               onBackdropPress={() => {
-                 setOverlay(false);
-               }}>
+      <Overlay isVisible={overlay} overlayStyle={styles.overlay}>
         <View>
           <Icon
             name='medal'
@@ -187,7 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     letterSpacing: 1,
     color: COLORS.secondary,
-    textAlign: 'center',
+    textAlign: 'justify',
   },
   resultTextTitle: {
     fontSize: 20,

@@ -1,4 +1,4 @@
-export class ProfilePersonalInfoModal {
+export class ProfilePersonalInfoModel {
   firstName: string = '';
   lastName: string = '';
   email: string = '';

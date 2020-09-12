@@ -1,18 +1,20 @@
 import React from 'react';
 import { FormikErrors, withFormik } from 'formik';
 import * as Yup from 'yup';
-import ProfileService from '../../services/ProfileService';
+import { toggleLoading } from '../navigation/NavigationSlice'
 import PasswordForm from './PasswordForm';
-import { ProfilePasswordModal } from '../../modals/ProfilePasswordModal';
+import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
+import { store } from '../../store';
+import { setOnboard } from './ProfileSlice';
+import ProfileServiceApi from '../../services/ProfileServiceApi';
+import { TOAST } from '../../constants';
 
-const profileService = new ProfileService();
-
-const Password = withFormik<ProfilePasswordModal, ProfilePasswordModal>({
+const Password = withFormik<ProfilePasswordModel, ProfilePasswordModel>({
 
   mapPropsToValues: props => {
 
     // reset password fields
-    return new ProfilePasswordModal();
+    return new ProfilePasswordModel();
   },
 
   validationSchema: Yup.object().shape({
@@ -25,7 +27,7 @@ const Password = withFormik<ProfilePasswordModal, ProfilePasswordModal>({
   }),
 
   validate: (values) => {
-    let errors: FormikErrors<ProfilePasswordModal> = {};
+    let errors: FormikErrors<ProfilePasswordModel> = {};
     if (values.password && values.password.length >= 6 && values.strength < .75) {
       errors.password = 'Too week'
     }
@@ -33,12 +35,24 @@ const Password = withFormik<ProfilePasswordModal, ProfilePasswordModal>({
     return errors;
   },
 
-  handleSubmit: (profilePassword: ProfilePasswordModal, bag:any)  => {
+  handleSubmit: (profilePassword: ProfilePasswordModel, bag:any)  => {
 
-    console.log("profile's password", [profilePassword]);
-
-    // profileService.store();
-    // bag.props.navigation.navigate('Savings');
+    const profileServiceApi = new ProfileServiceApi();
+    profileServiceApi.syncFromStore();
+    profileServiceApi.setPassword(profilePassword);
+    store.dispatch(toggleLoading());
+    profileServiceApi.save().then(() => {
+      store.dispatch(setOnboard(false));
+      TOAST.ref.alertWithType(
+        'success',
+        'Profile Created',
+        'Your profile was created! Sign in with your email and password!');
+      bag.props.navigation.navigate('SignIn');
+    }).catch((error: Error) => {
+      console.warn('Password.handleSubmit: ' + error.message);
+    }).finally(() => {
+      store.dispatch(toggleLoading());
+    });
   },
 
 })(PasswordForm);
