@@ -22,8 +22,7 @@ export default class ProfileServiceApi extends ProfileService {
    * @param email
    * @param password
    */
-  async signIn(email:string, password:string):Promise<boolean> {
-    let result = false;
+  async signIn(email:string, password:string):Promise<void> {
     try {
 
       const res = await this.api.post('profile/auth', {
@@ -36,7 +35,6 @@ export default class ProfileServiceApi extends ProfileService {
         this.setToken();
         this.storeToken();
         this.mapToStore(res.data.profile);
-        result = true;
       }
 
     } catch (error) {
@@ -47,8 +45,6 @@ export default class ProfileServiceApi extends ProfileService {
       }
       this.handleHttpError(method, msg, error);
     }
-
-    return result;
   }
 
   /**

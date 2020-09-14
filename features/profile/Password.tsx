@@ -45,8 +45,11 @@ const Password = withFormik<ProfilePasswordModel, ProfilePasswordModel>({
       store.dispatch(setOnboard(false));
       TOAST.ref.alertWithType(
         'success',
-        'Profile Created',
-        'Your profile was created! Sign in with your email and password!');
+        'Your profile was created!',
+        'Sign in with your email and password to access your account!',
+        null,
+        5000
+      );
       bag.props.navigation.navigate('SignIn');
     }).catch((error: Error) => {
       console.warn('Password.handleSubmit: ' + error.message);

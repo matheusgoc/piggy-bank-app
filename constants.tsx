@@ -8,6 +8,7 @@ export const COLORS = {
   success: '#008600',
   error: '#860000',
   warning: '#c85200',
+  gray: '#888888',
 }
 
 export const LOADING = {

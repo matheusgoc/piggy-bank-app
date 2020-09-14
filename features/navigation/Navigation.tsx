@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ThemeContext } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import DropdownAlert from 'react-native-dropdownalert';
 import Loading from 'react-native-loading-spinner-overlay';
+import { COLORS, LOADING, TOAST } from '../../constants';
 import { isLoading } from './NavigationSlice';
 import { hasOnboard, hasToken } from '../profile/ProfileSlice';
 import Onboard from '../profile/Onboard';
@@ -14,12 +14,97 @@ import SignIn from '../profile/SignIn';
 import Savings from '../profile/Savings';
 import Password from '../profile/Password';
 import Main from './Main';
-import { LOADING, TOAST } from '../../constants';
+import TransactionAdd from '../transactions/TransactionAdd';
 
 const Navigation = () => {
 
   const RootStack = createStackNavigator();
-  const { theme } = useContext(ThemeContext);
+  const features = {
+    main: (
+      <RootStack.Screen
+        name='Main'
+        component={ Main }
+        options={{
+          headerShown: false,
+        }}
+      />
+    ),
+    onboard: (
+      <RootStack.Screen
+        name='Onboard'
+        component={ Onboard }
+        options={{
+          headerShown: false,
+        }}
+      />
+    ),
+    signIn: (
+      <RootStack.Screen
+        name='SignIn'
+        component={ SignIn }
+        options={{
+          headerShown: false,
+        }}
+      />
+    ),
+    terms: (
+      <RootStack.Screen
+        name='Terms'
+        component={ Terms }
+        options={{
+          title: 'Terms of service',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
+    profile: (
+      <RootStack.Screen
+        name='Profile'
+        component={ Profile }
+        options={{
+          title: 'Create my Profile',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
+    savings: (
+      <RootStack.Screen
+        name='Savings'
+        component={ Savings }
+        options={{
+          title: 'Plan my Savings',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
+    password: (
+      <RootStack.Screen
+        name='Password'
+        component={ Password }
+        options={{
+          title: 'Define my password',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
+    transactions: {
+      add: (
+        <RootStack.Screen
+          name='TransactionAdd'
+          component={ TransactionAdd }
+          options={{
+            title: 'Add Transaction',
+            headerBackTitleVisible: false,
+            headerTintColor: COLORS.primary,
+          }}
+        />
+      ),
+    }
+  }
 
   const loading = useSelector(isLoading);
   const onboard = useSelector(hasOnboard);
@@ -29,55 +114,23 @@ const Navigation = () => {
     <>
       <NavigationContainer>
         <RootStack.Navigator>
-          {(onboard)
-            ? <RootStack.Screen name='Onboard'
-                                component={ Onboard }
-                                options={{
-                                  headerShown: false,
-                                }} />
-            : null
+          { (onboard && !token) ? features.onboard : null }
+          { (token)
+            ? (
+              <>
+                { features.main }
+                { features.transactions.add }
+              </>
+            ) : (
+              <>
+                { features.signIn }
+                { features.terms }
+                { features.profile }
+                { features.savings }
+                { features.password }
+              </>
+            )
           }
-          {(token)
-            ? <RootStack.Screen name='Main'
-                                component={ Main }
-                                options={{
-                                  headerShown: false,
-                                }} />
-            : null
-          }
-          <RootStack.Screen name='SignIn'
-                            component={ SignIn }
-                            options={{
-                              headerShown: false,
-                            }} />
-          <RootStack.Screen name='Terms'
-                            component={ Terms }
-                            options={{
-                              title: 'Terms of service',
-                              headerBackTitleVisible: false,
-                              headerTintColor: theme.colors.primary
-                            }} />
-          <RootStack.Screen name='Profile'
-                            component={ Profile }
-                            options={{
-                              title: 'Create my Profile',
-                              headerBackTitleVisible: false,
-                              headerTintColor: theme.colors.primary
-                            }} />
-          <RootStack.Screen name='Savings'
-                            component={ Savings }
-                            options={{
-                              title: 'Plan my Savings',
-                              headerBackTitleVisible: false,
-                              headerTintColor: theme.colors.primary
-                            }} />
-          <RootStack.Screen name='Password'
-                            component={ Password }
-                            options={{
-                              title: 'Define my password',
-                              headerBackTitleVisible: false,
-                              headerTintColor: theme.colors.primary
-                            }} />
         </RootStack.Navigator>
       </NavigationContainer>
       <Loading
