@@ -30,6 +30,7 @@ const DropDown = (props: DropDown) => {
     container: {
       width: props.width || '100%',
       paddingHorizontal: 10,
+      zIndex: 10,
     },
     label: {
       color: (error)? COLORS.error : COLORS.primary,
@@ -40,7 +41,6 @@ const DropDown = (props: DropDown) => {
       backgroundColor: 'transparent',
       padding: 0,
       borderWidth: 0,
-      zIndex: 10,
     },
     pickerContainer: {
       backgroundColor: '#ffffff',
@@ -59,7 +59,6 @@ const DropDown = (props: DropDown) => {
       borderRadius: 5,
       borderColor: (error)? COLORS.error : COLORS.primary,
       borderWidth: 1,
-      zIndex: 10,
     },
     pickerLabel: {
       fontSize: 16,

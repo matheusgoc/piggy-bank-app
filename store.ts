@@ -4,6 +4,8 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import ProfileSlice from './features/profile/ProfileSlice';
 import NavigationSlice from './features/navigation/NavigationSlice';
+import TransactionsSlice from './features/transactions/TransactionsSlice';
+import CategoriesSlice from './features/categories/CategoriesSlice';
 
 const persistConfig = {
   key: 'root',
@@ -12,8 +14,10 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  profile: ProfileSlice,
   navigation: NavigationSlice,
+  profile: ProfileSlice,
+  categories: CategoriesSlice,
+  transactions: TransactionsSlice,
 });
 
 export const store = configureStore({

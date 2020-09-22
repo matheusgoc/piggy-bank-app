@@ -18,6 +18,11 @@ export const LOADING = {
 }
 
 export const THEME:Theme = {
+  SearchBar: {
+    inputContainerStyle: {
+      borderWidth: 0,
+    }
+  },
   colors: {
     primary: COLORS.primary,
     secondary: COLORS.secondary,

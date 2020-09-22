@@ -39,6 +39,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
       color: (error)? COLORS.error : COLORS.primary,
       fontWeight: 'bold',
       fontSize: 16,
+      paddingBottom: 3,
     },
     button: {
       justifyContent: 'space-between',

@@ -39,7 +39,7 @@ export default class ProfileServiceApi extends ProfileService {
 
     } catch (error) {
       const method = 'ProfileServiceApi.signIn';
-      let msg = 'The authentication has fail';
+      let msg = 'The authentication has fail due to a server error!';
       if (error.response && error.response.status == HTTP_STATUS.FORBIDDEN) {
         msg = 'The email or password is invalid!';
       }

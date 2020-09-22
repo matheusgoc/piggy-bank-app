@@ -18,5 +18,5 @@ export const { toggleLoading } = NavigationSlice.actions;
 //selectors
 export const isLoading = state => state.navigation.loading;
 
-//reducers
+//reducer
 export default NavigationSlice.reducer;

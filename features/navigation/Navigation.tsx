@@ -1,4 +1,5 @@
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
@@ -14,7 +15,7 @@ import SignIn from '../profile/SignIn';
 import Savings from '../profile/Savings';
 import Password from '../profile/Password';
 import Main from './Main';
-import TransactionAdd from '../transactions/TransactionAdd';
+import Transaction from '../transactions/Transaction';
 
 const Navigation = () => {
 
@@ -94,8 +95,8 @@ const Navigation = () => {
     transactions: {
       add: (
         <RootStack.Screen
-          name='TransactionAdd'
-          component={ TransactionAdd }
+          name='Transaction'
+          component={ Transaction }
           options={{
             title: 'Add Transaction',
             headerBackTitleVisible: false,

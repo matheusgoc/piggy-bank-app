@@ -49,9 +49,11 @@ export default class BaseService {
     });
   }
 
-  handleHttpError(method, msg, error) {
+  handleHttpError(method, msg, error, hasErrorAlert = true) {
     console.warn(method + ' :' + error, error.toJSON());
-    TOAST.ref.alertWithType('error', 'Error', msg);
-    throw new Error(msg);
+    if (hasErrorAlert) {
+      TOAST.ref.alertWithType('error', 'Error', msg);
+      throw new Error(msg);
+    }
   }
 }

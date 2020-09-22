@@ -4,8 +4,10 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from './store';
 import { ThemeProvider } from 'react-native-elements';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigation from './features/navigation/Navigation';
 import { THEME } from './constants';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const App = () => {
 
@@ -13,7 +15,11 @@ const App = () => {
     <ThemeProvider theme={THEME}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Navigation />
+          <SafeAreaProvider>
+            <ActionSheetProvider>
+              <Navigation />
+            </ActionSheetProvider>
+          </SafeAreaProvider>
         </PersistGate>
       </Provider>
     </ThemeProvider>

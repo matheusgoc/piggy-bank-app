@@ -24,10 +24,10 @@ export const ProfileSlice = createSlice({
 export const { setOnboard, setProfile, setToken } = ProfileSlice.actions;
 
 //selectors
-export const getProfile = state => state.profile.data;
-export const getToken = state => state.profile.token;
-export const hasToken = state => !!state.profile.token;
-export const hasOnboard = state => state.profile.onboard;
+export const getProfile = state => state?.profile?.data;
+export const getToken = state => state?.profile?.token;
+export const hasToken = state => !!state?.profile?.token;
+export const hasOnboard = state => state?.profile?.onboard;
 
 //reducers
 export default ProfileSlice.reducer;
