@@ -2,6 +2,9 @@ import axios, { AxiosInstance } from 'axios';
 import { TOAST } from '../constants';
 import { store } from '../store';
 
+// @ts-ignore
+import { BASE_URL } from '@env';
+
 export interface IService {
   store(): void
   syncFromStore(): void
@@ -11,7 +14,7 @@ export interface IService {
 
 export default class BaseService {
 
-  public static BASE_URL = 'http://192.168.0.4:81/api/';
+  public static BASE_URL = BASE_URL;
   public static token: string;
 
   protected api:AxiosInstance;
