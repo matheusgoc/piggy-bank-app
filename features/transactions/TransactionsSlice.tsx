@@ -83,7 +83,7 @@ export const TransactionsSlice = createSlice({
       }
 
       // remove transaction from the list to save if it is there
-      store.dispatch(removeTransactionFromListToSave(removedTransaction));
+      TransactionsSlice.caseReducers.removeTransactionFromListToSave(state, removedTransaction);
     },
 
     // Remove a transaction from the list to be saved
