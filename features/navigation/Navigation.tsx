@@ -2,10 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import DropdownAlert from 'react-native-dropdownalert';
-import Loading from 'react-native-loading-spinner-overlay';
-import { COLORS, LOADING, TOAST } from '../../constants';
-import { isLoading } from './NavigationSlice';
+import { COLORS } from '../../constants';
 import { getToken, hasOnboard } from '../profile/ProfileSlice';
 import Onboard from '../profile/Onboard';
 import Profile from '../profile/Profile';
@@ -18,7 +15,6 @@ import Transaction from '../transactions/Transaction';
 
 const Navigation = () => {
 
-  const loading = useSelector(isLoading);
   const onboard = useSelector(hasOnboard);
   const token = useSelector(getToken);
 
@@ -133,14 +129,6 @@ const Navigation = () => {
           }
         </RootStack.Navigator>
       </NavigationContainer>
-      <Loading
-        visible={loading}
-        textContent={'Loading...'}
-        overlayColor={LOADING.overlayColor}
-        textStyle={LOADING.textStyle}
-        animation={LOADING.animation}
-      />
-      <DropdownAlert ref={ref => TOAST.ref = ref} />
     </>
   )
 }
