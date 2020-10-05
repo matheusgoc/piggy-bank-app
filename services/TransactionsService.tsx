@@ -14,6 +14,8 @@ import {
 } from '../features/transactions/TransactionsSlice';
 import { TransactionModel } from '../models/TransactionModel';
 
+export type ListDirectionType = 'after'|'before';
+
 /**
  * TransactionsService
  * A service to handle the transaction's state persistence
@@ -43,8 +45,9 @@ export default class TransactionsService extends BaseService {
     return this.list;
   }
 
-  set(list: TransactionModel[]): void {
-    this.dispatch(setList(list));
+  set(list: TransactionModel[], direction?: ListDirectionType): void {
+
+    this.dispatch(setList({list, direction}));
   }
 
   add(newTransaction: TransactionModel): void {

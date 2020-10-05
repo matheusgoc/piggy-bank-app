@@ -2,7 +2,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TransactionModel } from '../../models/TransactionModel';
-import { store } from '../../store';
+import { ListDirectionType } from '../../services/TransactionsService';
 
 export const TransactionsSlice = createSlice({
   name: 'transactions',
@@ -12,12 +12,28 @@ export const TransactionsSlice = createSlice({
     listToRemove: [],
   },
   reducers: {
-    setList: (state, action) => {
-      state.list = action.payload;
+
+    // rearrange the list depending on the request direction
+    setList: (state, action: PayloadAction<{ list: TransactionModel[], direction: ListDirectionType}>) => {
+      const { list, direction } = action.payload;
+      switch (direction) {
+        case 'after':
+          state.list = state.list.concat(list).splice(0, list.length);
+          break;
+        case 'before':
+          state.list = list.concat(state.list).splice(state.list.length, list.length);
+          break;
+        default:
+          state.list = list;
+      }
     },
+
+    // set the list to save
     setListToSave: (state, action) => {
       state.listToSave = action.payload;
     },
+
+    // set the list to remove
     setListToRemove: (state, action) => {
       state.listToRemove = action.payload;
     },

@@ -1,8 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import FormData from 'form-data';
 import moment from 'moment';
-import TransactionsService from './TransactionsService';
+import TransactionsService, { ListDirectionType } from './TransactionsService';
 import { TransactionModel } from '../models/TransactionModel';
+import { LIST_LIMIT } from '../constants';
 
 /**
  * TransactionsServiceApi
@@ -17,30 +18,45 @@ export default class TransactionsServiceApi extends TransactionsService {
   }
 
   /**
-   * Load the list
+   * Load the list of transations
    *
    * @param direction
    */
-  async load(direction?: 'up'|'down'):Promise<void> {
+  async load(direction?: ListDirectionType):Promise<TransactionModel[]> {
+
     try {
+
       // define the URL
+      let limit = LIST_LIMIT;
+      // let url = 'transactions/' + moment({}).format() + '/after/' + limit;x`
       let url = 'transactions';
       if (direction) {
+
+        // balance the limit to rearrange the current list
+        limit = Math.ceil(LIST_LIMIT / 2);
+
         // get the timestamp of the last or the first transaction on the list based on the given direction
         const baseTimestamp = this.list.find((transaction, index) => {
           return (
-            direction == 'up' && this.list.length == index - 1 || // last
-            direction == 'down' && this.list.length == 0 // first
+            direction == 'after' && this.list.length == index - 1 || // last
+            direction == 'before' && this.list.length == 0 // first
           );
-        })[0].timestamp;
-        url += '/' + baseTimestamp + '/' + direction;
+        })[0];
+
+        // define the url according to the first or last transaction's timestamp retrieved
+        url += '/' + moment(this.list[baseTimestamp].timestamp).format() + '/' + direction + '/' + limit;
       }
 
-      // request the transactions and load the list
-      const res: object[] = await this.api.get(url);
-      this.list = res.map((item): TransactionModel => {
+      // request the transactions and load the list to be aggregated
+      const res: AxiosResponse = await this.api.get(url);
+      const list = res.data.map((item): TransactionModel => {
         return this.mapToStore(item);
       });
+
+      // store the loaded list
+      this.set(list, direction);
+
+      return this.list;
 
     } catch(error) {
 
@@ -54,7 +70,7 @@ export default class TransactionsServiceApi extends TransactionsService {
    * Persist a transaction on the server
    *
    * @param transaction: TransactionModel last transaction added or updated
-   * @param hasErrorAlert[optional] default: true
+   * @param showError[optional] default: true
    */
   async save(transaction: TransactionModel, showError = true):Promise<void> {
 

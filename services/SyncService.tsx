@@ -3,6 +3,7 @@ import CategoriesServiceApi from './CategoriesServiceApi';
 import { store } from '../store';
 import { getToken } from '../features/profile/ProfileSlice';
 import { showLoading } from '../helpers';
+import TransactionsServiceApi from './TransactionsServiceApi';
 
 export default class SyncService extends BaseService{
 
@@ -26,10 +27,11 @@ export default class SyncService extends BaseService{
 
       try {
 
-        // loads for authentication
+        // loads only when authenticated
         if (token) {
           sync.setToken(token);
           await sync.loadCategories();
+          await sync.loadTransactions();
           SyncService.hasLoad = true;
         }
 
@@ -52,15 +54,29 @@ export default class SyncService extends BaseService{
   private async loadCategories() {
     try {
 
-      const categoriesServiceApi = new CategoriesServiceApi();
-      await categoriesServiceApi.load();
-      categoriesServiceApi.store();
+      const api = new CategoriesServiceApi();
+      await api.load();
+      api.store();
 
     } catch (error) {
 
       const method = 'SyncService.loadCategories';
       let msg = 'Unable to load categories';
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error, false);
+    }
+  }
+
+  private async loadTransactions() {
+    try {
+
+      const api = new TransactionsServiceApi();
+      await api.load();
+
+    } catch (error) {
+
+      const method = 'SyncService.loadTransactions';
+      let msg = 'Unable to load transactions';
+      this.handleHttpError(method, msg, error, false);
     }
   }
 }
