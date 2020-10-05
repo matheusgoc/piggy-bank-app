@@ -40,9 +40,9 @@ export default class CategoriesService extends BaseService implements IService {
    * Exchange the current categories' lists with the stored list
    */
   syncFromStore() {
-    this.list = getList(store.getState());
-    this.listToSave = getListToSave(store.getState());
-    this.listToRemove = getListToRemove(store.getState());
+    this.list = [...getList(store.getState())];
+    this.listToSave = [...getListToSave(store.getState())];
+    this.listToRemove = [...getListToRemove(store.getState())];
   }
 
   /**

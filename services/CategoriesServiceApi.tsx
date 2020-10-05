@@ -16,12 +16,11 @@ export default class CategoriesServiceApi extends CategoriesService {
   /**
    * Load the user's categories
    */
-  async load(search?: string): Promise<void> {
+  async load(): Promise<void> {
     try {
 
-      const url = (search)? 'categories/' + search : 'categories';
-      const res: object[] = await this.api.get(url);
-      this.list = res.map((item): CategoryModel => {
+      const res = await this.api.get('categories');
+      this.list = res.data.map((item): CategoryModel => {
         return this.mapToStore(item);
       });
 
@@ -39,8 +38,9 @@ export default class CategoriesServiceApi extends CategoriesService {
   async search(search: string): Promise<CategoryModel[]> {
     try {
 
-      const res: object[] = await this.api.get('categories/' + search);
-      return res.map((item): CategoryModel => {
+      const res = await this.api.get('categories/search/' + search);
+
+      return res.data.map((item): CategoryModel => {
         return this.mapToStore(item);
       });
 
@@ -120,6 +120,7 @@ export default class CategoriesServiceApi extends CategoriesService {
     return {
       id: category['id'],
       name: category['name'],
+      isNew: false,
     }
   }
 }

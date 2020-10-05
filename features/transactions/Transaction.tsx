@@ -4,24 +4,24 @@ import * as Yup from 'yup';
 import TransactionForm from './TransactionForm';
 import { TransactionModel } from '../../models/TransactionModel';
 import TransactionsServiceApi from '../../services/TransactionsServiceApi';
-import { store } from '../../store';
-import { toggleLoading } from '../navigation/NavigationSlice';
 import { TOAST } from '../../constants';
-import CategoriesServiceApi from '../../services/CategoriesServiceApi';
+import { showLoading } from '../../helpers';
 
 interface TransactionsListProps {
   transaction: TransactionModel;
 }
 
 const transactionsServiceApi = new TransactionsServiceApi();
-const categoriesServiceApi = new CategoriesServiceApi();
 
 const extractTimestamp = (transaction) => {
-  transaction.orderDate.setHours(
-    transaction.orderTime.getHours(),
-    transaction.orderTime.getMinutes(),
-    transaction.orderTime.getSeconds(),
-  );
+  if (transaction.orderTime) {
+    transaction.orderDate.setHours(
+      transaction.orderTime.getHours(),
+      transaction.orderTime.getMinutes(),
+      transaction.orderTime.getSeconds(),
+    );
+  }
+
   return transaction.orderDate.getTime();
 }
 
@@ -32,20 +32,22 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     return (props.transaction)? props.transaction : new TransactionModel();
   },
 
-  validationSchema: Yup.object({
+  validationSchema: Yup.object().shape({
     type: Yup.string()
       .required('Required'),
-    category: Yup.string()
+    category: Yup.object().shape({
+      name: Yup.string().required('Required'),
+    }),
+    amount: Yup.number()
+      .nullable()
       .required('Required'),
-    total: Yup.string()
-      .required('Required'),
-    date: Yup.date()
+    orderDate: Yup.date()
       .required('Required'),
   }),
 
   handleSubmit: (transaction: TransactionModel, bag:any)  => {
 
-    store.dispatch(toggleLoading());
+    showLoading(true);
     transaction.timestamp = extractTimestamp(transaction);
 
     let successMsg: string;
@@ -57,17 +59,22 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
       successMsg = 'A new transaction was add!';
     }
 
-    transactionsServiceApi.save().then(() => {
+    transactionsServiceApi.save(transaction).then(() => {
       TOAST.ref.alertWithType(
         'success',
         'Transaction saved',
         successMsg,
       );
-      bag.props.navigation.back();
+
+      bag.props.navigation.goBack();
+
     }).catch((error) => {
+
       console.warn('Transaction.handleSubmit: ' + error.message);
+
     }).finally(() => {
-      store.dispatch(toggleLoading());
+
+      showLoading(false);
     });
   },
 

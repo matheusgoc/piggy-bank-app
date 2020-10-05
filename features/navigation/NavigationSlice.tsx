@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const NavigationSlice = createSlice({
   name: 'navigation',
@@ -6,14 +6,14 @@ export const NavigationSlice = createSlice({
     loading: false,
   },
   reducers: {
-    toggleLoading: (state) => {
-      state.loading = !state.loading;
-    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    }
   },
 });
 
 //actions
-export const { toggleLoading } = NavigationSlice.actions;
+export const { setLoading } = NavigationSlice.actions;
 
 //selectors
 export const isLoading = state => state.navigation.loading;

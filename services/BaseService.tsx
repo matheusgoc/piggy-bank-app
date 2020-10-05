@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { TOAST } from '../constants';
+import { store } from '../store';
 
 export interface IService {
   store(): void
@@ -10,8 +11,8 @@ export interface IService {
 
 export default class BaseService {
 
-  public static BASE_UR = 'http://192.168.0.11:81/api/';
-  protected static token: string;
+  public static BASE_URL = 'http://192.168.0.4:81/api/';
+  public static token: string;
 
   protected api:AxiosInstance;
 
@@ -25,22 +26,25 @@ export default class BaseService {
    */
   private setApi() {
     this.api = axios.create({
-      baseURL: BaseService.BASE_UR,
+      baseURL: BaseService.BASE_URL,
     });
-    this.setResponseInteceptor();
-    this.setToken();
+    this.setResponseInterceptor();
+    this.setRequestInterceptor();
   }
 
-  setToken() {
-    if (BaseService.token) {
-      this.api.defaults.headers.common['Authorization'] = BaseService.token;
-    } else if(this.api.defaults.headers.common['Authorization']) {
-      delete(this.api.defaults.headers.common['Authorization']);
-    }
+  setToken(token: string) {
+
+    BaseService.token = token;
   }
 
-  setResponseInteceptor() {
+  getToken() {
+
+    return BaseService.token;
+  }
+
+  private setResponseInterceptor() {
     this.api.interceptors.response.use(function (response) {
+
       if (response.data['data']) {
         response.data = response.data['data'];
       }
@@ -49,11 +53,36 @@ export default class BaseService {
     });
   }
 
+  private setRequestInterceptor() {
+    this.api.interceptors.request.use(function (request){
+
+      request.headers['Content-Type'] = 'application/json';
+      request.headers['Accept'] = 'application/json'
+
+      if (BaseService.token) {
+        request.headers['Authorization'] = 'Bearer ' + BaseService.token;
+      } else if (request.headers['Authorization']) {
+        delete(request.headers['Authorization']);
+      }
+
+      return request;
+    });
+  }
+
   handleHttpError(method, msg, error, hasErrorAlert = true) {
-    console.warn(method + ' :' + error, error.toJSON());
+    const errorJSON = (error.toJSON && typeof(error.toJSON) === 'function')? error.toJSON() : null;
+    console.warn(method + ': ' + error, errorJSON );
     if (hasErrorAlert) {
       TOAST.ref.alertWithType('error', 'Error', msg);
       throw new Error(msg);
     }
+  }
+
+  dispatch(action) {
+    store.dispatch(action);
+  }
+
+  getState() {
+    return store.getState();
   }
 }

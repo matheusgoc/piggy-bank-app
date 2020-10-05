@@ -28,6 +28,7 @@ interface TakePictureProps {
   iconType?: string,
   width?: string | number,
   onTake?(uri: string): void,
+  onRemove?(): void,
 }
 
 const TakePicture = (props: TakePictureProps) => {
@@ -129,8 +130,6 @@ const TakePicture = (props: TakePictureProps) => {
 
         if (!result.cancelled) {
 
-          console.log(result.uri);
-
           setImage(result.uri);
 
           if (props.formik && props.name) {
@@ -184,6 +183,7 @@ const TakePicture = (props: TakePictureProps) => {
       },
     );
   }
+
   const showOptionsMax = () => {
     showActionSheetWithOptions(
       {

@@ -3,6 +3,7 @@ import BaseService from './BaseService';
 import { ProfileModel } from '../models/ProfileModel';
 import moment from 'moment';
 import { HTTP_STATUS } from '../constants';
+import SyncService from './SyncService';
 
 /**
  * ProfileServiceApi
@@ -30,11 +31,12 @@ export default class ProfileServiceApi extends ProfileService {
         password,
         device: 'device'
       });
+
       if (res.status === HTTP_STATUS.OK) {
-        BaseService.token = res.data.token;
-        this.setToken();
+        this.setToken(res.data.token);
         this.storeToken();
         this.mapToStore(res.data.profile);
+        await SyncService.load(true);
       }
 
     } catch (error) {
@@ -54,9 +56,8 @@ export default class ProfileServiceApi extends ProfileService {
     try {
 
       const res = await this.api.post('profile/revoke');
-      BaseService.token = null;
       this.profile = null;
-      this.setToken();
+      this.setToken(null);
       this.storeToken();
       this.store();
 

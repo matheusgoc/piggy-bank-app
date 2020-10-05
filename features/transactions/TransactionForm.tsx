@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,9 +10,8 @@ import { COLORS } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 import { TransactionModel } from '../../models/TransactionModel';
-import DropDownOverlay from '../../components/drop-down-overlay/DropDownOverlay';
 import TakePicture from '../../components/take-picture/TakePicture';
-import CategoriesServiceApi from '../../services/CategoriesServiceApi';
+import DropDownCategory from '../../components/drop-down/DropDownCategory';
 
 const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
@@ -22,30 +21,6 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
     values,
   } = props;
 
-  const categoryApi = new CategoriesServiceApi();
-  const categoriesList = categoryApi.get();
-
-  const [categories, setCategories] = useState(categoriesList);
-  const [searchingCategory, setSearchingCategory] = useState(false);
-
-  const searchCategories = (name: string) => {
-    setSearchingCategory(true);
-    let currentCategories = (name === '')? [...categoriesList] : [...categories];
-    if (name === '') {
-      currentCategories = [];
-    }
-    if (currentCategories.length === 0) {
-      currentCategories.push({id: null, name: name});
-    } else if (currentCategories[0].id === null) {
-      const index = currentCategories.findIndex(category => category.name === name);
-      if (index < 0) {
-        currentCategories[0].name = name;
-      }
-    }
-    setSearchingCategory(false);
-    setCategories(currentCategories);
-  }
-
   return (
     <SafeAreaView style={styles.style} edges={['right', 'bottom', 'left']}>
       <KeyboardAwareScrollView
@@ -54,10 +29,17 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
         <View style={styles.container}>
           <View style={styles.row}>
             <TakePicture
+              name='receipt'
+              formik={props}
               title='Receipt Picture'
               width='50%'
               onTake={() => {
                 values.isNewReceipt = true;
+                values.isReceiptRemoved = false;
+              }}
+              onRemove={() => {
+                values.isNewReceipt = false;
+                values.isReceiptRemoved = true;
               }}
             />
             <View style={{width: '50%'}}>
@@ -71,18 +53,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 ]}
                 style={{zIndex: 10}}
               />
-              <DropDownOverlay
-                name='category'
-                formik={props}
-                label='* Category'
-                items={categories}
-                key='id'
-                searchKey='name'
-                placeholder='Search...'
-                width='100%'
-                onSearch={searchCategories}
-                loading={searchingCategory}
-              />
+              <DropDownCategory formik={props} />
               <CurrencyField
                 name='amount'
                 formik={props}
@@ -92,7 +63,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 name='place'
                 formik={props}
                 label='Place'
-                placeholder='Where it was ordered?'
+                placeholder='Where?'
                 autoCapitalize='words'
                 textContentType='location'
                 keyboardType='ascii-capable'

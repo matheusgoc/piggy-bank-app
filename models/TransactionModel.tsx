@@ -4,7 +4,7 @@ export class TransactionModel {
   id: number = null;
   key: string;
   type: 'I'|'E' = 'E';
-  category: CategoryModel = { id: null, name: '' }
+  category: CategoryModel = { id: null, name: '', isNew: false }
   amount: number = null;
   place: string = '';
   description: string = '';
@@ -16,4 +16,5 @@ export class TransactionModel {
   isOwner: boolean = true;
   currency: string = 'USD';
   currencyExchange: number = null;
+  isReceiptRemoved: boolean = false;
 }

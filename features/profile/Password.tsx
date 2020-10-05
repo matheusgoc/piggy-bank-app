@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormikErrors, withFormik } from 'formik';
 import * as Yup from 'yup';
-import { toggleLoading } from '../navigation/NavigationSlice'
 import PasswordForm from './PasswordForm';
 import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
 import { store } from '../../store';
 import { setOnboard } from './ProfileSlice';
 import ProfileServiceApi from '../../services/ProfileServiceApi';
 import { TOAST } from '../../constants';
+import { showLoading } from '../../helpers';
 
 const Password = withFormik<ProfilePasswordModel, ProfilePasswordModel>({
 
@@ -40,7 +40,7 @@ const Password = withFormik<ProfilePasswordModel, ProfilePasswordModel>({
     const profileServiceApi = new ProfileServiceApi();
     profileServiceApi.syncFromStore();
     profileServiceApi.setPassword(profilePassword);
-    store.dispatch(toggleLoading());
+    showLoading(true);
     profileServiceApi.save().then(() => {
       store.dispatch(setOnboard(false));
       TOAST.ref.alertWithType(
@@ -54,7 +54,7 @@ const Password = withFormik<ProfilePasswordModel, ProfilePasswordModel>({
     }).catch((error: Error) => {
       console.warn('Password.handleSubmit: ' + error.message);
     }).finally(() => {
-      store.dispatch(toggleLoading());
+      showLoading(false);
     });
   },
 

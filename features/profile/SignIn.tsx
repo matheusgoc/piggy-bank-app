@@ -5,8 +5,7 @@ import SignInForm from './SignInForm';
 import { ProfileCredentialsModel } from '../../models/ProfileCredentialsModel';
 import ProfileServiceApi from '../../services/ProfileServiceApi';
 import { TOAST } from '../../constants';
-import { store } from '../../store';
-import { toggleLoading } from '../navigation/NavigationSlice';
+import { showLoading } from '../../helpers';
 
 const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
 
@@ -26,7 +25,7 @@ const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
   handleSubmit: (credentials: ProfileCredentialsModel, bag:any)  => {
 
     const profileServiceApi = new ProfileServiceApi();
-    store.dispatch(toggleLoading());
+    showLoading(true);
     profileServiceApi.signIn(credentials.email, credentials.password).then(function () {
 
       const profile = profileServiceApi.get();
@@ -37,7 +36,7 @@ const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
     }).catch((error) => {
       console.warn('SigIn.handleSubmit: ' + error);
     }).finally(() => {
-      store.dispatch(toggleLoading());
+      showLoading(false);
     });
   },
 

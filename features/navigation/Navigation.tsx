@@ -1,5 +1,4 @@
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
@@ -7,7 +6,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import Loading from 'react-native-loading-spinner-overlay';
 import { COLORS, LOADING, TOAST } from '../../constants';
 import { isLoading } from './NavigationSlice';
-import { hasOnboard, hasToken } from '../profile/ProfileSlice';
+import { getToken, hasOnboard } from '../profile/ProfileSlice';
 import Onboard from '../profile/Onboard';
 import Profile from '../profile/Profile';
 import Terms from '../profile/Terms';
@@ -18,6 +17,10 @@ import Main from './Main';
 import Transaction from '../transactions/Transaction';
 
 const Navigation = () => {
+
+  const loading = useSelector(isLoading);
+  const onboard = useSelector(hasOnboard);
+  const token = useSelector(getToken);
 
   const RootStack = createStackNavigator();
   const features = {
@@ -106,10 +109,6 @@ const Navigation = () => {
       ),
     }
   }
-
-  const loading = useSelector(isLoading);
-  const onboard = useSelector(hasOnboard);
-  const token = useSelector(hasToken);
 
   return (
     <>

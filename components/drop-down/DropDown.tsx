@@ -16,11 +16,11 @@ interface DropDown extends DropDownPicker {
 
 const DropDown = (props: DropDown) => {
 
-  const [error, showError]:any = useState(false);
+  const [error, showError]:any = useState('');
   useEffect(() => {
     if (props.formik && props.name) {
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
-        ?props.formik.errors[props.name]
+        ? props.formik.errors[props.name]
         : ''
       );
     }

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StatusBar, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Button, Icon, ListItem, Overlay, SearchBar } from 'react-native-elements';
 import { FormikProps } from 'formik';
 import { COLORS } from '../../constants';
 
-interface DropDownOverlayProps {
+export interface DropDownOverlayProps {
   items: object[],
   key: string,
   searchKey: string,
@@ -19,23 +19,35 @@ interface DropDownOverlayProps {
   onSearch(text: string): void,
   renderItem?(item: object): any,
   onChange?(item: object): void,
-
+  onOpen?(): void,
+  onClose?(): void,
 }
 
 const DropDownOverlay = (props: DropDownOverlayProps) => {
 
-  const [overlay, setOverlay] = useState(false);
-  const [search, setSearch] = useState(
-    props.value && props.value[props.searchKey] ||
-    props.formik?.values[props.name][props.searchKey] ||
-    null
-  );
+  // define initial value
+  let initialValue = null;
+  if (props.value && props.value[props.searchKey]) {
 
-  const [error, showError]:any = useState(false);
+    initialValue = props.value[props.searchKey];
+
+  } else if(props.formik?.values[props.name][props.searchKey]) {
+
+    initialValue = props.formik.values[props.name][props.searchKey];
+  }
+
+  const [overlay, setOverlay] = useState(false);
+  const [value, setValue] = useState(initialValue);
+  const [search, setSearch] = useState(initialValue);
+
+  const [error, showError]:any = useState('');
   useEffect(() => {
+
     if (props.formik && props.name) {
-      showError((props.formik.touched[props.name] && props.formik.errors[props.name])
-        ?props.formik.errors[props.name]
+      showError((
+        props.formik.touched[props.name]?.[props.searchKey]  &&
+        props.formik.errors[props.name]?.[props.searchKey])
+        ? props.formik.errors[props.name][props.searchKey]
         : ''
       );
     }
@@ -62,14 +74,16 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       paddingRight: 0,
     },
     buttonTitleStyle: {
-      color: (error)? COLORS.error : null,
+      color: (!value)? COLORS.gray : (error)? COLORS.error : null,
       fontWeight: 'normal',
+      width: '80%',
+      textAlign: 'left',
     },
     errorMessage: {
       color: COLORS.error,
       minHeight: 20,
       fontSize: 12,
-      paddingLeft: 5,
+      paddingLeft: 10,
       paddingVertical: 5,
     },
     overlay: {
@@ -86,16 +100,19 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       position: 'absolute',
       top: -20,
       right: -20,
+    },
+    itemSelected: {
+      fontWeight: 'bold',
+      color: COLORS.primary,
     }
   })
 
   const handleItemPress = (item) => {
+    setValue(item[props.searchKey]);
     setSearch(item[props.searchKey]);
     if (props.name && props.formik?.values) {
       props.formik.values[props.name] = item;
-    }
-    if (props.value) {
-      props.value = item;
+      props.formik.validateForm();
     }
     if (props.onChange) {
       props.onChange(item);
@@ -103,11 +120,28 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     setOverlay(false);
   }
 
+  const handleOnOpen = () => {
+    setOverlay(true);
+    if (props.onOpen) {
+      props.onOpen();
+    }
+  }
+
+  const handleOnClose = () => {
+    setOverlay(false);
+    props.formik.setFieldTouched(props.name + '.' + props.searchKey, true);
+    if (props.onClose) {
+      props.onClose();
+    }
+  }
+
   const renderItem = ({ item, index, separators }) => {
     return (
       <ListItem onPress={() => handleItemPress(item)}>
         <ListItem.Content>
-          <ListItem.Title>{item[props['searchKey']]}</ListItem.Title>
+          <ListItem.Title style={(item[props['searchKey']] === value)? styles.itemSelected : {}}>
+            {item[props['searchKey']]}
+          </ListItem.Title>
         </ListItem.Content>
       </ListItem>
     );
@@ -118,9 +152,9 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       <View style={styles.container}>
         <Text style={styles.label}>{props.label}</Text>
         <Button
-          title={ search || props.placeholder }
+          title={ value || props.placeholder }
           type="outline"
-          onPress={() => setOverlay(!overlay)}
+          onPress={handleOnOpen}
           iconRight={true}
           icon={{
             name: 'search',
@@ -137,7 +171,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       <Overlay
         isVisible={overlay}
         overlayStyle={styles.overlay}
-        onBackdropPress={ () => setOverlay(false) }>
+        onBackdropPress={handleOnClose}>
         <View>
           <SearchBar
             placeholder={props.placeholder}
@@ -156,8 +190,8 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
           <FlatList
             data={props.items || []}
             renderItem={renderItem}
-            extraData={search}
-            keyExtractor={item => item.id}
+            extraData={value}
+            keyExtractor={item => item.name}
           />
           <Icon
             name='times'
@@ -166,9 +200,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
             size={15}
             reverse raised
             containerStyle={styles.returnIconContainer}
-            onPress={() => {
-              setOverlay(false);
-            }}
+            onPress={handleOnClose}
           />
         </View>
       </Overlay>

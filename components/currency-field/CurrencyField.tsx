@@ -24,7 +24,9 @@ const CurrencyField = (props: CurrencyField) => {
         if (props.value) {
           props.value = unmaskCurrency(value).toString();
         } else if (props.name && props.formik) {
-          props.formik.values[props.name] = unmaskCurrency(value);
+          const unmaskValue = unmaskCurrency(value);
+          props.formik.values[props.name] = (isNaN(unmaskValue))? null : unmaskValue;
+          props.formik.validateForm();
         }
         setValue(MASKS.currency.resolve(value));
       }}
