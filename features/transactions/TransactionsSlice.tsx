@@ -1,17 +1,24 @@
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import moment from 'moment';
 import { TransactionModel } from '../../models/TransactionModel';
 import { ListDirectionType } from '../../services/TransactionsService';
 
 export const TransactionsSlice = createSlice({
   name: 'transactions',
   initialState: {
+    date: moment().startOf('month').toDate(),
     list: [],
     listToSave: [],
     listToRemove: [],
   },
   reducers: {
+
+    // set the current moment
+    setDate: (state, action: PayloadAction<Date>) => {
+      state.date = action.payload;
+    },
 
     // rearrange the list depending on the request direction
     setList: (state, action: PayloadAction<{ list: TransactionModel[], direction: ListDirectionType}>) => {
@@ -162,6 +169,7 @@ const findTransactionIndex = (transactionToFind: TransactionModel, list: Transac
 
 //actions
 export const {
+  setDate,
   setList,
   setListToSave,
   setListToRemove,
@@ -175,9 +183,10 @@ export const {
 } = TransactionsSlice.actions;
 
 //selectors
-export const getList = state => state.transactions?.list;
-export const getListToSave = state => state.transactions?.listToSave;
-export const getListToRemove = state => state.transactions?.listToRemove;
+export const getDate = state => state.transactions.date;
+export const getList = state => state.transactions.list;
+export const getListToSave = state => state.transactions.listToSave;
+export const getListToRemove = state => state.transactions.listToRemove;
 
 //reducers
 export default TransactionsSlice.reducer;

@@ -3,7 +3,7 @@ import { TOAST } from '../constants';
 import { store } from '../store';
 
 // @ts-ignore
-import { BASE_URL } from '@env';
+import { API_URL } from '@env';
 
 export interface IService {
   store(): void
@@ -14,7 +14,7 @@ export interface IService {
 
 export default class BaseService {
 
-  public static BASE_URL = BASE_URL;
+  public static BASE_URL = API_URL;
   public static token: string;
 
   protected api:AxiosInstance;

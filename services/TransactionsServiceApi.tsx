@@ -28,8 +28,11 @@ export default class TransactionsServiceApi extends TransactionsService {
 
       // define the URL
       let limit = LIST_LIMIT;
-      // let url = 'transactions/' + moment({}).format() + '/after/' + limit;x`
-      let url = 'transactions';
+      const lastDayOfPreviousMonth = moment()
+        .startOf('month')
+        .subtract(1, 'd')
+        .format('YYYY-MM-DD');
+      let url = 'transactions/' + lastDayOfPreviousMonth + '/after/' + limit;
       if (direction) {
 
         // balance the limit to rearrange the current list
@@ -205,7 +208,7 @@ export default class TransactionsServiceApi extends TransactionsService {
       amount: transaction.amount,
       place: transaction.place,
       description: transaction.description,
-      ordered_at: moment(transaction.timestamp).format('YYYY-MM-DDTHH:mm:ss'),
+      ordered_at: moment(transaction.timestamp).format(),
       is_receipt_removed: transaction.isReceiptRemoved,
     }
   }
