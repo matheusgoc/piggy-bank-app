@@ -1,22 +1,50 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import { COLORS } from '../../constants';
-import { getDate } from '../../features/transactions/TransactionsSlice';
+import {
+  getDate,
+  getLoadingList,
+  setDate,
+  setLoadingList
+} from '../../features/transactions/TransactionsSlice';
+import TransactionsServiceApi from '../../services/TransactionsServiceApi';
 
 // delete-sweep
 // delete-forever
 const TransactionListHeader = () => {
 
-  // const dispatch = useDispatch();
+  const serviceApi = new TransactionsServiceApi();
+
+  const dispatch = useDispatch();
   const date = useSelector(getDate);
+  const loading = useSelector(getLoadingList);
 
-  console.log('TransactionListHeader', moment(date).format());
-
+  let time = null;
   const handleOnChangeMonth = (direction: 'before'|'after') => {
-    console.log('TransactionListHeader.handleOnChangeMonth', direction);
+
+    dispatch(setLoadingList(true));
+
+    let currentDate = moment(date);
+    currentDate.startOf('month');
+    switch (direction) {
+      case 'before':
+        currentDate.subtract(1, 'month');
+        break;
+      case 'after':
+        currentDate.add(1, 'month');
+        break;
+    }
+
+    dispatch(setDate(currentDate.toDate()));
+
+    const year = currentDate.format('YYYY');
+    const month = currentDate.format('MM');
+    serviceApi.load(year, month).then(() => {
+      dispatch(setLoadingList(false));
+    });
   }
 
   const handleOnSearch = () => {

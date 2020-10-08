@@ -1,9 +1,8 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import FormData from 'form-data';
 import moment from 'moment';
-import TransactionsService, { ListDirectionType } from './TransactionsService';
+import TransactionsService from './TransactionsService';
 import { TransactionModel } from '../models/TransactionModel';
-import { LIST_LIMIT } from '../constants';
 
 /**
  * TransactionsServiceApi
@@ -18,46 +17,33 @@ export default class TransactionsServiceApi extends TransactionsService {
   }
 
   /**
-   * Load the list of transations
+   * Load the list of transactions
    *
-   * @param direction
+   * @param year
+   * @param month
+   * @param limit
    */
-  async load(direction?: ListDirectionType):Promise<TransactionModel[]> {
+  async load(year?, month?, limit?):Promise<TransactionModel[]> {
 
     try {
 
-      // define the URL
-      let limit = LIST_LIMIT;
-      const lastDayOfPreviousMonth = moment()
-        .startOf('month')
-        .subtract(1, 'd')
-        .format('YYYY-MM-DD');
-      let url = 'transactions/' + lastDayOfPreviousMonth + '/after/' + limit;
-      if (direction) {
-
-        // balance the limit to rearrange the current list
-        limit = Math.ceil(LIST_LIMIT / 2);
-
-        // get the timestamp of the last or the first transaction on the list based on the given direction
-        const baseTimestamp = this.list.find((transaction, index) => {
-          return (
-            direction == 'after' && this.list.length == index - 1 || // last
-            direction == 'before' && this.list.length == 0 // first
-          );
-        })[0];
-
-        // define the url according to the first or last transaction's timestamp retrieved
-        url += '/' + moment(this.list[baseTimestamp].timestamp).format() + '/' + direction + '/' + limit;
+      if (!year) {
+        year = moment(this.date).format('YYYY');
       }
 
-      // request the transactions and load the list to be aggregated
+      if (!month) {
+        month = moment(this.date).format('MM');
+      }
+
+      let url = 'transactions/' + year + '/' + month;
+      if (limit) {
+        url += '/' + limit;
+      }
       const res: AxiosResponse = await this.api.get(url);
       const list = res.data.map((item): TransactionModel => {
         return this.mapToStore(item);
       });
-
-      // store the loaded list
-      this.set(list, direction);
+      this.set(list);
 
       return this.list;
 
@@ -164,7 +150,7 @@ export default class TransactionsServiceApi extends TransactionsService {
     try {
 
       if (transaction.id) {
-        await this.api.delete('transctions/' + transaction.id);
+        await this.api.delete('transactions/' + transaction.id);
       }
 
       this.removeFromList(transaction);

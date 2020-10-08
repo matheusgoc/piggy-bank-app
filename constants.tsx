@@ -2,8 +2,6 @@ import IMask from 'imask';
 import { Theme } from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
 
-export const LIST_LIMIT = 20;
-
 export const COLORS = {
   primary: '#006600',
   secondary: '#ffffff',

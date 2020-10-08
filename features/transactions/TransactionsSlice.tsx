@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment';
 import { TransactionModel } from '../../models/TransactionModel';
-import { ListDirectionType } from '../../services/TransactionsService';
 
 export const TransactionsSlice = createSlice({
   name: 'transactions',
@@ -12,8 +11,14 @@ export const TransactionsSlice = createSlice({
     list: [],
     listToSave: [],
     listToRemove: [],
+    loadingList: false,
   },
   reducers: {
+
+    // set that the list is loading
+    setLoadingList: (state, action: PayloadAction<boolean>) => {
+      state.loadingList = action.payload;
+    },
 
     // set the current moment
     setDate: (state, action: PayloadAction<Date>) => {
@@ -21,18 +26,8 @@ export const TransactionsSlice = createSlice({
     },
 
     // rearrange the list depending on the request direction
-    setList: (state, action: PayloadAction<{ list: TransactionModel[], direction: ListDirectionType}>) => {
-      const { list, direction } = action.payload;
-      switch (direction) {
-        case 'after':
-          state.list = state.list.concat(list).splice(0, list.length);
-          break;
-        case 'before':
-          state.list = list.concat(state.list).splice(state.list.length, list.length);
-          break;
-        default:
-          state.list = list;
-      }
+    setList: (state, action: PayloadAction<TransactionModel[]>) => {
+      state.list = action.payload;
     },
 
     // set the list to save
@@ -55,16 +50,19 @@ export const TransactionsSlice = createSlice({
         newTransaction.key = uuidv4();
       }
 
-      // look for a transaction with a date and time greater then the new one
-      const greaterIndex = state.list.findIndex(
-        transaction => transaction.timestamp > newTransaction.timestamp
-      );
+      if (moment(state.date).isSame(newTransaction.timestamp, 'month')) {
 
-      // add the transaction in the correct position to the list
-      if (greaterIndex >= 0){
-        state.list.splice(greaterIndex, 0, newTransaction);
-      } else {
-        state.list.push(newTransaction);
+        // look for a transaction with a date and time greater then the new one
+        const greaterIndex = state.list.findIndex(
+          transaction => transaction.timestamp > newTransaction.timestamp
+        );
+
+        // add the transaction in the correct position to the list
+        if (greaterIndex >= 0){
+          state.list.splice(greaterIndex, 0, newTransaction);
+        } else {
+          state.list.push(newTransaction);
+        }
       }
 
       // add the transaction to the list to be saved
@@ -146,7 +144,7 @@ export const TransactionsSlice = createSlice({
       const index = findTransactionIndex(transaction, state.list);
       if (index >= 0) {
 
-        state.list.splice(index, 1, transaction);
+        state.list[index] = transaction;
       }
     },
   },
@@ -159,16 +157,15 @@ export const TransactionsSlice = createSlice({
  * @param list
  */
 const findTransactionIndex = (transactionToFind: TransactionModel, list: TransactionModel[]): number => {
-  const transactionToFindJSON = JSON.stringify(transactionToFind);
   return (list.length)? list.findIndex((transaction) => {
     return (transactionToFind.id && transactionToFind.id === transaction.id) ||
-      transaction.key === transaction.key ||
-      JSON.stringify(transaction) === transactionToFindJSON
+      transaction.key === transaction.key
   }) : -1;
 }
 
 //actions
 export const {
+  setLoadingList,
   setDate,
   setList,
   setListToSave,
@@ -187,6 +184,7 @@ export const getDate = state => state.transactions.date;
 export const getList = state => state.transactions.list;
 export const getListToSave = state => state.transactions.listToSave;
 export const getListToRemove = state => state.transactions.listToRemove;
+export const getLoadingList = state => state.transactions.loadingList;
 
 //reducers
 export default TransactionsSlice.reducer;

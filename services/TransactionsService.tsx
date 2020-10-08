@@ -2,13 +2,15 @@ import * as FileSystem from 'expo-file-system';
 import BaseService from './BaseService';
 import {
   addTransaction,
+  getDate,
   getList,
   getListToRemove,
   removeTransaction,
   removeTransactionFromList,
-  removeTransactionFromListToSave,
   removeTransactionFromListToRemove,
+  removeTransactionFromListToSave,
   replaceTransaction,
+  setDate,
   setList,
   updateTransaction,
 } from '../features/transactions/TransactionsSlice';
@@ -27,6 +29,7 @@ export default class TransactionsService extends BaseService {
   public list: TransactionModel[];
   public listToSave: TransactionModel[];
   public listToRemove: TransactionModel[];
+  public date: Date;
 
   constructor() {
     super();
@@ -37,6 +40,7 @@ export default class TransactionsService extends BaseService {
     this.list = getList(this.getState());
     this.listToSave = getListToRemove(this.getState());
     this.listToRemove = getListToRemove(this.getState());
+    this.date = getDate(this.getState());
   }
 
   get(): TransactionModel[] {
@@ -45,13 +49,16 @@ export default class TransactionsService extends BaseService {
     return this.list;
   }
 
-  set(list: TransactionModel[], direction?: ListDirectionType): void {
+  set(list: TransactionModel[]): void {
 
-    this.dispatch(setList({list, direction}));
+    this.dispatch(setList(list));
+  }
+
+  protected setDate(date: Date = new Date()): void {
+    this.dispatch(setDate(date));
   }
 
   add(newTransaction: TransactionModel): void {
-
     this.dispatch(addTransaction(newTransaction));
   }
 
