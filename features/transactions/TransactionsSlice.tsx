@@ -159,7 +159,7 @@ export const TransactionsSlice = createSlice({
 const findTransactionIndex = (transactionToFind: TransactionModel, list: TransactionModel[]): number => {
   return (list.length)? list.findIndex((transaction) => {
     return (transactionToFind.id && transactionToFind.id === transaction.id) ||
-      transaction.key === transaction.key
+      transaction.key === transactionToFind.key
   }) : -1;
 }
 
