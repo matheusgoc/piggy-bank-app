@@ -12,6 +12,7 @@ import Savings from '../profile/Savings';
 import Password from '../profile/Password';
 import Main from './Main';
 import Transaction from '../transactions/Transaction';
+import TransactionsView from '../transactions/TransactionsView';
 
 const Navigation = () => {
 
@@ -103,6 +104,17 @@ const Navigation = () => {
           }}
         />
       ),
+      view: (
+        <RootStack.Screen
+          name='TransactionView'
+          component={ TransactionsView }
+          options={{
+            title: 'View Transaction',
+            headerBackTitleVisible: false,
+            headerTintColor: COLORS.primary,
+          }}
+        />
+      ),
     }
   }
 
@@ -116,6 +128,7 @@ const Navigation = () => {
               <>
                 { features.main }
                 { features.transactions.add }
+                { features.transactions.view }
               </>
             ) : (
               <>
