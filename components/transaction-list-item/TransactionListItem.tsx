@@ -9,7 +9,7 @@ interface TransactionListItemProps extends ListItemProps {
   transaction: TransactionModel,
 }
 
-const TransactionListItem = (props) => {
+const TransactionListItem = (props: TransactionListItemProps) => {
 
   const { timestamp, category, place, amount, key }: TransactionModel = props.transaction;
   const date = moment(timestamp).format('MMM[\n]DD');
@@ -20,15 +20,15 @@ const TransactionListItem = (props) => {
   ).format(amount);
 
   const styles = StyleSheet.create({
-    ...baseSyles,
+    ...baseStyles,
     amountInfoText: {
-      ...baseSyles.amountInfoText,
+      ...baseStyles.amountInfoText,
       color: (amount > 0)? COLORS.success : COLORS.error,
     }
   });
 
   return (
-    <ListItem key bottomDivider pad={10} {...props}>
+    <ListItem bottomDivider pad={10} {...props}>
       <Avatar
         size='medium'
         rounded
@@ -61,7 +61,7 @@ const TransactionListItem = (props) => {
   )
 }
 
-const baseSyles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   date: {
     borderWidth: 2,
   },

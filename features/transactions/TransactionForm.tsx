@@ -74,10 +74,9 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
             <InputDateTimePicker
               name='orderDate'
               mode='date'
-              label='Date'
+              label='*Date'
               width='50%'
               formik={props}
-              value={new Date()}
             />
             <InputDateTimePicker
               name='orderTime'
@@ -108,7 +107,6 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
         </Text>
         <Button
           title='Save'
-          disabled={!isValid}
           onPressOut={() => {
             handleSubmit();
           }}

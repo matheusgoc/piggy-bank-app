@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
+import moment from 'moment';
 import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
 import { FormikProps } from 'formik';
 import { COLORS } from '../../constants';
@@ -20,62 +21,41 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   const mode: any = (props.mode) ? props.mode : 'date';
   const width = (props.width)? props.width : (mode === 'date')? 160 : 150;
 
+  const [visible, isVisible] = useState(false);
   const [error, showError]:any = useState(false);
   useEffect(() => {
     if (props.formik && props.name) {
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
-        ?props.formik.errors[props.name]
+        ? props.formik.errors[props.name]
         : ''
       );
     }
   });
 
   const styles = StyleSheet.create({
+    ...baseStyles,
     container: {
+      ...baseStyles.container,
       minWidth: width,
-      paddingHorizontal: 10,
     },
     label: {
+      ...baseStyles.label,
       color: (error)? COLORS.error : COLORS.primary,
-      fontWeight: 'bold',
-      fontSize: 16,
-      paddingBottom: 3,
     },
     button: {
-      justifyContent: 'space-between',
-      borderWidth: 2,
-      borderRadius: 5,
-      height: 45,
+      ...baseStyles.button,
       borderColor: (error)? COLORS.error : COLORS.primary,
     },
-    buttonTitleStyle: {
+    buttonTitle: {
+      ...baseStyles.buttonTitle,
       color: (error)? COLORS.error : null,
-      fontWeight: 'normal',
     },
-    errorMessage: {
-      color: COLORS.error,
-      minHeight: 20,
-      fontSize: 12,
-      paddingLeft: 5,
-      paddingVertical: 5,
-    }
   });
 
-  const [visible, isVisible] = useState(false);
-
   let formatValue = '--';
-  let initialValue:any = null;
-
-  if (props.value) {
-    initialValue = props.value;
-  } else if (props.name && props.formik && props.formik.values.hasOwnProperty(props.name)) {
-    initialValue = props.formik.values[props.name];
-  }
-
+  let initialValue:Date = props.formik?.values[props.name] || props.value || null;
   if (initialValue && initialValue instanceof Date) {
-    formatValue = formatDateTime(initialValue);
-  } else {
-    initialValue = new Date();
+    formatValue = formatDateTime(initialValue, mode);
   }
 
   const [value, setValue] = useState(initialValue);
@@ -87,7 +67,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
     setValue(dt);
     setFormat(formatDateTime(dt, mode));
     isVisible(false);
-    if (props.onPick && typeof(props.onPick) === 'function') {
+    if (props.onPick) {
       props.onPick(dt);
     }
     if(props.formik && props.name){
@@ -100,6 +80,11 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
     if(props.formik && props.name){
       props.formik.setFieldTouched(props.name, true);
     }
+  }
+
+  const handleButtonPress = () => {
+    setValue(new Date());
+    isVisible(true);
   }
 
   return (
@@ -117,8 +102,8 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         title={format}
         type='outline'
         buttonStyle={styles.button}
-        titleStyle={styles.buttonTitleStyle}
-        onPress={() => {isVisible(true)}}
+        titleStyle={styles.buttonTitle}
+        onPress={handleButtonPress}
       />
       <DateTimePickerModal
         isVisible={visible}
@@ -137,26 +122,44 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
 }
 
 // get date format as ##-##-#### and time format as ##:## AM | PM
-const formatDateTime = (dt:Date, mode = 'date') => {
+const formatDateTime = (dt?:Date, mode = 'date') => {
 
-  let dtf: string;
-
-  if (!dt) {
-    return '--';
-  }
-
-  if (mode === 'date') {
-    let dtfArr = dt.toLocaleDateString().split('/');
-    for (let i = 0; i < dtfArr.length; i++) {
-      dtfArr[i] = (dtfArr[i].length === 1) ? '0' + dtfArr[i] : dtfArr[i];
+  let format = '--';
+  if (dt) {
+    switch (mode) {
+      case 'date': format = moment(dt).format('L'); break;
+      case 'time': format =  moment(dt).format('LT'); break;
     }
-    dtf = dtfArr.join('-');
-  } else {
-    dtf = dt.toLocaleTimeString().replace(/:0{2}(\sAM|\sPM)$/g, '');
-    dtf += (dt.getHours() >= 12)? ' PM': ' AM';
   }
 
-  return dtf;
+  return format;
 };
+
+const baseStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    paddingBottom: 3,
+  },
+  button: {
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    borderRadius: 5,
+    height: 45,
+  },
+  buttonTitle: {
+    fontWeight: 'normal',
+  },
+  errorMessage: {
+    color: COLORS.error,
+    minHeight: 20,
+    fontSize: 12,
+    paddingLeft: 5,
+    paddingVertical: 5,
+  }
+});
 
 export default InputDateTimePicker;

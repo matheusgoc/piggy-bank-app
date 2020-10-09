@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, View, Text, ActivityIndicator, Image } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
 import { Divider, Icon } from 'react-native-elements';
@@ -7,21 +7,19 @@ import { useSelector } from 'react-redux';
 import { TransactionModel } from '../../models/TransactionModel'
 import TransactionListItem from '../../components/transaction-list-item/TransactionListItem';
 import { getList, getLoadingList } from './TransactionsSlice';
-import TransactionsServiceApi from '../../services/TransactionsServiceApi';
 import TransactionListPlaceholder from '../../components/transaction-list-item/TransactionListPlaceholder';
 import { COLORS } from '../../constants';
 
-const TransactionsList = () => {
+const TransactionsList = ({ navigation }) => {
 
   const loading = useSelector(getLoadingList);
   const list = useSelector(getList);
-  const serviceApi = new TransactionsServiceApi();
 
   const handleItemPress = (transaction: TransactionModel | string, index: number) => {
-    console.log('TransactionsList.handleItemPress', transaction, index);
+    navigation.navigate('Transaction', { transaction: JSON.stringify(transaction) });
   }
 
-  const renderItem = (transaction: TransactionModel | string, index: number) => {
+  const renderItem = (transaction: TransactionModel, index: number) => {
 
     return (
       <TransactionListItem
@@ -36,8 +34,8 @@ const TransactionsList = () => {
 
     if (loading) {
 
-      listToRender = Array(15).fill('').map(() => {
-        return (<TransactionListPlaceholder />)
+      listToRender = Array(15).fill('').map((value, index) => {
+        return (<TransactionListPlaceholder key={index} />)
       });
 
     } else if (list.length) {

@@ -10,7 +10,7 @@ export class TransactionModel {
   description: string = '';
   receipt: string = '';
   isNewReceipt: boolean = false;
-  orderDate: Date = new Date();
+  orderDate: Date = null;
   orderTime: Date = null;
   timestamp: number;
   isOwner: boolean = true;

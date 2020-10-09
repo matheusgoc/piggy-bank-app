@@ -9,6 +9,7 @@ import { showLoading } from '../../helpers';
 
 interface TransactionsListProps {
   transaction: TransactionModel;
+  route: any,
 }
 
 const transactionsServiceApi = new TransactionsServiceApi();
@@ -29,7 +30,16 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
 
   mapPropsToValues: props => {
 
-    return (props.transaction)? props.transaction : new TransactionModel();
+    let transaction: TransactionModel = new TransactionModel();
+    if (props.route?.params?.transaction) {
+      transaction = JSON.parse(props.route?.params?.transaction);
+      if (transaction.timestamp) {
+        transaction.orderDate = new Date(transaction.timestamp);
+        transaction.orderTime = new Date(transaction.timestamp);
+      }
+    }
+
+    return transaction;
   },
 
   validationSchema: Yup.object().shape({
@@ -41,7 +51,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     amount: Yup.number()
       .nullable()
       .required('Required'),
-    orderDate: Yup.date()
+    orderDate: Yup.date().nullable()
       .required('Required'),
   }),
 
