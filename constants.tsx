@@ -2,6 +2,8 @@ import IMask from 'imask';
 import { Theme } from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
 
+export const BASE_PATH_RECEIPT = 'http://192.168.0.6:81/storage/';
+
 export const COLORS = {
   primary: '#006600',
   secondary: '#ffffff',

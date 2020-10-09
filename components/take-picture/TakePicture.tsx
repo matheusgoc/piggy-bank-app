@@ -27,49 +27,26 @@ interface TakePictureProps {
   icon?: string,
   iconType?: string,
   width?: string | number,
+  image?: string,
   onTake?(uri: string): void,
   onRemove?(): void,
 }
 
 const TakePicture = (props: TakePictureProps) => {
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(props.image);
   const [isImageMax, setImageMax] = useState(false);
 
   const styles = StyleSheet.create({
+    ...baseStyles,
     container: {
+      ...baseStyles.container,
       width: props.width || '100%',
-      paddingHorizontal: 10,
-      paddingVertical: 20,
     },
     placeholder: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'rgba(0,47,7,.1)',
-      borderRadius: 10,
-    },
-    label: {
-      color: COLORS.primary,
-      fontWeight: 'bold',
-    },
-    imageMaxOverlay: {
-      width: '100%',
-      height: '100%',
-      padding: 0,
-      margin: 0,
-    },
-    imageMaxOverlayToolbar: {
-      position: 'absolute',
-      width: '100%',
-      top: 0,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    },
-    imageBackground: {
-      width: '100%',
-      height: '100%',
-    },
+      ...baseStyles.placeholder,
+      backgroundColor: (image)? '#ffffff' : 'rgba(0,47,7,0.1)',
+    }
   });
 
   const handleCameraRollPermission = async () => {
@@ -159,6 +136,34 @@ const TakePicture = (props: TakePictureProps) => {
     }
   }
 
+  const remove = () => {
+    Alert.alert(
+      "Remove Receipt Picture",
+      "Are you sure you want to remove this picture?",
+      [
+        {
+          text: "NO",
+          style: "cancel"
+        },
+        {
+          text: "YES",
+          style: "destructive",
+          onPress: () => {
+            setImageMax(false);
+            setImage(null);
+            resetStatusBar();
+            if (props.formik?.values[props.name]) {
+              props.formik.values[props.name] = null;
+            }
+            if (props.onRemove) {
+              props.onRemove();
+            }
+          }}
+      ],
+      { cancelable: false }
+    );
+  }
+
   const { showActionSheetWithOptions } = useActionSheet();
   const showOptions = () => {
     showActionSheetWithOptions(
@@ -211,28 +216,7 @@ const TakePicture = (props: TakePictureProps) => {
             (async () => { await share()})();
             break;
           case 3:
-            Alert.alert(
-              "Remove Receipt Picture",
-              "Are you sure you want to remove this picture?",
-              [
-                {
-                  text: "NO",
-                  style: "cancel"
-                },
-                {
-                  text: "YES",
-                  style: "destructive",
-                  onPress: () => {
-                    if (props.formik?.values[props.name]) {
-                      props.formik.values[props.name] = null;
-                    }
-                    setImageMax(false);
-                    setImage(null);
-                    resetStatusBar();
-                  }}
-              ],
-              { cancelable: false }
-            );
+            remove();
             break;
         }
       },
@@ -254,13 +238,34 @@ const TakePicture = (props: TakePictureProps) => {
   }
 
   const renderImage = () => {
-    return (
-      <Image
-        source={{ uri: image }}
-        resizeMode='stretch'
-        style={{ width: '100%', height: '100%' }}
-      />
-    );
+
+    let render = null;
+    if (image) {
+
+      render = (
+        <Image
+          source={{ uri: image }}
+          resizeMode='contain'
+          style={styles.imageSize}
+        />
+      );
+
+    } else {
+
+      render = (
+        <>
+          <Icon
+            name='camera'
+            type={props.iconType || 'font-awesome-5'}
+            size={40}
+            color={COLORS.primary}
+          />
+          <Text style={styles.label}>{props.title || 'Take Picture'}</Text>
+        </>
+      );
+    }
+
+    return render;
   }
 
   return (
@@ -270,17 +275,7 @@ const TakePicture = (props: TakePictureProps) => {
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
         onPress={handleTouch}>
-        {(image)? renderImage() : (
-          <>
-            <Icon
-              name='camera'
-              type={props.iconType || 'font-awesome-5'}
-              size={40}
-              color={COLORS.primary}
-            />
-            <Text style={styles.label}>{props.title || 'Take Picture'}</Text>
-          </>
-        )}
+        {renderImage()}
       </TouchableHighlight>
       <Overlay
         isVisible={isImageMax}
@@ -293,8 +288,9 @@ const TakePicture = (props: TakePictureProps) => {
             imageHeight={Dimensions.get('window').height}>
             <Image
               source={{ uri: image }}
-              resizeMode='stretch'
-              style={styles.imageBackground} />
+              resizeMode='contain'
+              style={styles.imageSize}
+            />
           </ImageZoom>
           <View style={styles.imageMaxOverlayToolbar}>
             <Icon
@@ -322,5 +318,40 @@ const TakePicture = (props: TakePictureProps) => {
     </View>
   )
 }
+
+const baseStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  placeholder: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  label: {
+    color: COLORS.primary,
+    fontWeight: 'bold',
+  },
+  imageMaxOverlay: {
+    backgroundColor: 'black',
+    width: '100%',
+    height: '100%',
+    padding: 0,
+    margin: 0,
+  },
+  imageMaxOverlayToolbar: {
+    position: 'absolute',
+    width: '100%',
+    top: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  imageSize: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default TakePicture

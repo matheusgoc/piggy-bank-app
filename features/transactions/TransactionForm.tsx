@@ -6,7 +6,7 @@ import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
 import DropDown from '../../components/drop-down/DropDown';
-import { COLORS } from '../../constants';
+import { BASE_PATH_RECEIPT, COLORS } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 import { TransactionModel } from '../../models/TransactionModel';
@@ -17,9 +17,14 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
   const {
     handleSubmit,
-    isValid,
     values,
   } = props;
+
+  //set receipt image
+  let receipt = null;
+  if (values.receipt) {
+    receipt = (values.isNewReceipt)? values.receipt : BASE_PATH_RECEIPT + values.receipt;
+  }
 
   return (
     <SafeAreaView style={styles.style} edges={['right', 'bottom', 'left']}>
@@ -31,6 +36,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
             <TakePicture
               name='receipt'
               formik={props}
+              image={receipt}
               title='Receipt Picture'
               width='50%'
               onTake={() => {
@@ -38,6 +44,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 values.isReceiptRemoved = false;
               }}
               onRemove={() => {
+                console.log('test');
                 values.isNewReceipt = false;
                 values.isReceiptRemoved = true;
               }}
