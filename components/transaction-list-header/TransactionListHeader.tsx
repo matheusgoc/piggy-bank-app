@@ -29,6 +29,7 @@ const TransactionListHeader = () => {
 
     let currentDate = moment(date);
     currentDate.startOf('month');
+    const previousDate = moment(currentDate);
     switch (direction) {
       case 'before':
         currentDate.subtract(1, 'month');
@@ -42,7 +43,10 @@ const TransactionListHeader = () => {
 
     const year = currentDate.format('YYYY');
     const month = currentDate.format('MM');
-    serviceApi.load(year, month).then(() => {
+    serviceApi.load(year, month).catch((error) => {
+      dispatch(setDate(previousDate.toDate()));
+      console.warn('TransactionListHeader.handleOnChangeMonth: ' + error);
+    }).finally(() => {
       dispatch(setLoadingList(false));
     });
   }
