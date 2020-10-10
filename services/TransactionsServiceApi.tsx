@@ -124,7 +124,7 @@ export default class TransactionsServiceApi extends TransactionsService {
 
     Object.keys(data).forEach(key => {
       if (key !== 'receipt') {
-        form.append(key, data[key]);
+        form.append(key, data[key] || '');
       }
     });
 
