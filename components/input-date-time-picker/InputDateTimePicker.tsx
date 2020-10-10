@@ -83,7 +83,9 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   }
 
   const handleButtonPress = () => {
-    setValue(new Date());
+    if (!value) {
+      setValue(new Date());
+    }
     isVisible(true);
   }
 
