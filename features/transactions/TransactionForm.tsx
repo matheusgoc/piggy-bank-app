@@ -30,7 +30,8 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
     <SafeAreaView style={styles.style} edges={['right', 'bottom', 'left']}>
       <KeyboardAwareScrollView
         resetScrollToCoords={{ x: 0, y: 0 }}
-        scrollEnabled={true}>
+        scrollEnabled={true}
+        keyboardShouldPersistTaps='handled'>
         <View style={styles.container}>
           <View style={styles.row}>
             <TakePicture
@@ -72,8 +73,6 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 label='Place'
                 placeholder='Where?'
                 autoCapitalize='words'
-                textContentType='location'
-                keyboardType='ascii-capable'
               />
             </View>
           </View>
@@ -98,9 +97,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               name='description'
               formik={props}
               label='Description'
-              autoCapitalize='words'
-              textContentType='none'
-              keyboardType='ascii-capable'
+              autoCapitalize='sentences'
               multiline={true}
               numberOfLines={4}
               style={{height: 100}}

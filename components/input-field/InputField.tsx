@@ -58,6 +58,9 @@ const InputField = (props: InputFieldProps) => {
       inputContainerStyle={styles.inputContainer}
       labelStyle={styles.label}
       value={props.formik.values[props.name]}
+      keyboardType='default'
+      returnKeyType='done'
+      blurOnSubmit={true}
       {...props}
     />
   )
