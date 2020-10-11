@@ -91,7 +91,7 @@ const TakePicture = (props: TakePictureProps) => {
 
         const options: ImagePickerOptions = {
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          quality: 1,
+          quality: 0,
           allowsEditing: false,
         }
 
