@@ -57,7 +57,6 @@ const DropDownCategory = (props: DropDownCategoryProps) => {
       placeholder='Search...'
       width='100%'
       onSearch={searchCategoriesDebounce}
-      onOpen={() => searchCategories(props.formik.values.category.name)}
       loading={searchingCategory}
     />
   )

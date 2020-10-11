@@ -54,58 +54,24 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
   });
 
   const styles = StyleSheet.create({
+    ...baseStyles,
     label: {
+      ...baseStyles.label,
       color: (error)? COLORS.error : COLORS.primary,
-      fontWeight: 'bold',
-      fontSize: 16,
-      paddingBottom: 3,
-      paddingLeft: 10,
     },
     container: {
+      ...baseStyles.container,
       width: props.width || '100%',
     },
     button: {
-      justifyContent: 'space-between',
-      borderWidth: 2,
-      borderRadius: 5,
-      height: 45,
+      ...baseStyles.button,
       borderColor: (error)? COLORS.error : COLORS.primary,
-      marginHorizontal: 10,
-      paddingRight: 0,
     },
     buttonTitleStyle: {
+      ...baseStyles.buttonTitleStyle,
       color: (!value)? COLORS.gray : (error)? COLORS.error : null,
-      fontWeight: 'normal',
-      width: '80%',
-      textAlign: 'left',
     },
-    errorMessage: {
-      color: COLORS.error,
-      minHeight: 20,
-      fontSize: 12,
-      paddingLeft: 10,
-      paddingVertical: 5,
-    },
-    overlay: {
-      width: '85%',
-      height: '85%',
-      padding: 0,
-      borderRadius: 5,
-    },
-    searchBarContainer: {
-      borderTopLeftRadius: 5,
-      borderTopRightRadius: 5
-    },
-    returnIconContainer: {
-      position: 'absolute',
-      top: -20,
-      right: -20,
-    },
-    itemSelected: {
-      fontWeight: 'bold',
-      color: COLORS.primary,
-    }
-  })
+  });
 
   const handleItemPress = (item) => {
     setValue(item[props.searchKey]);
@@ -117,7 +83,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     if (props.onChange) {
       props.onChange(item);
     }
-    setOverlay(false);
+    setTimeout(() => setOverlay(false), 300);
   }
 
   const handleOnOpen = () => {
@@ -136,10 +102,14 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
   }
 
   const renderItem = ({ item, index, separators }) => {
+
     return (
-      <ListItem onPress={() => handleItemPress(item)}>
+      <ListItem
+        onPress={() => handleItemPress(item)}
+        topDivider={true}
+        containerStyle={(item[props['searchKey']] === value)? styles.itemSelected : {}}>
         <ListItem.Content>
-          <ListItem.Title style={(item[props['searchKey']] === value)? styles.itemSelected : {}}>
+          <ListItem.Title style={(item[props['searchKey']] === value)? styles.itemTitleSelected : {}}>
             {item[props['searchKey']]}
           </ListItem.Title>
         </ListItem.Content>
@@ -183,15 +153,13 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
               setSearch(text);
               return props.onSearch(text);
             }}
-            onClear={() => {
-
-            }}
           />
           <FlatList
             data={props.items || []}
             renderItem={renderItem}
             extraData={value}
             keyExtractor={item => item.name}
+            style={styles.flatList}
           />
           <Icon
             name='times'
@@ -207,5 +175,61 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     </>
   )
 }
+
+const baseStyles = StyleSheet.create({
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    paddingBottom: 3,
+    paddingLeft: 10,
+  },
+  container: {},
+  button: {
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    borderRadius: 5,
+    height: 45,
+    marginHorizontal: 10,
+    paddingRight: 0,
+  },
+  buttonTitleStyle: {
+    fontWeight: 'normal',
+    width: '80%',
+    textAlign: 'left',
+  },
+  errorMessage: {
+    color: COLORS.error,
+    minHeight: 20,
+    fontSize: 12,
+    paddingLeft: 10,
+    paddingVertical: 5,
+  },
+  overlay: {
+    width: '85%',
+    height: '85%',
+    padding: 0,
+    borderRadius: 5,
+  },
+  searchBarContainer: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
+  },
+  returnIconContainer: {
+    position: 'absolute',
+    top: -20,
+    right: -20,
+  },
+  itemSelected: {
+    backgroundColor: COLORS.primary,
+  },
+  itemTitleSelected: {
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  flatList: {
+    maxHeight: '91%',
+    borderRadius: 5,
+  },
+});
 
 export default DropDownOverlay
