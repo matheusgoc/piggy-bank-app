@@ -45,7 +45,6 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 values.isReceiptRemoved = false;
               }}
               onRemove={() => {
-                console.log('test');
                 values.isNewReceipt = false;
                 values.isReceiptRemoved = true;
               }}

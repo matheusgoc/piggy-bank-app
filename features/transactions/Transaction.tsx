@@ -33,6 +33,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     let transaction: TransactionModel = new TransactionModel();
     if (props.route?.params?.transaction) {
       transaction = JSON.parse(props.route?.params?.transaction);
+      transaction.amount = Math.abs(transaction.amount);
       if (transaction.timestamp) {
         transaction.orderDate = new Date(transaction.timestamp);
         transaction.orderTime = new Date(transaction.timestamp);
@@ -48,8 +49,8 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     category: Yup.object().shape({
       name: Yup.string().required('Required'),
     }),
-    amount: Yup.number()
-      .nullable()
+    amount: Yup.number().nullable()
+      .min(.01, 'Required')
       .required('Required'),
     orderDate: Yup.date().nullable()
       .required('Required'),

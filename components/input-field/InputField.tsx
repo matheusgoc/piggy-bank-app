@@ -41,18 +41,26 @@ const InputField = (props: InputFieldProps) => {
     },
   };
 
+  const handleOnChangeText = (value) => {
+    if (props.formik && props.name) {
+      props.formik.setFieldValue(props.name, (props.mask)? MASKS[props.mask].resolve(value) : value);
+    }
+    if (props.onFocus) {
+      props.onFocus(value);
+    }
+  }
+
+  const handleOnFocus = (e) => {
+    if (props.formik && props.name) {
+      props.formik.setFieldTouched(props.name, true);
+    }
+    if (props.onFocus) {
+      props.onFocus(e);
+    }
+  }
+
   return (
     <Input
-      onChangeText={(value) => {
-        if (props.formik && props.name) {
-          props.formik.setFieldValue(props.name, (props.mask)? MASKS[props.mask].resolve(value) : value);
-        }
-      }}
-      onFocus={(e) => {
-        if (props.formik && props.name) {
-          props.formik.setFieldTouched(props.name, true);
-        }
-      }}
       errorMessage={props.errorMessage || error}
       containerStyle={styles.container}
       inputContainerStyle={styles.inputContainer}
@@ -61,7 +69,9 @@ const InputField = (props: InputFieldProps) => {
       keyboardType='default'
       returnKeyType='done'
       blurOnSubmit={true}
+      onChangeText={handleOnChangeText}
       {...props}
+      onFocus={handleOnFocus}
     />
   )
 }

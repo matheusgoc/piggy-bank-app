@@ -33,38 +33,16 @@ export const showLoading = (isLoading: boolean): void => {
   store.dispatch(setLoading(isLoading));
 }
 
-
-/**
- * Clone everything
- *
- * @param item
- */
-export const clone = (item: any): any => {
-
-  let value;
-
-  // handle array
-  if (Array.isArray(item)) {
-
-    value = [];
-    for (let i = 0; i < 0; i++) {
-      value.push(clone(item[i]));
-    }
-
-  // handle object
-  } else if (typeof item === 'object' && !(item instanceof Date)) {
-
-    value = {};
-    const keys = Object.keys(item);
-    for (let i = 0; i < keys.length; i++) {
-      value[keys[i]] = clone(item[keys[i]]);
-    }
-
-  // handle other types
-  } else {
-
-    value = item;
+export const formatCurrency = (number: number|string) => {
+  if (typeof number == 'string') {
+    number = Number(unformatCurrency(number));
   }
+  return new Intl.NumberFormat(
+    'en-US',
+    { style: 'currency', currency: 'USD'}
+  ).format(number);
+}
 
-  return value;
+export const unformatCurrency = (currencyFormat:string)  => {
+  return currencyFormat.replace(/[^0-9.-]+/g,'');
 }
