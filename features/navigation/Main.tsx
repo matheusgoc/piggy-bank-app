@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -55,7 +55,7 @@ const Main = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName='TransactionsList'
+      initialRouteName='Transactions'
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size}) => {
           const type = 'font-awesome-5';
@@ -73,7 +73,7 @@ const Main = () => {
       tabBarOptions={{
         activeTintColor: COLORS.primary,
         inactiveTintColor: COLORS.gray,
-        tabStyle: { paddingBottom: 2 }
+        tabStyle: { paddingBottom: 2 },
       }}>
       <Tab.Screen name="Reports" component={ReportsStackScreen} />
       <Tab.Screen name="Transactions" component={TransactionsStackScreen} />
