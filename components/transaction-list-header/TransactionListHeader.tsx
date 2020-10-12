@@ -6,14 +6,14 @@ import { Button } from 'react-native-elements';
 import { COLORS } from '../../constants';
 import {
   getDate,
-  getLoadingList,
   setDate,
-  setLoadingList
+  getLoadingList,
+  setLoadingList,
+  setDeleteEnable,
+  checkDeleteEnable,
 } from '../../features/transactions/TransactionsSlice';
 import TransactionsServiceApi from '../../services/TransactionsServiceApi';
 
-// delete-sweep
-// delete-forever
 const TransactionListHeader = () => {
 
   const serviceApi = new TransactionsServiceApi();
@@ -21,10 +21,12 @@ const TransactionListHeader = () => {
   const dispatch = useDispatch();
   const date = useSelector(getDate);
   const loading = useSelector(getLoadingList);
+  const isDeleteEnable = useSelector(checkDeleteEnable);
 
   let time = null;
   const handleOnChangeMonth = (direction: 'before'|'after') => {
 
+    dispatch(setDeleteEnable(false));
     dispatch(setLoadingList(true));
 
     let currentDate = moment(date);
@@ -56,7 +58,7 @@ const TransactionListHeader = () => {
   }
 
   const handleOnDelete = () => {
-    console.log('TransactionListHeader.handleOnDelete');
+    dispatch(setDeleteEnable(!isDeleteEnable));
   }
 
   return (
@@ -105,8 +107,8 @@ const TransactionListHeader = () => {
         <Button
           onPress={() => handleOnDelete()}
           icon={{
-            name: "delete-sweep",
-            color: COLORS.primary,
+            name: (isDeleteEnable)? 'delete-forever' : 'delete-sweep',
+            color: (isDeleteEnable)? COLORS.error : COLORS.primary,
             type: 'material',
             size: 30,
           }}

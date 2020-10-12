@@ -12,12 +12,17 @@ export const TransactionsSlice = createSlice({
     listToSave: [],
     listToRemove: [],
     loadingList: false,
+    isDeleteEnable: false,
   },
   reducers: {
 
     // set that the list is loading
     setLoadingList: (state, action: PayloadAction<boolean>) => {
       state.loadingList = action.payload;
+    },
+
+    setDeleteEnable: (state, action: PayloadAction<boolean>) => {
+      state.isDeleteEnable = action.payload;
     },
 
     // set the current moment
@@ -93,9 +98,7 @@ export const TransactionsSlice = createSlice({
       const index = action.payload;
 
       // remove transaction from the current list
-      const removedTransaction = state.list[index];
-
-      // remove transaction from the current list
+      const removedTransaction = {...state.list[index]};
       state.list.splice(index, 1);
 
       // add transaction to the list to remove if it has been saved on server
@@ -166,6 +169,7 @@ const findTransactionIndex = (transactionToFind: TransactionModel, list: Transac
 //actions
 export const {
   setLoadingList,
+  setDeleteEnable,
   setDate,
   setList,
   setListToSave,
@@ -185,6 +189,7 @@ export const getList = state => state.transactions.list;
 export const getListToSave = state => state.transactions.listToSave;
 export const getListToRemove = state => state.transactions.listToRemove;
 export const getLoadingList = state => state.transactions.loadingList;
+export const checkDeleteEnable = state => state.transactions.isDeleteEnable;
 
 //reducers
 export default TransactionsSlice.reducer;

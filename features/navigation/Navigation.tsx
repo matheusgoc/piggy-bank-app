@@ -104,6 +104,17 @@ const Navigation = () => {
           }}
         />
       ),
+      edit: (
+        <RootStack.Screen
+          name='TransactionEdit'
+          component={ Transaction }
+          options={{
+            title: 'Edit Transaction',
+            headerBackTitleVisible: false,
+            headerTintColor: COLORS.primary,
+          }}
+        />
+      ),
       view: (
         <RootStack.Screen
           name='TransactionView'
@@ -128,6 +139,7 @@ const Navigation = () => {
               <>
                 { features.main }
                 { features.transactions.add }
+                { features.transactions.edit }
                 { features.transactions.view }
               </>
             ) : (

@@ -144,33 +144,13 @@ export default class TransactionsServiceApi extends TransactionsService {
   /**
    * Remove the transaction
    */
-  async delete(index: number):Promise<void> {
+  async delete(transaction: TransactionModel):Promise<void> {
 
-    const transaction = this.list[index];
     try {
 
       if (transaction.id) {
         await this.api.delete('transactions/' + transaction.id);
       }
-
-      this.removeFromList(transaction);
-      this.removeFromListToSave(transaction);
-
-    } catch (error) {
-
-      const method = 'TransactionsServiceApi.delete';
-      let msg = 'Unable to remove the transaction due to a server error. Try again later!';
-      this.handleHttpError(method, msg, error);
-    }
-
-    const idsToRemove = this.listToRemove.map((transaction) => {
-      return transaction.id;
-    }).join(',');
-
-    try {
-
-      await this.api.delete('transactions/' + idsToRemove);
-      this.listToRemove = [];
 
     } catch (error) {
 

@@ -3,27 +3,31 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
 import { Divider, Icon } from 'react-native-elements';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TransactionModel } from '../../models/TransactionModel'
 import TransactionListItem from '../../components/transaction-list-item/TransactionListItem';
-import { getList, getLoadingList } from './TransactionsSlice';
+import { getList, getLoadingList, setDeleteEnable } from './TransactionsSlice';
 import TransactionListPlaceholder from '../../components/transaction-list-item/TransactionListPlaceholder';
 import { COLORS } from '../../constants';
 
 const TransactionsList = ({ navigation }) => {
 
+  const dispatch = useDispatch();
   const loading = useSelector(getLoadingList);
   const list = useSelector(getList);
 
   const handleItemPress = (transaction: TransactionModel | string, index: number) => {
-    navigation.navigate('Transaction', { transaction: JSON.stringify(transaction) });
+
+    dispatch(setDeleteEnable(false));
+    navigation.navigate('TransactionEdit', { transaction: JSON.stringify(transaction) });
   }
 
   const renderItem = (transaction: TransactionModel, index: number) => {
 
     return (
       <TransactionListItem
-        transaction={transaction}
+        index={index}
+        transaction={{...transaction}}
         onPress={() => handleItemPress(transaction, index)}
       />
     );

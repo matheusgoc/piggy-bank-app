@@ -4,6 +4,7 @@ import { store } from '../store';
 import { getToken } from '../features/profile/ProfileSlice';
 import { showLoading } from '../helpers';
 import TransactionsServiceApi from './TransactionsServiceApi';
+import { setDeleteEnable } from '../features/transactions/TransactionsSlice';
 
 export default class SyncService extends BaseService{
 
@@ -24,6 +25,7 @@ export default class SyncService extends BaseService{
 
       const token = getToken(store.getState());
       const sync = new SyncService();
+      sync.dispatch(setDeleteEnable(false));
 
       try {
 
