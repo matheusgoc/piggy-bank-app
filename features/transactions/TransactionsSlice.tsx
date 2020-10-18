@@ -4,6 +4,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment';
 import { TransactionModel } from '../../models/TransactionModel';
 
+let reqCount = 0;
+
 export const TransactionsSlice = createSlice({
   name: 'transactions',
   initialState: {

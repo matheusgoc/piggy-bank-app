@@ -73,6 +73,7 @@ const Main = () => {
       tabBarOptions={{
         activeTintColor: COLORS.primary,
         inactiveTintColor: COLORS.gray,
+        style: { minHeight: 50 },
         tabStyle: { paddingBottom: 2 },
       }}>
       <Tab.Screen name="Reports" component={ReportsStackScreen} />

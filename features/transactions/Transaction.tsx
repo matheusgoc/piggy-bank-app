@@ -54,6 +54,10 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
       .required('Required'),
     orderDate: Yup.date().nullable()
       .required('Required'),
+    place: Yup.string().nullable()
+      .max(45, "45 characters at most"),
+    description: Yup.string().nullable()
+      .max(244, "244 characters at most"),
   }),
 
   handleSubmit: (transaction: TransactionModel, bag:any)  => {

@@ -1,42 +1,25 @@
 import React from 'react';
-import { StyleSheet } from "react-native";
-import { Avatar, ListItem } from 'react-native-elements';
-import { COLORS } from '../../constants';
+import { Divider, ListItem } from 'react-native-elements';
+import ContentLoader, { Circle, Rect } from "react-content-loader/native"
 
 const TransactionListPlaceholder = () => {
   return (
-    <ListItem>
-      <Avatar
-        size='medium'
-        rounded
-        title='--'
-        containerStyle={styles.date}
-        titleStyle={styles.dateTitle}
-      />
-      <ListItem.Content>
-        <ListItem.Title style={styles.categoryText}>Loading...</ListItem.Title>
-        <ListItem.Subtitle>--</ListItem.Subtitle>
-      </ListItem.Content>
+    <ListItem bottomDivider={true}>
+      <ContentLoader
+        speed={.5}
+        width={300}
+        height={60}
+        viewBox="0 0 300 60"
+        backgroundColor="#f3f3f3"
+        foregroundColor="#d4d4d4"
+      >
+        <Rect x="69" y="13" rx="3" ry="3" width="200" height="10" />
+        <Rect x="70" y="35" rx="3" ry="3" width="100" height="10" />
+        <Circle cx="29" cy="29" r="29" />
+      </ContentLoader>
+      <Divider />
     </ListItem>
   )
 }
-
-const styles = StyleSheet.create({
-  date: {
-    borderWidth: 1,
-    borderColor: COLORS.gray,
-  },
-  dateTitle: {
-    color: COLORS.gray,
-    fontSize: 15,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
-  categoryText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.gray,
-  }
-});
 
 export default TransactionListPlaceholder

@@ -1,9 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import { TOAST } from '../constants';
+import { API_URL, TOAST } from '../constants';
 import { store } from '../store';
-
-// @ts-ignore
-import { API_URL } from '@env';
 
 export interface IService {
   store(): void

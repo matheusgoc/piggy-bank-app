@@ -4,9 +4,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { FormikProps } from 'formik';
 import { Button, Card, Icon, Overlay } from 'react-native-elements';
 import DropDown from '../../components/drop-down/DropDown';
-import { COLORS, MASKS } from '../../constants';
+import { COLORS } from '../../constants';
 import { ProfileModel } from '../../models/ProfileModel';
 import CurrencyField from '../../components/currency-field/CurrencyField';
+import { formatCurrency } from '../../helpers';
 
 const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
@@ -24,23 +25,34 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
    */
   const onNext = () => {
 
-    if (!values.targetMonthlySavings || !values.targetTotalSavings) {
+    if (!values.targetMonthlySavings && !values.targetTotalSavings) {
       handleSubmit();
       return;
     }
 
-    const mask = MASKS.currency;
-
     // format monthly target
-    const monthlyTarget = mask.resolve(values.targetMonthlySavings.toString());
+    const monthlyTargetFormat = formatCurrency(values.targetMonthlySavings);
 
     // format total target
     const totalTarget = (values.targetMonthlySavings > values.targetTotalSavings)
-      ? monthlyTarget
-      : mask.resolve(values.targetTotalSavings.toString());
+      ? values.targetMonthlySavings
+      : values.targetTotalSavings;
+    const totalTargetFormat = formatCurrency(totalTarget);
 
     // calculate the time prediction for the target
-    const savingsMonths = Math.ceil(values.targetTotalSavings / values.targetMonthlySavings);
+    const savingsTotalMonths = Math.ceil(totalTarget / values.targetMonthlySavings);
+    const savingsYears = Math.floor(savingsTotalMonths / 12);
+    const savingsMonths = savingsTotalMonths % 12;
+    let periodText = '';
+    if (savingsYears > 0) {
+      periodText += savingsYears + ' year';
+      periodText += (savingsYears > 1)? 's ' : ' ';
+      periodText += (savingsMonths > 0)? 'and ': '';
+    }
+    if (savingsMonths > 0) {
+      periodText += savingsMonths + ' month';
+      periodText += (savingsMonths > 1)? 's ' : ' ';
+    }
 
     // determine balance signal
     values.balance = Math.abs(values.balance);
@@ -49,28 +61,24 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
     }
 
     // calculate new balance with target and format it
-    let newBalance:any = values.balance + values.targetTotalSavings;
-    newBalance = mask.resolve(newBalance.toString());
-    if (newBalance < 0) {
-      newBalance = '- (' + newBalance + ')';
-    }
+    let newBalance = values.balance + totalTarget;
+    let newBalanceFormat = formatCurrency(newBalance);
 
     // display the modal message
     setResultMessage((
       <Text style={styles.resultText}>
-        In <Text style={{fontWeight: 'bold'}}>{savingsMonths} month{(savingsMonths > 1)? 's ' : ' '}</Text>
+        In <Text style={{fontWeight: 'bold'}}>{periodText}</Text>
         you'll have been saved
-        <Text style={{fontWeight: 'bold'}}> {totalTarget} </Text>
-        {(savingsMonths > 1)? (
-          <>by saving <Text style={{fontWeight: 'bold'}}>{monthlyTarget}</Text> per month </>
+        <Text style={{fontWeight: 'bold'}}> {totalTargetFormat} </Text>
+        {(savingsTotalMonths > 1)? (
+          <>by saving <Text style={{fontWeight: 'bold'}}>{monthlyTargetFormat}</Text> per month </>
         ) : null}
-        and your total balance will be
-        <Text style={{fontWeight: 'bold'}}> {newBalance}</Text>
+        and your total balance will be:
+        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>{"\n"}{"\n"}{newBalanceFormat}</Text>
       </Text>
     ));
     setOverlay(true);
   }
-
 
   return (
     <SafeAreaView style={styles.style}>

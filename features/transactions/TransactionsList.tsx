@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
 import { Divider, Icon } from 'react-native-elements';
-import { useSelector, useDispatch } from 'react-redux';
+import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
 import { TransactionModel } from '../../models/TransactionModel'
 import TransactionListItem from '../../components/transaction-list-item/TransactionListItem';
 import { getList, getLoadingList, setDeleteEnable } from './TransactionsSlice';
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
   empty: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '90%'
+    height: '100%',
+    paddingBottom: 100,
   },
   emptyText: {
     color: COLORS.gray,

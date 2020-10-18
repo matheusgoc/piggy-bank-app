@@ -12,8 +12,10 @@ const Savings = withFormik<ProfileModel, ProfileModel>({
 
     // map profile from storage
     profileService.syncFromStore();
+    const profile = profileService.get();
+    profile.balance = Math.abs(profile.balance);
 
-    return profileService.get();
+    return profile;
   },
 
   handleSubmit: (profile: ProfileModel, bag:any)  => {

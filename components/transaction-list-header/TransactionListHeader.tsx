@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { StyleSheet, Text, View } from "react-native";
@@ -17,14 +17,17 @@ import TransactionsServiceApi from '../../services/TransactionsServiceApi';
 const TransactionListHeader = () => {
 
   const serviceApi = new TransactionsServiceApi();
-
   const dispatch = useDispatch();
   const date = useSelector(getDate);
   const loading = useSelector(getLoadingList);
   const isDeleteEnable = useSelector(checkDeleteEnable);
 
-  let time = null;
+  const [timeout, enableTimeout] = useState(null);
+  let reqCount = 0;
+
   const handleOnChangeMonth = (direction: 'before'|'after') => {
+
+    clearTimeout(timeout);
 
     dispatch(setDeleteEnable(false));
     dispatch(setLoadingList(true));
@@ -42,15 +45,16 @@ const TransactionListHeader = () => {
     }
 
     dispatch(setDate(currentDate.toDate()));
-
-    const year = currentDate.format('YYYY');
-    const month = currentDate.format('MM');
-    serviceApi.load(year, month).catch((error) => {
-      dispatch(setDate(previousDate.toDate()));
-      console.warn('TransactionListHeader.handleOnChangeMonth: ' + error);
-    }).finally(() => {
-      dispatch(setLoadingList(false));
-    });
+    enableTimeout(setTimeout(() => {
+      const year = currentDate.format('YYYY');
+      const month = currentDate.format('MM');
+      serviceApi.load(year, month).catch((error) => {
+        dispatch(setDate(previousDate.toDate()));
+        console.warn('TransactionListHeader.handleOnChangeMonth: ' + error);
+      }).finally(() => {
+        dispatch(setLoadingList(false));
+      });
+    },3000));
   }
 
   const handleOnSearch = () => {
@@ -148,7 +152,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btn: {
-    // backgroundColor: 'pink',
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'left',

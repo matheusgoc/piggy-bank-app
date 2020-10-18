@@ -6,7 +6,7 @@ import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
 import DropDown from '../../components/drop-down/DropDown';
-import { BASE_PATH_RECEIPT, COLORS } from '../../constants';
+import { STORAGE_URL, COLORS } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 import { TransactionModel } from '../../models/TransactionModel';
@@ -23,7 +23,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
   //set receipt image
   let receipt = null;
   if (values.receipt) {
-    receipt = (values.isNewReceipt)? values.receipt : BASE_PATH_RECEIPT + values.receipt;
+    receipt = (values.isNewReceipt)? values.receipt : STORAGE_URL + values.receipt;
   }
 
   return (
@@ -72,6 +72,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
                 label='Place'
                 placeholder='Where?'
                 autoCapitalize='words'
+                maxLength={45}
               />
             </View>
           </View>
@@ -100,6 +101,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               multiline={true}
               numberOfLines={4}
               style={{height: 100}}
+              maxLength={244}
             />
           </View>
         </View>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
-  Dimensions,
-  Image,
+  Dimensions, Image,
   Platform,
   StatusBar,
   StyleSheet,
@@ -243,11 +243,18 @@ const TakePicture = (props: TakePictureProps) => {
     if (image) {
 
       render = (
-        <Image
-          source={{ uri: image }}
-          resizeMode='contain'
-          style={styles.imageSize}
-        />
+        <>
+          <Image
+            source={{ uri: image }}
+            resizeMode='contain'
+            style={styles.imageSize}
+          />
+          <ActivityIndicator
+            size='large'
+            color={COLORS.primary}
+            style={styles.imagePlaceholder}
+          />
+        </>
       );
 
     } else {
@@ -292,6 +299,11 @@ const TakePicture = (props: TakePictureProps) => {
               style={styles.imageSize}
             />
           </ImageZoom>
+          <ActivityIndicator
+            size='large'
+            color={COLORS.secondary}
+            style={styles.imagePlaceholder}
+          />
           <View style={styles.imageMaxOverlayToolbar}>
             <Icon
               name='chevron-left'
@@ -352,6 +364,13 @@ const baseStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  imagePlaceholder: {
+    position: 'absolute',
+    zIndex: -1,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    top: '50%',
+  }
 });
 
 export default TakePicture

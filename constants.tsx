@@ -1,8 +1,15 @@
 import IMask from 'imask';
 import { Theme } from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
+// @ts-ignore
+import { BASE_PATH_STORAGE } from '@env';
+// @ts-ignore
+import { BASE_PATH_API } from '@env';
 
-export const BASE_PATH_RECEIPT = 'http://192.168.0.6:81/storage/';
+// export const STORAGE_URL = 'http://192.168.0.6:81/storage/';
+// export const API_URL = 'http://192.168.0.6:81/api/';
+export const STORAGE_URL = BASE_PATH_STORAGE;
+export const API_URL = BASE_PATH_API;
 
 export const COLORS = {
   primary: '#006600',
