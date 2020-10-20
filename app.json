@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "piggy-bank-app",
+    "name": "Piggy Bank App",
+    "description": "Piggy Bank App is part of a final project called Personal Expenses Tracking App (PETA) from Illinois State University (ISU). It is a mobile App designed to make people gain control over their own expenses.",
     "slug": "piggy-bank-app",
-    "version": "1.0.0",
+    "version": "v0.1.0",
+    "githubUrl": "https://github.com/matheusgoc/piggy-bank-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +19,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.matheuscamara.PiggyBankApp",
+      "buildNumber": "1",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.matheuscamara.PiggyBankApp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

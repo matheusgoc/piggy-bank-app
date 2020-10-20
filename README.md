@@ -1,10 +1,8 @@
 # Piggy Bank App
 
-A mobile App to make people gain control over their own expenses!
-
 Piggy Bank App is part of a final project called Personal Expenses Tracking App (PETA) 
-from Illinois State University (ISU) and is the main interaction channel with 
-the end user in this project.
+from Illinois State University (ISU). It is a mobile App designed to make people gain 
+control over their own expenses.
 
 ## PETA Project
 
