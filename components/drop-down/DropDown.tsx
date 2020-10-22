@@ -3,19 +3,24 @@ import { StyleSheet, Text, View } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FormikProps } from 'formik';
 import { COLORS } from '../../constants';
+import { BottomSheet, BottomSheetProps, Button, ListItem } from 'react-native-elements';
 
-interface DropDown extends DropDownPicker {
+interface DropDown {
+  items: Array<{label: string, value: string|number}>,
   label: any,
   value?: any,
   width?: string | number,
   errorMessage?: string,
   name?: string,
   formik?: FormikProps<any>,
+  placeholder?: string,
   onChange?(item:any): void,
 }
 
 const DropDown = (props: DropDown) => {
 
+  const [value, setValue] = useState(props.value || props.formik?.values[props.name]);
+  const [visible, setVisible] = useState(false);
   const [error, showError]:any = useState('');
   useEffect(() => {
     if (props.formik && props.name) {
@@ -27,86 +32,95 @@ const DropDown = (props: DropDown) => {
   });
 
   const styles = StyleSheet.create({
+    ...baseStyles,
     container: {
+      ...baseStyles.container,
       width: props.width || '100%',
-      paddingHorizontal: 10,
-      zIndex: 10,
     },
     label: {
+      ...baseStyles.label,
       color: (error)? COLORS.error : COLORS.primary,
-      fontWeight: 'bold',
-      fontSize: 16,
-    },
-    picker: {
-      backgroundColor: 'transparent',
-      padding: 0,
-      borderWidth: 0,
-    },
-    pickerContainer: {
-      backgroundColor: '#ffffff',
-      width: '100%',
-      height: 45,
-      borderColor: (error)? COLORS.error : COLORS.primary,
-      borderRadius: 5,
-      borderWidth: 2,
-    },
-    pickerItem: {
-      justifyContent: 'flex-start',
-    },
-    pickerDropDown: {
-      backgroundColor: "#ffffff",
-      alignSelf: 'flex-start',
-      borderRadius: 5,
-      borderColor: (error)? COLORS.error : COLORS.primary,
-      borderWidth: 1,
-    },
-    pickerLabel: {
-      fontSize: 16,
-    },
-    errorMessage: {
-      color: COLORS.error,
-      minHeight: 20,
-      fontSize: 12,
-      paddingLeft: 5,
-      paddingVertical: 5,
     }
   });
+
+  const handleOnOpen = () => {
+    setVisible(true);
+  };
+
+  const handleOnPress = (item) => {
+    setVisible(false);
+    setValue(item);
+    if (props.formik?.values[props.name]) {
+      props.formik.values[props.name] = item.value;
+      props.formik.validateForm();
+    }
+    if (props.onChange) {
+      props.onChange(item);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
         {props.label}
       </Text>
-      <DropDownPicker
-        items={props.items}
-        defaultValue={(props.value)? props.value : props.formik.values[props.name]}
-        placeholder='--'
-        style={styles.picker}
-        containerStyle={styles.pickerContainer}
-        itemStyle={styles.pickerItem}
-        labelStyle={styles.pickerLabel}
-        dropDownStyle={styles.pickerDropDown}
-        arrowColor={(error)? COLORS.error : null}
-        searchablePlaceholder='Search'
-        onChangeItem={(item) => {
-          if(props.formik && props.name){
-            props.formik.setFieldValue(props.name, item.value);
-          }
+      <Button
+        title={ value.label || props.placeholder || '--' }
+        type="outline"
+        onPress={handleOnOpen}
+        iconRight={true}
+        icon={{
+          name: (visible)? 'caret-up' : 'caret-down',
+          type: 'font-awesome',
+          color:(error)? COLORS.error : COLORS.primary,
         }}
-        onClose={() => {
-          if(props.formik && props.name){
-            setTimeout(() => {
-              props.formik.setFieldTouched(props.name, true);
-            }, 5);
-          }
-        }}
-        {...props}
+        buttonStyle={styles.button}
+        titleStyle={styles.buttonTitle}
       />
+      <BottomSheet isVisible={visible} modalProps={{}}>
+        {props.items.map((item, index) => (
+          <ListItem key={index} onPress={() => handleOnPress(item)}>
+            <ListItem.Content>
+              <ListItem.Title>{item.label}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        ))}
+      </BottomSheet>
       <Text style={styles.errorMessage}>
         {props.errorMessage || error}
       </Text>
     </View>
   )
 }
+
+const baseStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+    zIndex: 10,
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  button: {
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    borderRadius: 5,
+    height: 45,
+    marginHorizontal: 10,
+  },
+  buttonTitle: {
+    fontWeight: 'normal',
+    width: '80%',
+    textAlign: 'left',
+  },
+  errorMessage: {
+    color: COLORS.error,
+    minHeight: 20,
+    fontSize: 12,
+    paddingLeft: 5,
+    paddingVertical: 5,
+  },
+});
 
 export default DropDown;

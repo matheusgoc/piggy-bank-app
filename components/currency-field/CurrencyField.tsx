@@ -9,7 +9,7 @@ const CurrencyField = (props: CurrencyField) => {
 
   let initialValue = props.value || props.formik?.values[props.name] || '0.00';
   const [value, setValue] = useState(formatCurrency(initialValue));
-  const [selection, setSelection] = useState(null);
+  // const [selection, setSelection] = useState(null);
 
   const handleOnChangeText = (inputValue) => {
 
@@ -32,40 +32,39 @@ const CurrencyField = (props: CurrencyField) => {
     }
   }
 
-  const handleOnFocus = (e) => {
-    setSelection({start: value.length});
-    // setSelection(null);
-    if (props.onFocus) {
-      props.onFocus(e);
-    }
-  }
-
-  const handleOnKeyPress = (e) => {
-    setSelection(null);
-    // setSelection(null);
-    if (props.onKeyPress) {
-      props.onKeyPress(e);
-    }
-  }
+  // const handleOnFocus = (e) => {
+  //   setSelection({start: value.length});
+  //   setSelection(null);
+  //   if (props.onFocus) {
+  //     props.onFocus(e);
+  //   }
+  // }
+  //
+  // const handleOnKeyPress = (e) => {
+  //   setSelection(null);
+  //   if (props.onKeyPress) {
+  //     props.onKeyPress(e);
+  //   }
+  // }
 
   return (
     <InputField
       placeholder='$0.00'
       keyboardType='number-pad'
       inputStyle={styles.currencyInput}
-      selection={selection}
+      // selection={selection}
       {...props}
       value={value}
       onChangeText={handleOnChangeText}
-      onKeyPress={handleOnKeyPress}
-      onFocus={handleOnFocus}
+      // onKeyPress={handleOnKeyPress}
+      // onFocus={handleOnFocus}
     />
   )
 }
 
 const styles = StyleSheet.create({
   currencyInput: {
-    textAlign: 'right',
+    // textAlign: 'right',
     paddingRight: 10
   },
 });

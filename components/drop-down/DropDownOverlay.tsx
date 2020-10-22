@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { Button, Icon, ListItem, Overlay, SearchBar } from 'react-native-elements';
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Icon, IconProps, ListItem, Overlay, SearchBar } from 'react-native-elements';
 import { FormikProps } from 'formik';
 import { COLORS } from '../../constants';
 
 export interface DropDownOverlayProps {
   items: object[],
-  key: string,
+  id: string,
   searchKey: string,
   label?: string,
   value?: object,
@@ -16,7 +16,9 @@ export interface DropDownOverlayProps {
   width?: string | number,
   errorMessage?: string,
   loading?: boolean,
-  onSearch(text: string): void,
+  icon?: IconProps,
+  hideButtonLabel?: boolean,
+  onSearch?(text: string): void,
   renderItem?(item: object): any,
   onChange?(item: object): void,
   onOpen?(): void,
@@ -53,7 +55,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     }
   });
 
-  const styles = StyleSheet.create({
+  let styles = StyleSheet.create({
     ...baseStyles,
     label: {
       ...baseStyles.label,
@@ -67,10 +69,22 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       ...baseStyles.button,
       borderColor: (error)? COLORS.error : COLORS.primary,
     },
-    buttonTitleStyle: {
-      ...baseStyles.buttonTitleStyle,
-      color: (!value)? COLORS.gray : (error)? COLORS.error : null,
+    buttonTitle: {
+      ...baseStyles.buttonTitle,
+      color: (!value)? COLORS.gray : (error)? COLORS.error : COLORS.black,
     },
+    overlay: (props.onSearch)? {
+      ...baseStyles.overlay,
+      height: '80%',
+    } : {
+      ...baseStyles.overlay,
+      maxHeight: '80%',
+      paddingBottom: 5,
+    },
+    flatList: {
+      ...baseStyles.flatList,
+      maxHeight: (props.onSearch)? '82%' : '100%',
+    }
   });
 
   const handleItemPress = (item) => {
@@ -83,7 +97,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     if (props.onChange) {
       props.onChange(item);
     }
-    setTimeout(() => setOverlay(false), 300);
+    setTimeout(() => setOverlay(false), 500);
   }
 
   const handleOnOpen = () => {
@@ -104,35 +118,46 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
   const renderItem = ({ item, index, separators }) => {
 
     return (
-      <ListItem
-        onPress={() => handleItemPress(item)}
-        topDivider={true}
-        containerStyle={(item[props['searchKey']] === value)? styles.itemSelected : {}}>
-        <ListItem.Content>
-          <ListItem.Title style={(item[props['searchKey']] === value)? styles.itemTitleSelected : {}}>
+      <Pressable onPress={() => handleItemPress(item)}>
+        <View style={[
+          styles.item,
+          (index < props.items.length - 1)? styles.itemSeparator : {},
+          (item[props['searchKey']] === value)? styles.itemSelected : {}
+        ]}>
+          <Text style={[
+            styles.itemText,
+            (item[props['searchKey']] === value)? styles.itemTextSelected : {}
+          ]}>
             {item[props['searchKey']]}
-          </ListItem.Title>
-        </ListItem.Content>
-      </ListItem>
+          </Text>
+        </View>
+      </Pressable>
     );
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.label}>{props.label}</Text>
+    <View style={styles.container}>
+      <View>
+        {(props.hideButtonLabel)? null :
+          (
+            <Text style={styles.overlayLabel}>{props.label}</Text>
+          )
+        }
         <Button
           title={ value || props.placeholder }
           type="outline"
           onPress={handleOnOpen}
           iconRight={true}
-          icon={{
+          icon={(props.icon)? {
+            ...props.icon,
+            color:(error)? COLORS.error : COLORS.primary,
+          } : {
             name: 'search',
             type:'font-awesome-5',
             color:(error)? COLORS.error : COLORS.primary,
           }}
           buttonStyle={styles.button}
-          titleStyle={styles.buttonTitleStyle}
+          titleStyle={styles.buttonTitle}
         />
       </View>
       <Text style={styles.errorMessage}>
@@ -142,23 +167,28 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
         isVisible={overlay}
         overlayStyle={styles.overlay}
         onBackdropPress={handleOnClose}>
-        <View>
-          <SearchBar
-            placeholder={props.placeholder}
-            value={ search }
-            lightTheme={true}
-            containerStyle={styles.searchBarContainer}
-            showLoading={props.loading}
-            onChangeText={(text) => {
-              setSearch(text);
-              return props.onSearch(text);
-            }}
-          />
+        <View style={styles.overlayContainer}>
+          <View style={styles.overlayTitle}>
+            <Text style={styles.overlayTitleText}>{props.label}</Text>
+          </View>
+          {(props.onSearch) ? (
+            <SearchBar
+              placeholder={props.placeholder}
+              value={search}
+              lightTheme={true}
+              containerStyle={styles.searchBarContainer}
+              showLoading={props.loading}
+              onChangeText={(text) => {
+                setSearch(text);
+                return props.onSearch(text);
+              }}
+            />
+          ) : null}
           <FlatList
             data={props.items || []}
             renderItem={renderItem}
             extraData={value}
-            keyExtractor={item => item.name}
+            keyExtractor={item => item[props.id]}
             style={styles.flatList}
           />
           <Icon
@@ -172,27 +202,26 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
           />
         </View>
       </Overlay>
-    </>
+    </View>
   )
 }
 
 const baseStyles = StyleSheet.create({
+  container: {},
   label: {
     fontWeight: 'bold',
     fontSize: 16,
     paddingBottom: 3,
     paddingLeft: 10,
   },
-  container: {},
   button: {
     justifyContent: 'space-between',
     borderWidth: 2,
     borderRadius: 5,
     height: 45,
     marginHorizontal: 10,
-    paddingRight: 0,
   },
-  buttonTitleStyle: {
+  buttonTitle: {
     fontWeight: 'normal',
     width: '80%',
     textAlign: 'left',
@@ -206,30 +235,54 @@ const baseStyles = StyleSheet.create({
   },
   overlay: {
     width: '85%',
-    height: '85%',
     padding: 0,
     borderRadius: 5,
   },
-  searchBarContainer: {
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5
+  overlayContainer: {},
+  overlayLabel: {
+    paddingLeft: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.primary,
   },
+  overlayTitle: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlayTitleText: {
+    color: COLORS.primary,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  searchBarContainer: {},
   returnIconContainer: {
     position: 'absolute',
     top: -20,
     right: -20,
   },
+  item: {
+    justifyContent: 'center',
+    height: 50,
+    paddingLeft: 20,
+    backgroundColor: COLORS.secondary,
+  },
+  itemSeparator: {
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGray,
+  },
+  itemText: {
+    fontSize: 16,
+    color: COLORS.primary,
+  },
   itemSelected: {
     backgroundColor: COLORS.primary,
   },
-  itemTitleSelected: {
+  itemTextSelected: {
+    color: COLORS.secondary,
     fontWeight: 'bold',
-    color: '#fff',
   },
-  flatList: {
-    maxHeight: '91%',
-    borderRadius: 5,
-  },
+  flatList: {},
 });
 
 export default DropDownOverlay

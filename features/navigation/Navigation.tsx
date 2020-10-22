@@ -1,4 +1,5 @@
 import React from 'react';
+import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import Password from '../profile/Password';
 import Main from './Main';
 import Transaction from '../transactions/Transaction';
 import TransactionsView from '../transactions/TransactionsView';
+enableScreens();
 
 const Navigation = () => {
 

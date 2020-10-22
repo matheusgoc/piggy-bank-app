@@ -3,11 +3,11 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FormikProps } from 'formik';
 import { Button, Card, Icon, Overlay } from 'react-native-elements';
-import DropDown from '../../components/drop-down/DropDown';
 import { COLORS } from '../../constants';
 import { ProfileModel } from '../../models/ProfileModel';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 import { formatCurrency } from '../../helpers';
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
 
 const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
@@ -20,9 +20,7 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
   const [overlay, setOverlay] = useState(false);
   const [resultMessage, setResultMessage] = useState(null);
 
-  /**
-   * Handle form's submission to display the savings' plan summary
-   */
+  // Handle form's submission to display the savings' plan summary
   const onNext = () => {
 
     if (!values.targetMonthlySavings && !values.targetTotalSavings) {
@@ -56,7 +54,7 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
     // determine balance signal
     values.balance = Math.abs(values.balance);
-    if (values.balanceSignal === 'owed') {
+    if (values.balanceSignal == 'owed' || values.balanceSignal?.value == 'owed') {
       values.balance = -values.balance;
     }
 
@@ -66,16 +64,18 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
     // display the modal message
     setResultMessage((
-      <Text style={styles.resultText}>
-        In <Text style={{fontWeight: 'bold'}}>{periodText}</Text>
-        you'll have been saved
-        <Text style={{fontWeight: 'bold'}}> {totalTargetFormat} </Text>
-        {(savingsTotalMonths > 1)? (
-          <>by saving <Text style={{fontWeight: 'bold'}}>{monthlyTargetFormat}</Text> per month </>
-        ) : null}
-        and your total balance will be:
-        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>{"\n"}{"\n"}{newBalanceFormat}</Text>
-      </Text>
+      <>
+        <Text style={styles.summaryText}>
+          In <Text style={{fontWeight: 'bold'}}>{periodText}</Text>
+          you'll have been saved
+          <Text style={{fontWeight: 'bold'}}> {totalTargetFormat} </Text>
+          {(savingsTotalMonths > 1)? (
+            <>by saving <Text style={{fontWeight: 'bold'}}>{monthlyTargetFormat}</Text> per month </>
+          ) : null}
+          and your total balance will be:
+        </Text>
+        <Text style={styles.summaryNewBalance}>{newBalanceFormat}</Text>
+      </>
     ));
     setOverlay(true);
   }
@@ -95,15 +95,23 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
               label='Current Balance'
               width='60%'
             />
-            <DropDown
+            <DropDownOverlay
               name='balanceSignal'
               formik={props}
-              label=''
-              width='40%'
+              label='Balance Position'
+              id='value'
+              searchKey='label'
+              placeholder='--'
+              width='35%'
+              hideButtonLabel={true}
               items={[
                 {label: 'Saved', value: 'saved'},
                 {label: 'Owed', value: 'owed'},
               ]}
+              icon={{
+                name: 'caret-down',
+                type: 'font-awesome',
+              }}
             />
           </View>
           <Card containerStyle={styles.card}>
@@ -143,13 +151,11 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
           <Icon
             name='medal'
             type='font-awesome-5'
-            style={styles.resultTextIcon}
+            style={styles.summaryTextIcon}
             color={COLORS.secondary}
             size={30}
           />
-          <Text style={styles.resultTextTitle}>
-            Congratulations
-          </Text>
+          <Text style={styles.summaryTextTitle}>Congratulations</Text>
           {resultMessage}
           <Button
             title='Next'
@@ -207,23 +213,6 @@ const styles = StyleSheet.create({
     padding: 0,
     borderRadius: 10,
   },
-  resultText: {
-    padding: 20,
-    fontSize: 16,
-    letterSpacing: 1,
-    color: COLORS.secondary,
-    textAlign: 'justify',
-  },
-  resultTextTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: COLORS.secondary,
-  },
-  resultTextIcon: {
-    alignSelf: 'flex-start',
-    paddingLeft: 20,
-  },
   overlayButton: {
     backgroundColor: COLORS.secondary,
     borderBottomStartRadius: 10,
@@ -231,7 +220,30 @@ const styles = StyleSheet.create({
   },
   overlayButtonTitle: {
     color: COLORS.primary,
-  }
+  },
+  summaryText: {
+    padding: 20,
+    fontSize: 16,
+    color: COLORS.secondary,
+    textAlign: 'justify',
+  },
+  summaryTextTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: COLORS.secondary,
+  },
+  summaryTextIcon: {
+    alignSelf: 'flex-start',
+    paddingLeft: 20,
+  },
+  summaryNewBalance: {
+    color: COLORS.secondary,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingBottom: 20,
+    fontSize: 20,
+  },
 });
 
 export default SavingsForm;

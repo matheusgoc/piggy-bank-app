@@ -91,7 +91,7 @@ const TakePicture = (props: TakePictureProps) => {
 
         const options: ImagePickerOptions = {
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          quality: 0,
+          quality: (Platform.OS === 'ios')? 0 : .5,
           allowsEditing: false,
         }
 
@@ -175,6 +175,7 @@ const TakePicture = (props: TakePictureProps) => {
         ],
         cancelButtonIndex: 2,
         tintColor: COLORS.primary,
+        showSeparators: true,
       },
       buttonIndex => {
         switch(buttonIndex) {
@@ -203,6 +204,8 @@ const TakePicture = (props: TakePictureProps) => {
         destructiveButtonIndex: 3,
         destructiveColor: COLORS.error,
         tintColor: COLORS.success,
+        useModal: true,
+        showSeparators: true,
       },
       buttonIndex => {
         switch(buttonIndex) {
@@ -320,9 +323,7 @@ const TakePicture = (props: TakePictureProps) => {
               type='font-awesome'
               color='rgba(134,0,0,.7)'
               raised reverse
-              onPress={() => {
-                showOptionsMax();
-              }}
+              onPress={showOptionsMax}
             />
           </View>
         </>

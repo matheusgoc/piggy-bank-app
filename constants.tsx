@@ -18,6 +18,9 @@ export const COLORS = {
   error: '#860000',
   warning: '#c85200',
   gray: '#888888',
+  mediumGray: '#cccccc',
+  lightGray: '#eeeeee',
+  black: '#000000',
 }
 
 export const LOADING = {

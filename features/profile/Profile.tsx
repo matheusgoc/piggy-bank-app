@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import ProfileService from '../../services/ProfileService';
 import ProfileForm from './ProfileForm';
 import { ProfileModel } from '../../models/ProfileModel';
+import { US_STATES } from '../../constants';
 
 const profileService = new ProfileService();
 
@@ -13,8 +14,19 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
 
     // map profile from storage
     profileService.syncFromStore();
+    let profile = profileService.get();
 
-    return profileService.get();
+    // set gender
+    if (profile.gender) {
+      profile.gender = {label: (profile.gender == 'M')? 'Male' : 'Female', value: profile.gender};
+    }
+
+    // set state
+    if (profile.state) {
+      profile.state = {abbr: profile.state, name: US_STATES[profile.state]}
+    }
+
+    return profile;
   },
 
   validationSchema: Yup.object({
@@ -36,9 +48,9 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
-      gender: profile.gender,
+      gender: profile.gender.value,
       birthday: profile.birthday,
-      state: profile.state,
+      state: profile.state.abbr,
       city: profile.city,
       postalCode: profile.postalCode,
     });

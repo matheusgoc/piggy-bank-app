@@ -52,7 +52,7 @@ const DropDownCategory = (props: DropDownCategoryProps) => {
       formik={props.formik}
       label='* Category'
       items={categories}
-      key='id'
+      id='name'
       searchKey='name'
       placeholder='Search...'
       width='100%'

@@ -52,7 +52,7 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
           placeholder='Enter your password'
           autoCapitalize='none'
           textContentType='password'
-          keyboardType='ascii-capable'
+          keyboardType='default'
           secureTextEntry={true}
           leftIcon={{
             name: 'lock-outline',

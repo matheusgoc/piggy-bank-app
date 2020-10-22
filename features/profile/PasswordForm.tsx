@@ -9,7 +9,6 @@ import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
 import { COLORS } from '../../constants';
 import TextIcon from '../../components/text-icon/TextIcon';
 
-
 const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
 
   const {
@@ -18,6 +17,7 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
     isValid,
     setValues,
     errors,
+    touched,
   } = props;
 
   const [length, hasLength] = useState(false);
@@ -79,7 +79,7 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
               leftIcon={{
                 name: 'lock-outline',
                 type: 'material-community',
-                color: (errors.password)? COLORS.error : COLORS.primary,
+                color: (errors.password && touched.password)? COLORS.error : COLORS.primary,
               }}
             />
             <InputField
@@ -93,7 +93,7 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
               leftIcon={{
                 name: 'lock-outline',
                 type: 'material-community',
-                color: (errors.confirmation)? COLORS.error : COLORS.primary,
+                color: (errors.confirmation && touched.confirmation)? COLORS.error : COLORS.primary,
               }}
             />
           </View>

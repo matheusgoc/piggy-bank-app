@@ -31,6 +31,8 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
   mapPropsToValues: props => {
 
     let transaction: TransactionModel = new TransactionModel();
+
+    // set transaction from list
     if (props.route?.params?.transaction) {
       transaction = JSON.parse(props.route?.params?.transaction);
       transaction.amount = Math.abs(transaction.amount);
@@ -38,6 +40,12 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
         transaction.orderDate = new Date(transaction.timestamp);
         transaction.orderTime = new Date(transaction.timestamp);
       }
+    }
+
+    // set type
+    transaction.type = {
+      label: (transaction.type == 'E')? 'Expense' : 'Income',
+      value: transaction.type
     }
 
     return transaction;
@@ -63,8 +71,14 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
   handleSubmit: (transaction: TransactionModel, bag:any)  => {
 
     showLoading(true);
+
+    // set timestamp
     transaction.timestamp = extractTimestamp(transaction);
 
+    // set type
+    transaction.type = transaction.type.value;
+
+    // save at device storage
     let successMsg: string;
     if (transaction.id) {
       transactionsServiceApi.update(transaction);
@@ -74,6 +88,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
       successMsg = 'A new transaction was add!';
     }
 
+    // persist at cloud server
     transactionsServiceApi.save(transaction).then(() => {
       TOAST.ref.alertWithType(
         'success',

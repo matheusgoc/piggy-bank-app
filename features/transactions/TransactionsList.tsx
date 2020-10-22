@@ -38,8 +38,8 @@ const TransactionsList = ({ navigation }) => {
 
     if (loading) {
 
-      listToRender = Array(15).fill('').map((value, index) => {
-        return (<TransactionListPlaceholder key={index} />)
+      listToRender = Array(5).fill('').map((value, index) => {
+        return (<TransactionListPlaceholder key={index} index={index} />)
       });
 
     } else if (list.length) {

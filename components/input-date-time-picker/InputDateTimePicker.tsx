@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
@@ -21,7 +21,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   const mode: any = (props.mode) ? props.mode : 'date';
   const width = (props.width)? props.width : (mode === 'date')? 160 : 150;
 
-  const [visible, isVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [error, showError]:any = useState(false);
   useEffect(() => {
     if (props.formik && props.name) {
@@ -48,7 +48,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
     },
     buttonTitle: {
       ...baseStyles.buttonTitle,
-      color: (error)? COLORS.error : null,
+      color: (error)? COLORS.error : COLORS.black,
     },
   });
 
@@ -62,11 +62,11 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   const [format, setFormat] = useState(formatValue);
 
   const handleConfirm = (dt:Date) => {
+    setVisible(false);
     dt.setMilliseconds(0);
     dt.setSeconds(0);
     setValue(dt);
     setFormat(formatDateTime(dt, mode));
-    isVisible(false);
     if (props.onPick) {
       props.onPick(dt);
     }
@@ -76,7 +76,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   }
 
   const handleCancel = () => {
-    isVisible(false);
+    setVisible(false);
     if(props.formik && props.name){
       props.formik.setFieldTouched(props.name, true);
     }
@@ -86,7 +86,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
     if (!value) {
       setValue(new Date());
     }
-    isVisible(true);
+    setVisible(true);
   }
 
   return (
@@ -114,6 +114,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         headerTextIOS={props.label}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
+        display={(Platform.OS == 'android')? 'spinner' : 'default'}
         {...props}
       />
       <Text style={styles.errorMessage}>
@@ -144,7 +145,6 @@ const baseStyles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
     fontSize: 16,
-    paddingBottom: 3,
   },
   button: {
     justifyContent: 'space-between',
@@ -153,6 +153,7 @@ const baseStyles = StyleSheet.create({
     height: 45,
   },
   buttonTitle: {
+    color: COLORS.primary,
     fontWeight: 'normal',
   },
   errorMessage: {

@@ -1,3 +1,5 @@
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import { store } from './store';
@@ -22,11 +24,6 @@ i18n.locale = Localization.locale;
 i18n.fallbacks = true;
 
 export const trans = key => i18n.t(key);
-
-export const unmaskCurrency = (value: string):number => {
-
-  return parseFloat(value.replace('$', '').replace(',', '.'));
-};
 
 export const showLoading = (isLoading: boolean): void => {
 

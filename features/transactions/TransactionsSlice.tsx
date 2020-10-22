@@ -32,9 +32,16 @@ export const TransactionsSlice = createSlice({
       state.date = action.payload;
     },
 
-    // rearrange the list depending on the request direction
+    // set the current list
     setList: (state, action: PayloadAction<TransactionModel[]>) => {
       state.list = action.payload;
+    },
+
+    // Sort the list according to date and time
+    sortList: (state) => {
+      state.list.sort((t1: TransactionModel, t2: TransactionModel) => {
+        return t1.timestamp - t2.timestamp;
+      });
     },
 
     // set the list to save
@@ -47,43 +54,45 @@ export const TransactionsSlice = createSlice({
       state.listToRemove = action.payload;
     },
 
-    // Add a new transaction to the correct position on the current list
+    // Add a new transaction to the current list and the list to save
     addTransaction: (state, action:PayloadAction<TransactionModel>) => {
 
       const newTransaction = action.payload;
 
-      // generate a new random key for the transaction case it wasn't done before
+      // generate a new random key for the transaction
       if (!newTransaction.key) {
         newTransaction.key = uuidv4();
       }
 
+      // case the transaction is supposed to be on the current list
       if (moment(state.date).isSame(newTransaction.timestamp, 'month')) {
 
-        // look for a transaction with a date and time greater then the new one
-        const greaterIndex = state.list.findIndex(
-          transaction => transaction.timestamp > newTransaction.timestamp
-        );
+        // add the new transaction to the current list
+        state.list.push(newTransaction);
 
-        // add the transaction in the correct position to the list
-        if (greaterIndex >= 0){
-          state.list.splice(greaterIndex, 0, newTransaction);
-        } else {
-          state.list.push(newTransaction);
-        }
+        // sort the current list to put the new transaction in the right position
+        TransactionsSlice.caseReducers.sortList(state);
       }
 
-      // add the transaction to the list to be saved
+      // add the transaction to the list to save
       state.listToSave.push(newTransaction);
     },
 
-    // Update a transaction in the current list and in the list save case it is there also
+    // Update a transaction in the current list and in the list to save
     updateTransaction: (state, action: PayloadAction<TransactionModel>) => {
 
       const transaction = action.payload;
 
-      // find the transaction on the current list and replace it
-      const index = findTransactionIndex(transaction, state.list);
-      state.list.splice(index, 1, transaction);
+      // case the transaction is supposed to be on the current list
+      if (moment(state.date).isSame(transaction.timestamp, 'month')) {
+
+        // find the transaction on the current list and replace it
+        const index = findTransactionIndex(transaction, state.list);
+        state.list.splice(index, 1, transaction);
+
+        // sort the current list to put the new transaction in the right position
+        TransactionsSlice.caseReducers.sortList(state);
+      }
 
       // find the transaction on the list to save and replace or add it
       const indexToSave = findTransactionIndex(transaction, state.listToSave);
@@ -174,6 +183,7 @@ export const {
   setDeleteEnable,
   setDate,
   setList,
+  sortList,
   setListToSave,
   setListToRemove,
   addTransaction,

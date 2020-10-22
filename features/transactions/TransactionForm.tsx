@@ -12,6 +12,7 @@ import CurrencyField from '../../components/currency-field/CurrencyField';
 import { TransactionModel } from '../../models/TransactionModel';
 import TakePicture from '../../components/take-picture/TakePicture';
 import DropDownCategory from '../../components/drop-down/DropDownCategory';
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
 
 const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
@@ -50,15 +51,21 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               }}
             />
             <View style={{width: '50%'}}>
-              <DropDown
+              <DropDownOverlay
                 name='type'
                 formik={props}
                 label='* Type'
+                id='value'
+                searchKey='label'
+                placeholder='--'
                 items={[
                   {label: 'Expense', value: 'E'},
                   {label: 'Income', value: 'I'},
                 ]}
-                style={{zIndex: 10}}
+                icon={{
+                  name: 'caret-down',
+                  type: 'font-awesome',
+                }}
               />
               <DropDownCategory formik={props} />
               <CurrencyField

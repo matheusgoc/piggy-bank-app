@@ -3,7 +3,7 @@ import { CategoryModel } from './CategoryModel';
 export class TransactionModel {
   id: number = null;
   key: string;
-  type: 'I'|'E' = 'E';
+  type: 'I' | 'E' | {label: string, value: 'I' | 'E'} | any = 'E';
   category: CategoryModel = { id: null, name: '', isNew: false }
   amount: number = null;
   place: string = '';

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
-import DropDown from '../../components/drop-down/DropDown';
 import { COLORS, US_STATES } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import { ProfileModel } from '../../models/ProfileModel';
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
 
 const ProfileForm = (props: FormikProps<ProfileModel>) => {
 
@@ -16,6 +16,21 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
     values,
     isValid,
   } = props;
+
+  const initialStates = Object.entries(US_STATES).map(([abbr, name]) => {
+    return {abbr, name}
+  });
+  const [states, setStates] = useState(initialStates);
+
+  const searchStates = (search) => {
+    let statesList = [];
+    Object.entries(US_STATES).map(([abbr, name]) => {
+      if (name.indexOf(search) >= 0) {
+        statesList.push({abbr, name});
+      }
+    });
+    setStates(statesList);
+  }
 
   return (
     <SafeAreaView style={styles.style}>
@@ -58,17 +73,23 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
               autoCompleteType='email'
             />
           </View>
-          <View style={[styles.row,{zIndex:11}]}>
-            <DropDown
+          <View style={styles.row}>
+            <DropDownOverlay
               name='gender'
               formik={props}
               label='Gender'
-              width='50%'
               items={[
-                {label: '--', value: ''},
                 {label: 'Male', value: 'M'},
                 {label: 'Female', value: 'F'},
               ]}
+              id='value'
+              searchKey='label'
+              placeholder='--'
+              width='50%'
+              icon={{
+                name: 'caret-down',
+                type: 'font-awesome',
+              }}
             />
             <InputDateTimePicker
               name='birthday'
@@ -78,15 +99,21 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
               formik={props}
             />
           </View>
-          <View style={[styles.row,{zIndex:10}]}>
-            <DropDown
+          <View style={styles.row}>
+            <DropDownOverlay
               name='state'
               formik={props}
               label='State'
               items={states}
-              value={values.state}
-              searchable={true}
+              id='abbr'
+              searchKey='name'
+              placeholder='--'
               width='50%'
+              onSearch={searchStates}
+              icon={{
+                name: 'caret-down',
+                type: 'font-awesome',
+              }}
             />
             <InputField
               name='city'
@@ -105,7 +132,7 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
               label='Zip Code'
               placeholder='Enter Zip Code'
               textContentType='postalCode'
-              keyboardType='numbers-and-punctuation'
+              keyboardType='number-pad'
               width='50%'
               mask='zipcode'
             />
@@ -127,13 +154,6 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
     </SafeAreaView>
   )
 }
-
-const states = [
-  {label: '--', value: '', name: ''},
-  ...Object.entries(US_STATES).map(([abbr, name]) => {
-    return {label: abbr, value: abbr, name}
-  })
-];
 
 const styles = StyleSheet.create({
   style: {

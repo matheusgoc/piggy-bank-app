@@ -13,14 +13,21 @@ const Savings = withFormik<ProfileModel, ProfileModel>({
     // map profile from storage
     profileService.syncFromStore();
     const profile = profileService.get();
+
+    // set balance
     profile.balance = Math.abs(profile.balance);
+
+    // set balance signal
+    profile.balanceSignal = (profile.balanceSignal === 'saved')
+      ? {label: 'Saved', value: 'saved'}
+      : {label: 'Owed', value: 'owed'};
 
     return profile;
   },
 
   handleSubmit: (profile: ProfileModel, bag:any)  => {
 
-    // change balance signal
+    // change balance value according to signal
     if (profile.balanceSignal === 'owed' && profile.balance > 0) {
       profile.balance = -profile.balance;
     }
@@ -28,7 +35,7 @@ const Savings = withFormik<ProfileModel, ProfileModel>({
     // set profile on storage
     profileService.setSavings({
       balance: profile.balance,
-      balanceSignal: profile.balanceSignal,
+      balanceSignal: profile.balanceSignal.value,
       targetTotalSavings: profile.targetTotalSavings,
       targetMonthlySavings: profile.targetMonthlySavings,
     });

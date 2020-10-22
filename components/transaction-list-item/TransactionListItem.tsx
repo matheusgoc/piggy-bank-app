@@ -72,7 +72,7 @@ const TransactionListItem = (props: TransactionListItemProps) => {
   }
 
   return (
-    <ListItem bottomDivider pad={10} {...props}>
+    <ListItem topDivider={props.index > 0} pad={10} {...props}>
       {(isDeleteEnable && !isConfirmDeleteEnable)?
         <Button
           type='clear'

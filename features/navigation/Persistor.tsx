@@ -6,7 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from '../../persistor';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Navigation from './Navigation';
-import { LOADING, TOAST } from '../../constants';
+import { COLORS, LOADING, TOAST } from '../../constants';
 import DropdownAlert from 'react-native-dropdownalert';
 import { isLoading } from './NavigationSlice';
 
@@ -30,7 +30,12 @@ const Persistor = () => {
         textStyle={LOADING.textStyle}
         animation={LOADING.animation}
       />
-      <DropdownAlert ref={ref => TOAST.ref = ref} />
+      <DropdownAlert
+        ref={ref => TOAST.ref = ref}
+        inactiveStatusBarBackgroundColor={COLORS.secondary}
+        inactiveStatusBarStyle='dark-content'
+        showCancel={true}
+      />
     </>
   )
 }

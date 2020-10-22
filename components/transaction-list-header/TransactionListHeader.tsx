@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import { COLORS } from '../../constants';
 import {
+  getList,
   getDate,
   setDate,
   getLoadingList,
@@ -18,12 +19,18 @@ const TransactionListHeader = () => {
 
   const serviceApi = new TransactionsServiceApi();
   const dispatch = useDispatch();
+
+  const list = useSelector(getList);
   const date = useSelector(getDate);
   const loading = useSelector(getLoadingList);
   const isDeleteEnable = useSelector(checkDeleteEnable);
 
   const [timeout, enableTimeout] = useState(null);
   let reqCount = 0;
+
+  const styles = StyleSheet.create({
+    ...baseStyles,
+  });
 
   const handleOnChangeMonth = (direction: 'before'|'after') => {
 
@@ -94,10 +101,11 @@ const TransactionListHeader = () => {
       </View>
       <View style={styles.balance}>
         <Button
+          disabled={loading}
           onPress={() => handleOnSearch()}
           icon={{
             name: "search",
-            color: COLORS.primary,
+            color: (loading)? COLORS.mediumGray : COLORS.primary,
             type: 'font-awesome',
             size: 25,
           }}
@@ -109,10 +117,13 @@ const TransactionListHeader = () => {
           <Text style={styles.balanceInfoText}>$6,027.32 - $5.823,41</Text>
         </View>
         <Button
+          disabled={!list.length || loading}
           onPress={() => handleOnDelete()}
           icon={{
             name: (isDeleteEnable)? 'delete-forever' : 'delete-sweep',
-            color: (isDeleteEnable)? COLORS.error : COLORS.primary,
+            color: (!list.length || loading)
+              ? COLORS.mediumGray
+              : (isDeleteEnable)? COLORS.error : COLORS.primary,
             type: 'material',
             size: 30,
           }}
@@ -124,10 +135,8 @@ const TransactionListHeader = () => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-
-  },
+const baseStyles = StyleSheet.create({
+  container: {},
   calendar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -141,9 +150,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    minHeight: 60,
   },
   balanceInfo: {
-
+    flexGrow: 2,
   },
   balanceInfoText: {
     color: COLORS.primary,
