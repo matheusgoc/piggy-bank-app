@@ -114,6 +114,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         headerTextIOS={props.label}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
+        isDarkModeEnabled={false}
         display={(Platform.OS == 'android')? 'spinner' : 'default'}
         {...props}
       />
