@@ -9,6 +9,7 @@ import Navigation from './Navigation';
 import { COLORS, LOADING, TOAST } from '../../constants';
 import DropdownAlert from 'react-native-dropdownalert';
 import { isLoading } from './NavigationSlice';
+import { StatusBar } from 'react-native';
 
 const Persistor = () => {
 
@@ -36,6 +37,7 @@ const Persistor = () => {
         inactiveStatusBarStyle='dark-content'
         showCancel={true}
       />
+      <StatusBar backgroundColor={COLORS.secondary} barStyle='dark-content' />
     </>
   )
 }
