@@ -13,7 +13,17 @@ import {
   setDeleteEnable,
   checkDeleteEnable,
 } from '../../features/transactions/TransactionsSlice';
+import {
+  getGeneralReport,
+  getMonthlyReport,
+} from '../../features/reports/ReportsSlice';
+import {
+  getSavings
+} from '../../features/profile/ProfileSlice'
 import TransactionsServiceApi from '../../services/TransactionsServiceApi';
+import { formatCurrency } from '../../helpers';
+import { ReportModel } from '../../models/ReportModel';
+import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
 
 const TransactionListHeader = () => {
 
@@ -24,6 +34,10 @@ const TransactionListHeader = () => {
   const date = useSelector(getDate);
   const loading = useSelector(getLoadingList);
   const isDeleteEnable = useSelector(checkDeleteEnable);
+
+  const generalReport: ReportModel = useSelector(getGeneralReport);
+  const monthlyReport: ReportModel = useSelector(getMonthlyReport);
+  const savingsPlan: ProfileSavingsModel = useSelector(getSavings);
 
   const [timeout, enableTimeout] = useState(null);
   let reqCount = 0;
@@ -72,6 +86,44 @@ const TransactionListHeader = () => {
     dispatch(setDeleteEnable(!isDeleteEnable));
   }
 
+  const showBalance = () => {
+
+    if (loading || !monthlyReport || !generalReport) {
+      return (
+        <Text style={styles.balanceInfoText}>--</Text>
+      );
+    }
+
+    let monthlyIncomes = monthlyReport.incomes;
+    let monthlyExpenses = monthlyReport.expenses;
+    const generalBalance = generalReport.incomes - generalReport.expenses + savingsPlan.balance;
+    const monthlyBalance = monthlyIncomes - monthlyExpenses;
+    const prevMonthBalance = generalBalance - monthlyBalance;
+    if (prevMonthBalance > 0) {
+      monthlyIncomes += prevMonthBalance;
+    } else {
+      monthlyExpenses -= prevMonthBalance;
+    }
+
+    return (
+      <View style={styles.balanceInfo}>
+        <Text style={[styles.balanceInfoText, (generalBalance < 0)? {color:COLORS.error} : null]}>
+          Balance
+          {
+            (generalBalance < 0)
+              ? ' -(' + formatCurrency(Math.abs(generalBalance)) + ')'
+              : ' ' + formatCurrency(generalBalance)
+          }
+        </Text>
+        {(monthlyIncomes == 0 && monthlyExpenses == 0)? null : (
+          <Text style={[styles.balanceInfoCalcText,(generalBalance < 0)? {color:COLORS.error} : null]}>
+            {formatCurrency(monthlyIncomes)} - {formatCurrency(monthlyExpenses)}
+          </Text>
+        )}
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.calendar}>
@@ -112,10 +164,7 @@ const TransactionListHeader = () => {
           type='clear'
           buttonStyle={styles.btn}
         />
-        <View style={styles.balanceInfo}>
-          <Text style={styles.balanceInfoText}>Balance $1,103.91</Text>
-          <Text style={styles.balanceInfoText}>$6,027.32 - $5.823,41</Text>
-        </View>
+        {showBalance()}
         <Button
           disabled={!list.length || loading}
           onPress={() => handleOnDelete()}
@@ -159,6 +208,10 @@ const baseStyles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  balanceInfoCalcText: {
+    fontSize: 14,
     textAlign: 'center',
   },
   btn: {

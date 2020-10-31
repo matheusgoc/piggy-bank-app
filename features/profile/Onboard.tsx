@@ -61,8 +61,8 @@ export default function Onboard(props) {
                         style={{width: 200, height: 210}} />,
         },
         {
-          title: 'Add TransactionsList',
-          subtitle: 'Take control over your balance!',
+          title: 'Manage your transactions',
+          subtitle: 'Take the control over your balance!',
           backgroundColor: '#006633',
           image: (
               <Icon name='exchange-alt' type='font-awesome-5' size={100} color='white' />

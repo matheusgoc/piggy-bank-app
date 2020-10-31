@@ -17,7 +17,7 @@ export default class TransactionsServiceApi extends TransactionsService {
   }
 
   /**
-   * Load the list of transactions
+   * Load the transactions list and reports
    *
    * @param year
    * @param month
@@ -27,23 +27,35 @@ export default class TransactionsServiceApi extends TransactionsService {
 
     try {
 
+      const tz = moment(this.date).format('Z');
       if (!year) {
+
+        // set current year
         year = moment(this.date).format('YYYY');
       }
 
       if (!month) {
+
+        // set current month
         month = moment(this.date).format('MM');
       }
 
-      let url = 'transactions/' + year + '/' + month;
+      // get transactions and reports
+      let url = 'transactions/' + year + '/' + month + '/' + tz;
       if (limit) {
         url += '/' + limit;
       }
       const res: AxiosResponse = await this.api.get(url);
-      const list = res.data.map((item): TransactionModel => {
+
+      // set transactions list
+      const list = res.data.transactions.map((item): TransactionModel => {
         return this.mapToStore(item);
       });
       this.set(list);
+
+      //set reports
+      this.reportService.setGeneral(res.data.reports.general);
+      this.reportService.setMonthly(res.data.reports.monthly);
 
       return this.list;
 
@@ -175,6 +187,7 @@ export default class TransactionsServiceApi extends TransactionsService {
       place: transaction.place,
       description: transaction.description,
       ordered_at: moment(transaction.timestamp).format(),
+      // ordered_at: moment(transaction.timestamp).format('YYYY-MM-DD HH:mm:SS'),
       is_receipt_removed: transaction.isReceiptRemoved,
     }
   }

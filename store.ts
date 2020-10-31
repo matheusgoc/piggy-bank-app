@@ -6,6 +6,7 @@ import ProfileSlice from './features/profile/ProfileSlice';
 import NavigationSlice from './features/navigation/NavigationSlice';
 import TransactionsSlice from './features/transactions/TransactionsSlice';
 import CategoriesSlice from './features/categories/CategoriesSlice';
+import ReportsSlice from './features/reports/ReportsSlice';
 
 const persistConfig = {
   key: 'root',
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   profile: ProfileSlice,
   categories: CategoriesSlice,
   transactions: TransactionsSlice,
+  reports: ReportsSlice,
 });
 
 export const store = configureStore({

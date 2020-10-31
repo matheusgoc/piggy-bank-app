@@ -15,6 +15,7 @@ import {
   updateTransaction,
 } from '../features/transactions/TransactionsSlice';
 import { TransactionModel } from '../models/TransactionModel';
+import ReportService from './ReportService';
 
 export type ListDirectionType = 'after'|'before';
 
@@ -30,9 +31,11 @@ export default class TransactionsService extends BaseService {
   public listToSave: TransactionModel[];
   public listToRemove: TransactionModel[];
   public date: Date;
+  protected reportService: ReportService;
 
   constructor() {
     super();
+    this.reportService = new ReportService();
     this.syncFromStore();
   }
 
