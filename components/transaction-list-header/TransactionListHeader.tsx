@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { StyleSheet, Text, View } from "react-native";
@@ -25,7 +25,11 @@ import { formatCurrency } from '../../helpers';
 import { ReportModel } from '../../models/ReportModel';
 import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
 
-const TransactionListHeader = () => {
+interface TransactionListHeaderProps {
+  disableDelete: boolean,
+}
+
+const TransactionListHeader = (props: TransactionListHeaderProps) => {
 
   const serviceApi = new TransactionsServiceApi();
   const dispatch = useDispatch();
@@ -166,11 +170,11 @@ const TransactionListHeader = () => {
         />
         {showBalance()}
         <Button
-          disabled={!list.length || loading}
+          disabled={props.disableDelete || !list.length || loading}
           onPress={() => handleOnDelete()}
           icon={{
             name: (isDeleteEnable)? 'delete-forever' : 'delete-sweep',
-            color: (!list.length || loading)
+            color: (props.disableDelete || !list.length || loading)
               ? COLORS.mediumGray
               : (isDeleteEnable)? COLORS.error : COLORS.primary,
             type: 'material',

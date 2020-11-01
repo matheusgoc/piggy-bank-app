@@ -31,10 +31,10 @@ export const hasToken = state => !!state.profile.token;
 export const hasOnboard = state => state.profile.onboard;
 export const getSavings = (state): ProfileSavingsModel => {
   return {
-    balance: state.profile.data.balance,
-    balanceSignal: state.profile.data.balanceSignal,
-    targetTotalSavings: state.profile.data.targetTotalSavings,
-    targetMonthlySavings: state.profile.data.targetMonthlySavings,
+    balance: state.profile.data?.balance,
+    balanceSignal: state.profile.data?.balanceSignal,
+    targetTotalSavings: state.profile.data?.targetTotalSavings,
+    targetMonthlySavings: state.profile.data?.targetMonthlySavings,
   }
 }
 
