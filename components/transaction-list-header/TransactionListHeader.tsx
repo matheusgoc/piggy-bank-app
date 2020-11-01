@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import { COLORS } from '../../constants';
 import {
@@ -26,7 +26,7 @@ import { ReportModel } from '../../models/ReportModel';
 import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
 
 interface TransactionListHeaderProps {
-  disableDelete: boolean,
+  disableDelete?: boolean,
 }
 
 const TransactionListHeader = (props: TransactionListHeaderProps) => {
@@ -94,7 +94,7 @@ const TransactionListHeader = (props: TransactionListHeaderProps) => {
 
     if (loading || !monthlyReport || !generalReport) {
       return (
-        <Text style={styles.balanceInfoText}>--</Text>
+        <ActivityIndicator color={COLORS.primary} />
       );
     }
 
