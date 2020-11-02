@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+import moment from 'moment';
 import BaseService from './BaseService';
 import {
   addTransaction,
@@ -14,6 +15,7 @@ import {
   setList,
   updateTransaction,
 } from '../features/transactions/TransactionsSlice';
+import { updateReport } from '../features/reports/ReportsSlice';
 import { TransactionModel } from '../models/TransactionModel';
 import ReportService from './ReportService';
 
@@ -34,12 +36,14 @@ export default class TransactionsService extends BaseService {
   protected reportService: ReportService;
 
   constructor() {
+
     super();
     this.reportService = new ReportService();
     this.syncFromStore();
   }
 
   syncFromStore() {
+
     this.list = getList(this.getState());
     this.listToSave = getListToRemove(this.getState());
     this.listToRemove = getListToRemove(this.getState());
@@ -47,6 +51,7 @@ export default class TransactionsService extends BaseService {
   }
 
   get(): TransactionModel[] {
+
     this.syncFromStore();
 
     return this.list;
@@ -58,19 +63,50 @@ export default class TransactionsService extends BaseService {
   }
 
   protected setDate(date: Date = new Date()): void {
+
     this.dispatch(setDate(date));
   }
 
-  add(newTransaction: TransactionModel): void {
-    this.dispatch(addTransaction(newTransaction));
+  add(transaction: TransactionModel): void {
+
+    const currentMonth = Number(moment(this.date).format('YYYYMM'));
+    const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
+    if (currentMonth <= transactionMonth) {
+      this.dispatch(updateReport({
+        transaction,
+        hasMonthly: currentMonth == transactionMonth,
+        operator: 'add'
+      }));
+    }
+    this.dispatch(addTransaction(transaction));
   }
 
-  update(transaction: TransactionModel): void {
+  update(transaction: TransactionModel, oldTransaction: TransactionModel): void {
 
-    this.dispatch(updateTransaction(transaction));
+    const currentMonth = Number(moment(this.date).format('YYYYMM'));
+    const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
+    if (currentMonth <= transactionMonth) {
+      this.dispatch(updateReport({
+        transaction: oldTransaction,
+        hasMonthly: currentMonth == transactionMonth,
+        operator: 'sub'
+      }));
+      this.dispatch(updateReport({
+        transaction,
+        hasMonthly: currentMonth == transactionMonth,
+        operator: 'add'
+      }));
+    }
+
+    if (currentMonth == transactionMonth) {
+      this.dispatch(updateTransaction(transaction));
+    } else {
+      this.dispatch(removeTransactionFromList(transaction));
+    }
   }
 
   async storeReceiptPicture(transaction: TransactionModel): Promise<void> {
+
     if (transaction.isNewReceipt) {
       await FileSystem.copyAsync({
         from: transaction.receipt,
@@ -81,6 +117,16 @@ export default class TransactionsService extends BaseService {
 
   remove(index: number): void {
 
+    const transaction = this.list[index];
+    const currentMonth = Number(moment(this.date).format('YYYYMM'));
+    const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
+    if (currentMonth <= transactionMonth) {
+      this.dispatch(updateReport({
+        transaction: transaction,
+        hasMonthly: currentMonth == transactionMonth,
+        operator: 'sub'
+      }));
+    }
     this.dispatch(removeTransaction(index));
   }
 

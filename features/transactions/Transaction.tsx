@@ -26,6 +26,8 @@ const extractTimestamp = (transaction) => {
   return transaction.orderDate.getTime();
 }
 
+let oldTransaction = null;
+
 const Transaction = withFormik<TransactionsListProps, TransactionModel>({
 
   mapPropsToValues: props => {
@@ -35,6 +37,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     // set transaction from list
     if (props.route?.params?.transaction) {
       transaction = JSON.parse(props.route?.params?.transaction);
+      oldTransaction = {...transaction};
       transaction.amount = Math.abs(transaction.amount);
       if (transaction.timestamp) {
         transaction.orderDate = new Date(transaction.timestamp);
@@ -81,7 +84,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
     // save at device storage
     let successMsg: string;
     if (transaction.id) {
-      transactionsServiceApi.update(transaction);
+      transactionsServiceApi.update(transaction, oldTransaction);
       successMsg = 'The transaction was updated!';
     } else {
       transactionsServiceApi.add(transaction);

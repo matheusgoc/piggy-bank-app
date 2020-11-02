@@ -56,9 +56,9 @@ const ReportCategories = (props: ReportCategoriesProps) => {
   const getData = (isLegend = false) => {
     const report = getCategoriesReport();
     let data = [];
-    if (report) {
+    if (report && Object.keys(report).length) {
       const total = getTotal();
-      for (const [category, value] of Object.entries(report)) {
+      for (let [category, value] of Object.entries(report)) {
         const percent = Math.round(value / total * 100);
         if (isLegend) {
           data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)});
@@ -96,7 +96,7 @@ const ReportCategories = (props: ReportCategoriesProps) => {
               }} />
               <VictoryBar
                 data={data}
-                alignment="start"
+                alignment='start'
                 labelComponent={<VictoryLabel dy={0} dx={-20} angle={90} />}
                 style={{
                   data: { fill: ({ index }) => PALLET[index]},
