@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Icon } from 'react-native-elements';
-import { VictoryBar, VictoryChart, VictoryLegend, VictoryPie, VictoryTheme } from "victory-native";
-import { COLORS } from '../../constants';
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryLegend,
+  VictoryPie,
+  VictoryLabel,
+  VictoryTheme,
+  VictoryAxis,
+  LineSegment,
+} from "victory-native";
+import { COLORS, PALLET } from '../../constants';
 import { ReportModel } from '../../models/ReportModel';
+import { formatCurrency } from '../../helpers';
 
 interface ReportCategoriesProps {
   type: 'general' | 'monthly',
@@ -37,23 +47,24 @@ const ReportCategories = (props: ReportCategoriesProps) => {
       : props.report.categories.incomes;
   }
 
-  const getData = () => {
-    const report = getCategoriesReport();
-    let data = [];
-    if (report) {
-      for (const [category, value] of Object.entries(report)) {
-        data.push({x: category, y:value, label: ''});
-      }
-    }
-    return data;
+  const getTotal = () => {
+    return (type == 'expense')
+      ? props.report.expenses
+      : props.report.incomes;
   }
 
-  const getLegend = () => {
+  const getData = (isLegend = false) => {
     const report = getCategoriesReport();
     let data = [];
     if (report) {
-      for (const category of Object.keys(report)) {
-        data.push({name: category});
+      const total = getTotal();
+      for (const [category, value] of Object.entries(report)) {
+        const percent = Math.round(value / total * 100);
+        if (isLegend) {
+          data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)});
+        } else{
+          data.push({x: category, y:value, label: percent + '%'});
+        }
       }
     }
     return data;
@@ -62,6 +73,7 @@ const ReportCategories = (props: ReportCategoriesProps) => {
   const displayChart = () => {
 
     const data = getData();
+    const totalItems = Object.keys(getCategoriesReport()).length;
 
     let chart = null;
     if (data && data.length) {
@@ -71,29 +83,37 @@ const ReportCategories = (props: ReportCategoriesProps) => {
             <VictoryPie
               data={data}
               theme={VictoryTheme.material}
-              colorScale='qualitative'
+              colorScale={PALLET}
               innerRadius={80}
-              animate={{ duration: 1000 }}
             />
           ) : (
             <VictoryChart
               theme={VictoryTheme.material}
-              domainPadding={10}>
+              domainPadding={10}
+            >
+              <VictoryAxis dependentAxis tickFormat={(tick) => {
+                return (tick >= 0)? (tick / 1000) + 'K' : tick;
+              }} />
               <VictoryBar
                 data={data}
                 alignment="start"
-                animate={{ duration: 1000 }}
+                labelComponent={<VictoryLabel dy={0} dx={-20} angle={90} />}
+                style={{
+                  data: { fill: ({ index }) => PALLET[index]},
+                }}
               />
             </VictoryChart>
           )}
           <VictoryLegend
-            data={getLegend()}
-            x={20}
-            y={0}
-            colorScale='qualitative'
-            orientation="vertical"
+            data={getData(true)}
+            x={20} y={0}
+            height={totalItems * 51}
+            colorScale={PALLET}
+            orientation='vertical'
+            labelComponent={<VictoryLabel />}
             rowGutter={{ top: 0, bottom: 10 }}
             theme={VictoryTheme.material}
+            style={{labels: { fontWeight: 'bold' }}}
           />
         </>
       )

@@ -6,10 +6,10 @@ import { BASE_PATH_STORAGE } from '@env';
 // @ts-ignore
 import { BASE_PATH_API } from '@env';
 
-export const STORAGE_URL = 'http://192.168.0.6:81/storage/';
-export const API_URL = 'http://192.168.0.6:81/api/';
-// export const STORAGE_URL = BASE_PATH_STORAGE;
-// export const API_URL = BASE_PATH_API;
+// export const STORAGE_URL = 'http://192.168.0.11:81/storage/';
+// export const API_URL = 'http://192.168.0.11:81/api/';
+export const STORAGE_URL = BASE_PATH_STORAGE;
+export const API_URL = BASE_PATH_API;
 
 export const COLORS = {
   primary: '#006600',
@@ -22,6 +22,14 @@ export const COLORS = {
   lightGray: '#eeeeee',
   black: '#000000',
 }
+
+export const PALLET = [
+  '#d4cc56','#0b0c10','#fff8dd','#f49ade','#9c7ab5',
+  '#a4c639','#0c1a4b','#ffe4d1','#ff0000','#7b5c99',
+  '#a5e519','#143d8c','#fdcbcb','#ff4f00','#664b8a',
+  '#559938','#84b2ca','#f9b2d2','#ff6900','#523c79',
+  '#1b8a24','#abc4d0','#ff9000','#ffa900','#443166',
+]
 
 export const LOADING = {
   overlayColor: 'rgba(0,0,0,0.5)',
