@@ -5,6 +5,7 @@ import { getToken } from '../features/profile/ProfileSlice';
 import { showLoading } from '../helpers';
 import TransactionsServiceApi from './TransactionsServiceApi';
 import { setDeleteEnable } from '../features/transactions/TransactionsSlice';
+import moment from 'moment';
 
 export default class SyncService extends BaseService{
 
@@ -72,6 +73,9 @@ export default class SyncService extends BaseService{
     try {
 
       const api = new TransactionsServiceApi();
+      if(!api.date) {
+        api.setDate(moment().startOf('month').toDate());
+      }
       await api.load();
 
     } catch (error) {

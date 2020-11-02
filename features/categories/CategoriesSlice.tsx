@@ -17,11 +17,16 @@ export const CategoriesSlice = createSlice({
     setListToRemove: (state, action) => {
       state.listToRemove = action.payload;
     },
+    clearCategories: (state) => {
+      state.list = [];
+      state.listToSave = [];
+      state.listToRemove = [];
+    },
   },
 });
 
 //actions
-export const { setList, setListToSave, setListToRemove } = CategoriesSlice.actions;
+export const { setList, setListToSave, setListToRemove, clearCategories } = CategoriesSlice.actions;
 
 //selectors
 export const getList = state => state.categories.list;

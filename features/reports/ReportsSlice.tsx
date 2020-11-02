@@ -6,8 +6,8 @@ import { CategoryModel } from '../../models/CategoryModel';
 export const ReportsSlice = createSlice({
   name: 'reports',
   initialState: {
-    general: ReportModel,
-    monthly: ReportModel,
+    general: new ReportModel(),
+    monthly: new ReportModel(),
   },
   reducers: {
     setGeneralReport: (state, action) => {
@@ -45,12 +45,16 @@ export const ReportsSlice = createSlice({
         }
       }
     },
+    clearReports: (state) => {
+      state.general = new ReportModel();
+      state.monthly = new ReportModel();
+    }
   }
   ,
 });
 
 //actions
-export const { setGeneralReport, setMonthlyReport, updateReport } = ReportsSlice.actions;
+export const { setGeneralReport, setMonthlyReport, updateReport, clearReports } = ReportsSlice.actions;
 
 //selectors
 export const getGeneralReport = state => state.reports.general;

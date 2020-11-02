@@ -8,6 +8,7 @@ import ReportCategories from './ReportCategories';
 import { Divider } from 'react-native-elements';
 import { ReportModel } from '../../models/ReportModel';
 import { getGeneralReport, getMonthlyReport } from './ReportsSlice';
+import { COLORS } from '../../constants';
 
 const Reports = () => {
 
@@ -31,7 +32,7 @@ const Reports = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.secondary,
     height: '100%'
   }
 });

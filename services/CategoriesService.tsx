@@ -5,7 +5,8 @@ import {
   getListToSave,
   setList,
   setListToRemove,
-  setListToSave
+  setListToSave,
+  clearCategories,
 } from '../features/categories/CategoriesSlice';
 import { CategoryModel } from '../models/CategoryModel';
 import { store } from '../store';
@@ -105,6 +106,13 @@ export default class CategoriesService extends BaseService implements IService {
     }
 
     this.store();
+  }
+
+  /**
+   * Reset all categories list
+   */
+  clear(): void {
+    this.dispatch(clearCategories());
   }
 
   /**

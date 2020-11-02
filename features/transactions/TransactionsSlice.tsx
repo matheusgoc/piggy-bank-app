@@ -161,6 +161,15 @@ export const TransactionsSlice = createSlice({
         state.list[index] = transaction;
       }
     },
+
+    clearTransactions: (state) => {
+      state.list = [];
+      state.listToSave = [];
+      state.listToRemove = [];
+      delete state.date;
+      state.isDeleteEnable = false;
+      state.loadingList = false;
+    },
   },
 });
 
@@ -189,6 +198,7 @@ export const {
   addTransaction,
   updateTransaction,
   replaceTransaction,
+  clearTransactions,
   removeTransaction,
   removeTransactionFromListToSave,
   removeTransactionFromListToRemove,

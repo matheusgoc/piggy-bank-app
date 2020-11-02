@@ -4,6 +4,7 @@ import {
   getMonthlyReport,
   setGeneralReport,
   setMonthlyReport,
+  clearReports,
 } from '../features/reports/ReportsSlice';
 import { store } from '../store';
 import { ReportModel } from '../models/ReportModel';
@@ -54,7 +55,7 @@ export default class ReportService extends BaseService {
    */
   setGeneral(general: ReportModel): void {
     this.general = general;
-    store.dispatch(setGeneralReport(this.general));
+    this.dispatch(setGeneralReport(this.general));
   }
 
   /**
@@ -63,6 +64,13 @@ export default class ReportService extends BaseService {
    */
   setMonthly(monthly: ReportModel): void {
     this.monthly = monthly;
-    store.dispatch(setMonthlyReport(this.monthly));
+    this.dispatch(setMonthlyReport(this.monthly));
+  }
+
+  /**
+   * Reset all reports
+   */
+  clear(): void {
+    this.dispatch(clearReports());
   }
 }

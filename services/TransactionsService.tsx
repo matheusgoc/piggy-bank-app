@@ -14,6 +14,7 @@ import {
   setDate,
   setList,
   updateTransaction,
+  clearTransactions,
 } from '../features/transactions/TransactionsSlice';
 import { updateReport } from '../features/reports/ReportsSlice';
 import { TransactionModel } from '../models/TransactionModel';
@@ -62,7 +63,7 @@ export default class TransactionsService extends BaseService {
     this.dispatch(setList(list));
   }
 
-  protected setDate(date: Date = new Date()): void {
+  setDate(date: Date = new Date()): void {
 
     this.dispatch(setDate(date));
   }
@@ -128,6 +129,11 @@ export default class TransactionsService extends BaseService {
       }));
     }
     this.dispatch(removeTransaction(index));
+  }
+
+  clear(): void {
+
+    this.dispatch(clearTransactions());
   }
 
   protected removeFromList(transactionToRemove: TransactionModel): void {

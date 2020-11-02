@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Avatar, Button, Icon, ListItem, ListItemProps } from 'react-native-elements';
 import { TransactionModel } from '../../models/TransactionModel';
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import { COLORS, LOADING, TOAST } from '../../constants';
+import { COLORS, TOAST } from '../../constants';
 import moment from 'moment';
 import { formatCurrency, showLoading } from '../../helpers';
 import { checkDeleteEnable } from '../../features/transactions/TransactionsSlice';

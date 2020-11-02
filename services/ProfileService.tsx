@@ -106,4 +106,14 @@ export default class ProfileService extends BaseService implements IService {
       this.profile.birthday = new Date(this.profile.birthday);
     }
   }
+
+  /**
+   * Reset profile and token
+   */
+  clear() {
+    this.setToken(null);
+    this.storeToken();
+    this.profile = new ProfileModel();
+    this.store();
+  }
 }

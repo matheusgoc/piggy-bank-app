@@ -4,6 +4,10 @@ import { ProfileModel } from '../models/ProfileModel';
 import moment from 'moment';
 import { HTTP_STATUS } from '../constants';
 import SyncService from './SyncService';
+import TransactionsService from './TransactionsService';
+import ReportService from './ReportService';
+import CategoriesService from './CategoriesService';
+import { store } from '../store';
 
 /**
  * ProfileServiceApi
@@ -50,21 +54,35 @@ export default class ProfileServiceApi extends ProfileService {
   }
 
   /**
-   * Revoke the user's access token to log out
+   * Revoke the user's access token and
+   * clear states and storage data
+   * to log the user out
    */
   async signOut():Promise<void> {
     try {
 
-      const res = await this.api.post('profile/revoke');
-      this.profile = null;
-      this.setToken(null);
-      this.storeToken();
-      this.store();
+      // revoke the current token
+      await this.api.get('profile/revoke');
+
+      // reset token and profile
+      this.clear();
+
+      // reset transaction
+      const transactionService = new TransactionsService();
+      transactionService.clear();
+
+      // reset reports
+      const reportService = new ReportService();
+      reportService.clear();
+
+      // reset categories
+      const categoriesService = new CategoriesService();
+      categoriesService.clear();
 
     } catch (error) {
 
       const method = 'ProfileServiceApi.signOut';
-      const msg = 'The log out has fail';
+      const msg = 'The logout has fail';
       this.handleHttpError(method, msg, error);
     }
   }
