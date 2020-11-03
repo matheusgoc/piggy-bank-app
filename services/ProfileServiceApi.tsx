@@ -122,6 +122,66 @@ export default class ProfileServiceApi extends ProfileService {
     }
   }
 
+  async requestPIN(email: string)
+  {
+    try {
+
+      await this.api.patch('profile/reset-password', {email});
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.requestPIN';
+      let msg = 'Unable to request PIN to reset your password!';
+      if (error.response) {
+        switch (error.response.status) {
+          case HTTP_STATUS.FORBIDDEN: msg = 'The given email is not registered'; break;
+        }
+      }
+
+      this.handleHttpError(method, msg, error);
+    }
+  }
+
+  async confirmPIN(pin: number, email: string)
+  {
+    try {
+
+      await this.api.patch('profile/refresh-pin-time', {email, pin});
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.confirmPIN';
+      let msg = 'Unable to confirm the PIN!';
+      if (error.response) {
+        switch (error.response.status) {
+          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break;
+          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired.'; break;
+        }
+      }
+      this.handleHttpError(method, msg, error);
+    }
+  }
+
+  async changePasswordWithPIN(email, pin, password)
+  {
+    try {
+
+      await this.api.patch('profile/change-password-with-pin', {email, pin, password});
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.changePasswordWithPIN';
+      let msg = 'Unable to change the PIN!';
+      if (error.response) {
+        switch (error.response.status) {
+          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break;
+          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired.'; break;
+        }
+      }
+      this.handleHttpError(method, msg, error);
+    }
+  }
+
   /**
    * Update the current profile with the data saved in the server
    */

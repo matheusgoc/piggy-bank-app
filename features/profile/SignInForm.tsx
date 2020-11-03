@@ -61,7 +61,9 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
           }}
         />
         <TouchableOpacity>
-          <Text style={styles.linkForgotten}>Forgotten password?</Text>
+          <Text onPress={() => navigation.navigate('ResetPasswordEmail')} style={styles.linkForgotten}>
+            Forgotten password?
+          </Text>
         </TouchableOpacity>
       </View>
       <View>

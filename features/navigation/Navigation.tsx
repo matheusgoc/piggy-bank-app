@@ -14,6 +14,8 @@ import Password from '../profile/Password';
 import Main from './Main';
 import Transaction from '../transactions/Transaction';
 import TransactionsView from '../transactions/TransactionsView';
+import ResetPasswordEmail from '../profile/ResetPasswordEmail';
+import ResetPasswordPIN from '../profile/ResetPasswordPIN';
 enableScreens();
 
 const Navigation = () => {
@@ -94,6 +96,28 @@ const Navigation = () => {
         }}
       />
     ),
+    resetPasswordEmail: (
+      <RootStack.Screen
+        name='ResetPasswordEmail'
+        component={ ResetPasswordEmail }
+        options={{
+          title: 'Reset my password',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
+    resetPasswordPIN: (
+      <RootStack.Screen
+        name='ResetPasswordPIN'
+        component={ ResetPasswordPIN }
+        options={{
+          title: 'Reset my password',
+          headerBackTitleVisible: false,
+          headerTintColor: COLORS.primary
+        }}
+      />
+    ),
     transactions: {
       add: (
         <RootStack.Screen
@@ -151,6 +175,8 @@ const Navigation = () => {
                 { features.profile }
                 { features.savings }
                 { features.password }
+                { features.resetPasswordEmail }
+                { features.resetPasswordPIN }
               </>
             )
           }

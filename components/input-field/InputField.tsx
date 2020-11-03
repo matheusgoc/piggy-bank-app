@@ -18,7 +18,6 @@ const InputField = (props: InputFieldProps) => {
   const [error, showError]:any = useState('');
   useEffect(() => {
     if (props.formik && props.name) {
-
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
         ? props.formik.errors[props.name]
         : ''
@@ -48,6 +47,9 @@ const InputField = (props: InputFieldProps) => {
     if (props.onFocus) {
       props.onFocus(value);
     }
+    if (props.onChangeText) {
+      props.onChangeText(value);
+    }
   }
 
   const handleOnFocus = (e) => {
@@ -69,8 +71,8 @@ const InputField = (props: InputFieldProps) => {
       keyboardType='default'
       returnKeyType='done'
       blurOnSubmit={true}
-      onChangeText={handleOnChangeText}
       {...props}
+      onChangeText={handleOnChangeText}
       onFocus={handleOnFocus}
     />
   )

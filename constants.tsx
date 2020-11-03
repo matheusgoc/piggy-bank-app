@@ -2,20 +2,19 @@ import IMask from 'imask';
 import { Theme } from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
 // @ts-ignore
-import { BASE_PATH_STORAGE } from '@env';
-// @ts-ignore
-import { BASE_PATH_API } from '@env';
+import { BASE_PATH_API, BASE_PATH_STORAGE } from '@env';
 
-export const STORAGE_URL = 'http://192.168.0.11:81/storage/';
-export const API_URL = 'http://192.168.0.11:81/api/';
-// export const STORAGE_URL = BASE_PATH_STORAGE;
-// export const API_URL = BASE_PATH_API;
+// export const STORAGE_URL = 'http://192.168.0.6:81/storage/';
+// export const API_URL = 'http://192.168.0.6:81/api/';
+export const STORAGE_URL = BASE_PATH_STORAGE;
+export const API_URL = BASE_PATH_API;
 
 export const COLORS = {
   primary: '#006600',
   secondary: '#ffffff',
   success: '#008600',
   error: '#860000',
+  danger: '#dd0000',
   warning: '#c85200',
   gray: '#888888',
   mediumGray: '#cccccc',
@@ -157,6 +156,9 @@ export const MASKS = {
       },
     },
   }),
+  digit: IMask.createMask({
+    mask: /^\d+$/
+  })
 };
 
 export const TOAST: { ref: DropdownAlert } = {
@@ -169,6 +171,11 @@ export const HTTP_STATUS = {
   NO_CONTENT: 204,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
+  REQUEST_TIMEOUT: 408,
   CONFLICT: 409,
   UNPROCESSABLE_ENTITY: 422,
+}
+
+export enum ACTIONS {
+  RESET_PASSWORD,
 }

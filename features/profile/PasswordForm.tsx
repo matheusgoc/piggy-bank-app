@@ -6,10 +6,11 @@ import { Button, Divider } from 'react-native-elements';
 import * as Progress from 'react-native-progress';
 import InputField from '../../components/input-field/InputField';
 import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
-import { COLORS } from '../../constants';
+import { ACTIONS, COLORS } from '../../constants';
 import TextIcon from '../../components/text-icon/TextIcon';
+import { PasswordProps } from './Password';
 
-const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
+const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) => {
 
   const {
     handleSubmit,
@@ -18,6 +19,7 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
     setValues,
     errors,
     touched,
+    route,
   } = props;
 
   const [length, hasLength] = useState(false);
@@ -56,6 +58,12 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
       confirmation: values.confirmation,
     });
   };
+
+  const displaySubmitButtonTitle = () => {
+
+    const action = props.route?.params?.action;
+    return (action == ACTIONS.RESET_PASSWORD)? 'Change my password' : 'Create my profile';
+  }
 
   return (
     <SafeAreaView style={styles.style}>
@@ -122,7 +130,7 @@ const PasswordForm = (props: FormikProps<ProfilePasswordModel>) => {
         </View>
         <View style={styles.save}>
           <Button
-            title='Create my profile'
+            title={displaySubmitButtonTitle()}
             disabled={!isValid}
             onPressOut={() => {
               handleSubmit();

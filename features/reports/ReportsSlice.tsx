@@ -26,7 +26,6 @@ export const ReportsSlice = createSlice({
       const amount = Math.abs(transaction.amount);
       const category = transaction.category.name;
       const reports = (hasMonthly)? ['general', 'monthly'] : ['general'];
-      console.log(operator,type,amount,category,reports,transaction,hasMonthly);
       for (const report of reports) {
         if (operator == 'sub') {
           state[report][type] -= amount;

@@ -5,8 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
-import DropDown from '../../components/drop-down/DropDown';
-import { STORAGE_URL, COLORS } from '../../constants';
+import { COLORS, STORAGE_URL } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import CurrencyField from '../../components/currency-field/CurrencyField';
 import { TransactionModel } from '../../models/TransactionModel';
