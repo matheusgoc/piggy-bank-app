@@ -1,17 +1,19 @@
 import React from 'react';
 import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Avatar, Divider, Icon, ListItem } from 'react-native-elements';
-import { useSelector } from 'react-redux';
-import { COLORS, TOAST } from '../../constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { setAction } from '../navigation/NavigationSlice'
+import { ACTIONS, COLORS, TOAST } from '../../constants';
 import { getProfile } from '../profile/ProfileSlice';
 import { showLoading } from '../../helpers';
 import ProfileServiceApi from '../../services/ProfileServiceApi';
-import TransactionsServiceApi from '../../services/TransactionsServiceApi';
 
 const Settings = () => {
 
+  const dispatch = useDispatch();
   const profile = useSelector(getProfile);
-
+  const navigation = useNavigation();
   const list = [
     {
       title: 'My Savings Plan',
@@ -25,6 +27,14 @@ const Settings = () => {
       icon: {name: 'user', type: 'font-awesome'},
       handleOnPress: ()=> {
         console.log('My Profile');
+      }
+    },
+    {
+      title: 'Change My Password',
+      icon: {name: 'lock-outline', type: 'material-community'},
+      handleOnPress: ()=> {
+        dispatch(setAction(ACTIONS.CHANGE_PASSWORD));
+        navigation.navigate('Password');
       }
     },
     {

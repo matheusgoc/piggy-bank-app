@@ -1,9 +1,12 @@
 import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
+import { setAction } from '../navigation/NavigationSlice'
 import ProfileServiceApi from '../../services/ProfileServiceApi';
 import { showLoading } from '../../helpers';
 import ResetPasswordForm from './ResetPasswordEmailForm';
+import { store } from '../../store';
+import { ACTIONS } from '../../constants';
 
 const ResetPasswordEmail = withFormik<{email: string}, {email: string}>({
 
@@ -24,6 +27,7 @@ const ResetPasswordEmail = withFormik<{email: string}, {email: string}>({
     showLoading(true);
     profileServiceApi.requestPIN(credentials.email).then(function () {
 
+      store.dispatch(setAction(ACTIONS.RESET_PASSWORD));
       bag.props.navigation.navigate('ResetPasswordPIN', { email: credentials.email });
 
     }).catch((error) => {

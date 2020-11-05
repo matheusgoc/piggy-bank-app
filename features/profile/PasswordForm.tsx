@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FormikProps } from 'formik';
 import { Button, Divider } from 'react-native-elements';
 import * as Progress from 'react-native-progress';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import InputField from '../../components/input-field/InputField';
 import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
 import { ACTIONS, COLORS } from '../../constants';
 import TextIcon from '../../components/text-icon/TextIcon';
 import { PasswordProps } from './Password';
+import { setAction, getAction } from '../navigation/NavigationSlice';
+import { getProfile } from './ProfileSlice';
+import ProfileServiceApi from '../../services/ProfileServiceApi';
+import { showLoading } from '../../helpers';
 
 const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) => {
 
@@ -19,13 +25,19 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
     setValues,
     errors,
     touched,
-    route,
+    route
   } = props;
+
+  const dispatch = useDispatch();
+  const profile = useSelector(getProfile);
+  const action = useSelector(getAction);
 
   const [length, hasLength] = useState(false);
   const [specialChar, hasSpecialChar] = useState(false);
   const [capitalLetter, hasCapitalLetter] = useState(false);
   const [number, hasNumber] = useState(false);
+
+  const navigation = useNavigation();
 
   const validateStrength = (password) => {
 
@@ -56,13 +68,24 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
       password,
       strength,
       confirmation: values.confirmation,
+      current: values.current,
     });
   };
 
-  const displaySubmitButtonTitle = () => {
+  const handleResetPassword = () => {
 
-    const action = props.route?.params?.action;
-    return (action == ACTIONS.RESET_PASSWORD)? 'Change my password' : 'Create my profile';
+    const profileServiceApi = new ProfileServiceApi();
+    showLoading(true);
+    profileServiceApi.requestPIN(profile.email).then(function () {
+
+      dispatch(setAction(ACTIONS.RESET_PASSWORD_LOGGED));
+      navigation.navigate('ResetPasswordPIN', { email: profile.email });
+
+    }).catch((error) => {
+      console.warn('PasswordForm.handleResetPassword: ' + error);
+    }).finally(() => {
+      showLoading(false);
+    });
   }
 
   return (
@@ -73,10 +96,26 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
         scrollEnabled={true}>
         <View>
           <View style={styles.form}>
+            {(action == ACTIONS.CHANGE_PASSWORD)? (
+              <InputField
+                name='current'
+                formik={props}
+                label='Current Password'
+                autoCapitalize='none'
+                textContentType='oneTimeCode'
+                keyboardType='ascii-capable'
+                secureTextEntry={true}
+                leftIcon={{
+                  name: 'lock-outline',
+                  type: 'material-community',
+                  color: (errors.current && touched.current)? COLORS.error : COLORS.primary,
+                }}
+              />
+            ) : null}
             <InputField
               name='password'
               formik={props}
-              label='Password'
+              label={(action == ACTIONS.CREATE_PROFILE)? 'Password' : 'New Password'}
               autoCapitalize='none'
               textContentType='oneTimeCode'
               keyboardType='ascii-capable'
@@ -93,7 +132,7 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
             <InputField
               name='confirmation'
               formik={props}
-              label='Confirm your password'
+              label={(action == ACTIONS.CREATE_PROFILE)? 'Confirm your password' : 'Confirm your new password'}
               autoCapitalize='none'
               textContentType='oneTimeCode'
               keyboardType='ascii-capable'
@@ -129,8 +168,17 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
           </View>
         </View>
         <View style={styles.save}>
+          {(action == ACTIONS.CHANGE_PASSWORD)? (
+            <Button
+              type='clear'
+              title='Forgotten password?'
+              containerStyle={styles.linkForgotten}
+              titleStyle={styles.linkForgottenTitle}
+              onPressOut={handleResetPassword}
+            />
+          ) : null}
           <Button
-            title={displaySubmitButtonTitle()}
+            title={(action == ACTIONS.CREATE_PROFILE)? 'Create my profile' : 'Change my password'}
             disabled={!isValid}
             onPressOut={() => {
               handleSubmit();
@@ -193,6 +241,14 @@ const styles = StyleSheet.create({
   save: {
     paddingHorizontal: 10,
     paddingBottom: 10,
+  },
+  linkForgotten: {
+    alignSelf: 'flex-end',
+  },
+  linkForgottenTitle: {
+    color: COLORS.ternary,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

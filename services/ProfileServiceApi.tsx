@@ -171,11 +171,33 @@ export default class ProfileServiceApi extends ProfileService {
     } catch (error) {
 
       const method = 'ProfileServiceApi.changePasswordWithPIN';
-      let msg = 'Unable to change the PIN!';
+      let msg = 'Unable to change the password';
       if (error.response) {
         switch (error.response.status) {
           case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break;
-          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired.'; break;
+          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired'; break;
+        }
+      }
+      this.handleHttpError(method, msg, error);
+    }
+  }
+
+  async changePassword(oldPassword, newPassword)
+  {
+    try {
+
+      await this.api.patch('profile/change-password', {
+        password: oldPassword,
+        new: newPassword
+      });
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.changePasswordWithPIN';
+      let msg = 'Unable to change the password';
+      if (error.response) {
+        switch (error.response.status) {
+          case HTTP_STATUS.FORBIDDEN: msg = 'The current password is not valid'; break;
         }
       }
       this.handleHttpError(method, msg, error);

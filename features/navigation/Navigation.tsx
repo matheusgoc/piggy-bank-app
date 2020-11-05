@@ -167,19 +167,19 @@ const Navigation = () => {
                 { features.transactions.add }
                 { features.transactions.edit }
                 { features.transactions.view }
+                { features.resetPasswordEmail }
               </>
             ) : (
               <>
                 { features.signIn }
-                { features.terms }
-                { features.profile }
-                { features.savings }
-                { features.password }
-                { features.resetPasswordEmail }
-                { features.resetPasswordPIN }
               </>
             )
           }
+          { features.terms }
+          { features.profile }
+          { features.savings }
+          { features.password }
+          { features.resetPasswordPIN }
         </RootStack.Navigator>
       </NavigationContainer>
     </>

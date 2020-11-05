@@ -3,6 +3,9 @@ import { withFormik } from 'formik';
 import ProfileService from '../../services/ProfileService';
 import { ProfileModel } from '../../models/ProfileModel';
 import SavingsForm from './SavingsForm';
+import { store } from '../../store';
+import { setAction } from '../navigation/NavigationSlice';
+import { ACTIONS } from '../../constants';
 
 const profileService = new ProfileService();
 
@@ -41,6 +44,7 @@ const Savings = withFormik<ProfileModel, ProfileModel>({
     });
     profileService.store();
 
+    store.dispatch(setAction(ACTIONS.CREATE_PROFILE));
     bag.props.navigation.navigate('Password');
   },
 

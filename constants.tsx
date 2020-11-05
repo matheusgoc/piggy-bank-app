@@ -12,6 +12,7 @@ export const API_URL = BASE_PATH_API;
 export const COLORS = {
   primary: '#006600',
   secondary: '#ffffff',
+  ternary: '#0000ff',
   success: '#008600',
   error: '#860000',
   danger: '#dd0000',
@@ -177,5 +178,8 @@ export const HTTP_STATUS = {
 }
 
 export enum ACTIONS {
+  CREATE_PROFILE,
   RESET_PASSWORD,
+  RESET_PASSWORD_LOGGED,
+  CHANGE_PASSWORD,
 }
