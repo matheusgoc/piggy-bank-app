@@ -1,13 +1,14 @@
 import React from 'react';
 import { withFormik } from 'formik';
-import ProfileService from '../../services/ProfileService';
 import { ProfileModel } from '../../models/ProfileModel';
 import SavingsForm from './SavingsForm';
 import { store } from '../../store';
 import { setAction } from '../navigation/NavigationSlice';
-import { ACTIONS } from '../../constants';
+import { ACTIONS, TOAST } from '../../constants';
+import ProfileServiceApi from '../../services/ProfileServiceApi';
+import { showLoading, unformatCurrency } from '../../helpers';
 
-const profileService = new ProfileService();
+const profileService = new ProfileServiceApi();
 
 const Savings = withFormik<ProfileModel, ProfileModel>({
 
@@ -43,9 +44,34 @@ const Savings = withFormik<ProfileModel, ProfileModel>({
       targetMonthlySavings: profile.targetMonthlySavings,
     });
     profileService.store();
+    // profile = profileService.get();
 
-    store.dispatch(setAction(ACTIONS.CREATE_PROFILE));
-    bag.props.navigation.navigate('Password');
+    // update
+    if (profile.id) {
+
+      showLoading(true);
+      profileService.save().then(() => {
+
+        TOAST.ref.alertWithType(
+          'success',
+          "Your profile's savings has been updated",
+          '',
+        );
+
+        bag.props.navigation.goBack();
+
+      }).catch((error: Error) => {
+        console.warn('Savings.handleSubmit: ' + error.message);
+      }).finally(() => {
+        showLoading(false);
+      });
+
+    // create
+    } else {
+
+      store.dispatch(setAction(ACTIONS.CREATE_PROFILE));
+      bag.props.navigation.navigate('Password');
+    }
   },
 
 })(SavingsForm);

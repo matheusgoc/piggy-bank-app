@@ -71,6 +71,7 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
               autoCapitalize='none'
               autoCorrect={false}
               autoCompleteType='email'
+              disabled={!!values.id}
             />
           </View>
           <View style={styles.row}>
@@ -143,7 +144,7 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
             * required
           </Text>
           <Button
-            title='Next'
+            title={(values.id)? 'Save' : 'Next'}
             disabled={!isValid}
             onPressOut={() => {
               handleSubmit();

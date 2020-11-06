@@ -71,8 +71,8 @@ const InputField = (props: InputFieldProps) => {
       keyboardType='default'
       returnKeyType='done'
       blurOnSubmit={true}
-      {...props}
       onChangeText={handleOnChangeText}
+      {...props}
       onFocus={handleOnFocus}
     />
   )

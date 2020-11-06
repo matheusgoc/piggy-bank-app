@@ -19,14 +19,14 @@ const Settings = () => {
       title: 'My Savings Plan',
       icon: {name: 'bullseye', type: 'font-awesome'},
       handleOnPress: ()=> {
-        console.log('My Savings Plan');
+        navigation.navigate('Savings');
       }
     },
     {
       title: 'My Profile',
       icon: {name: 'user', type: 'font-awesome'},
       handleOnPress: ()=> {
-        console.log('My Profile');
+        navigation.navigate('Profile');
       }
     },
     {

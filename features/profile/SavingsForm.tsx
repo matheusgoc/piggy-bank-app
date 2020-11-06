@@ -23,7 +23,7 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
   // Handle form's submission to display the savings' plan summary
   const onNext = () => {
 
-    if (!values.targetMonthlySavings && !values.targetTotalSavings) {
+    if (values.id || (!values.targetMonthlySavings && !values.targetTotalSavings)) {
       handleSubmit();
       return;
     }
@@ -87,33 +87,37 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
         resetScrollToCoords={{x: 0, y: 0}}
         scrollEnabled={true}>
         <View>
-          <Text style={styles.label}>How much money have you saved or owed?</Text>
-          <View style={styles.balance}>
-            <CurrencyField
-              name='balance'
-              formik={props}
-              label='Current Balance'
-              width='60%'
-            />
-            <DropDownOverlay
-              name='balanceSignal'
-              formik={props}
-              label='Balance Position'
-              id='value'
-              searchKey='label'
-              placeholder='--'
-              width='35%'
-              hideButtonLabel={true}
-              items={[
-                {label: 'Saved', value: 'saved'},
-                {label: 'Owed', value: 'owed'},
-              ]}
-              icon={{
-                name: 'caret-down',
-                type: 'font-awesome',
-              }}
-            />
-          </View>
+          {(values.id)? null : (
+            <>
+              <Text style={styles.label}>How much money have you saved or owed?</Text>
+              <View style={styles.balance}>
+                <CurrencyField
+                  name='balance'
+                  formik={props}
+                  label='Current Balance'
+                  width='60%'
+                />
+                <DropDownOverlay
+                  name='balanceSignal'
+                  formik={props}
+                  label='Balance Position'
+                  id='value'
+                  searchKey='label'
+                  placeholder='--'
+                  width='35%'
+                  hideButtonLabel={true}
+                  items={[
+                    {label: 'Saved', value: 'saved'},
+                    {label: 'Owed', value: 'owed'},
+                  ]}
+                  icon={{
+                    name: 'caret-down',
+                    type: 'font-awesome',
+                  }}
+                />
+              </View>
+            </>
+          )}
           <Card containerStyle={styles.card}>
             <Card.Title style={{textAlign:'left', color: COLORS.primary}}>Targets</Card.Title>
             <Card.Divider />
@@ -137,7 +141,7 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
         {(!overlay)? (
         <View style={styles.save}>
           <Button
-            title='Next'
+            title={(values.id)? 'Save' : 'Next'}
             disabled={!isValid}
             onPress={() => {
               onNext();

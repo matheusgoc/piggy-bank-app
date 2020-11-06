@@ -57,6 +57,7 @@ const Password = withFormik<PasswordProps, ProfilePasswordModel>({
     const profileServiceApi = new ProfileServiceApi();
     const params = bag.props.route?.params;
 
+    showLoading(true);
     switch (action) {
 
       // reset password with email and PIN
@@ -110,7 +111,6 @@ const Password = withFormik<PasswordProps, ProfilePasswordModel>({
       case ACTIONS.CREATE_PROFILE:
         profileServiceApi.syncFromStore();
         profileServiceApi.setPassword(profilePassword);
-        showLoading(true);
         profileServiceApi.save().then(() => {
 
           store.dispatch(setOnboard(false));

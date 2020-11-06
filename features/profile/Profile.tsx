@@ -1,12 +1,13 @@
 import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import ProfileService from '../../services/ProfileService';
 import ProfileForm from './ProfileForm';
 import { ProfileModel } from '../../models/ProfileModel';
-import { US_STATES } from '../../constants';
+import { TOAST, US_STATES } from '../../constants';
+import ProfileServiceApi from '../../services/ProfileServiceApi';
+import { showLoading } from '../../helpers';
 
-const profileService = new ProfileService();
+const profileService = new ProfileServiceApi();
 
 const Profile = withFormik<ProfileModel, ProfileModel>({
 
@@ -56,7 +57,31 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
     });
     profileService.store();
 
-    bag.props.navigation.navigate('Savings');
+    // update
+    if (profile.id) {
+
+      showLoading(true);
+      profileService.save().then(() => {
+
+        TOAST.ref.alertWithType(
+          'success',
+          "Your profile's information has been updated",
+          '',
+        );
+
+        bag.props.navigation.goBack();
+
+      }).catch((error: Error) => {
+        console.warn('Savings.handleSubmit: ' + error.message);
+      }).finally(() => {
+        showLoading(false);
+      });
+
+    // create
+    } else {
+
+      bag.props.navigation.navigate('Savings');
+    }
   },
 
 })(ProfileForm);

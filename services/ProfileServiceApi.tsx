@@ -96,17 +96,19 @@ export default class ProfileServiceApi extends ProfileService {
 
       let profileToSave = this.mapToApi();
       let uri = 'profile';
-      const isUpdate = !!profileToSave['id'];
-      if (isUpdate) {
+
+      // update
+      if (profileToSave['id']) {
+
         uri = 'profile/'+profileToSave['id'];
         delete(profileToSave['password']);
-      }
-
-      const res = await this.api.post(uri, profileToSave);
-
-      if (isUpdate) {
+        const res = await this.api.put(uri, profileToSave);
         this.mapToStore(res.data);
+
+      // create
       } else {
+
+        await this.api.post(uri, profileToSave);
         this.profile = null;
         this.store();
       }
@@ -251,19 +253,22 @@ export default class ProfileServiceApi extends ProfileService {
    * @private
    */
   private mapToStore(profile): void {
-    this.profile.id = profile['id'];
-    this.profile.email = profile['email'];
-    this.profile.firstName = profile['firstname'];
-    this.profile.lastName = profile['lastname'];
-    this.profile.gender = profile['gender'];
-    this.profile.birthday = (profile['birthday'])? new Date(profile['birthday']) : null;
-    this.profile.state = profile['state'];
-    this.profile.city = profile['city'];
-    this.profile.postalCode = profile['postalcode'];
-    this.profile.balance = profile['balance'];
-    this.profile.balanceSignal = (profile['balance'] < 0)? 'owed' : 'saved';
-    this.profile.targetTotalSavings = profile['target_total_savings'];
-    this.profile.targetMonthlySavings = profile['target_monthly_savings'];
+    this.set({
+      id: profile['id'],
+      email: profile['email'],
+      firstName: profile['firstname'],
+      lastName: profile['lastname'],
+      gender: profile['gender'],
+      birthday: (profile['birthday'])? new Date(profile['birthday']) : null,
+      state: profile['state'],
+      city: profile['city'],
+      postalCode: profile['postalcode'],
+      balance: profile['balance'],
+      balanceSignal: (profile['balance'] < 0)? 'owed' : 'saved',
+      targetTotalSavings: profile['target_total_savings'],
+      targetMonthlySavings: profile['target_monthly_savings'],
+      password: null,
+    });
     this.store();
   }
 }
