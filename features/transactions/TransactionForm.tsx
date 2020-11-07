@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSelector } from 'react-redux';
 import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
+import moment from 'moment';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
 import { COLORS, STORAGE_URL } from '../../constants';
 import InputField from '../../components/input-field/InputField';
@@ -12,6 +14,7 @@ import { TransactionModel } from '../../models/TransactionModel';
 import TakePicture from '../../components/take-picture/TakePicture';
 import DropDownCategory from '../../components/drop-down/DropDownCategory';
 import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
+import { getDate } from './TransactionsSlice';
 
 const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
@@ -19,6 +22,12 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
     handleSubmit,
     values,
   } = props;
+
+  // set default date
+  const currentDate = useSelector(getDate);
+  const yearAndMonth = moment(currentDate).format('YYYY-MM');
+  const day = moment().format('-DD');
+  const defaultDate = moment(yearAndMonth + day, 'YYYY-MM-DD').toDate();
 
   //set receipt image
   let receipt = null;
@@ -89,6 +98,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               label='*Date'
               width='50%'
               formik={props}
+              default={defaultDate}
             />
             <InputDateTimePicker
               name='orderTime'

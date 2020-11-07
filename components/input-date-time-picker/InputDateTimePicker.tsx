@@ -13,6 +13,7 @@ interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 
   width: number | string,
   name?: string,
   formik?: FormikProps<any>,
+  default?: Date,
   onPick?(Date): void,
 }
 
@@ -53,7 +54,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
   });
 
   let formatValue = '--';
-  let initialValue:Date = props.formik?.values[props.name] || props.value || null;
+  let initialValue:Date = props.formik?.values[props.name] || props.value;
   if (initialValue && initialValue instanceof Date) {
     formatValue = formatDateTime(initialValue, mode);
   }
@@ -84,7 +85,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
 
   const handleButtonPress = () => {
     if (!value) {
-      setValue(new Date());
+      setValue((props.default)? props.default : new Date());
     }
     setVisible(true);
   }
@@ -110,7 +111,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
       <DateTimePickerModal
         isVisible={visible}
         mode={mode}
-        date={value}
+        date={value || props.default}
         headerTextIOS={props.label}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
