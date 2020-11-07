@@ -6,6 +6,7 @@ import { showLoading } from '../helpers';
 import TransactionsServiceApi from './TransactionsServiceApi';
 import { setDeleteEnable } from '../features/transactions/TransactionsSlice';
 import moment from 'moment';
+import ProfileServiceApi from './ProfileServiceApi';
 
 export default class SyncService extends BaseService{
 
@@ -35,6 +36,9 @@ export default class SyncService extends BaseService{
           sync.setToken(token);
           await sync.loadCategories();
           await sync.loadTransactions();
+          if (!reload) {
+            await sync.loadProfile();
+          }
           SyncService.hasLoad = true;
         }
 
@@ -51,6 +55,21 @@ export default class SyncService extends BaseService{
         SyncService.isLoading = false;
         showLoading(false);
       }
+    }
+  }
+
+  private async loadProfile() {
+    try {
+
+      const api = new ProfileServiceApi();
+      await api.load();
+      api.store();
+
+    } catch (error) {
+
+      const method = 'SyncService.loadCategories';
+      let msg = 'Unable to load categories';
+      this.handleHttpError(method, msg, error, false);
     }
   }
 

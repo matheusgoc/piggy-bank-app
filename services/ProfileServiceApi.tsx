@@ -22,6 +22,23 @@ export default class ProfileServiceApi extends ProfileService {
   }
 
   /**
+   * Retrieves the user's profile
+   */
+  async load():Promise<void> {
+    try {
+
+      const res = await this.api.get('profile');
+      this.mapToStore(res.data);
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.load';
+      let msg = 'Server error in attempt to load profile';
+      this.handleHttpError(method, msg, error);
+    }
+  }
+
+  /**
    * Authenticate the user
    *
    * @param email
