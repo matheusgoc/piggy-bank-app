@@ -19,8 +19,7 @@ import {
 import { updateReport } from '../features/reports/ReportsSlice';
 import { TransactionModel } from '../models/TransactionModel';
 import ReportService from './ReportService';
-
-export type ListDirectionType = 'after'|'before';
+import { getListToSave } from '../features/categories/CategoriesSlice';
 
 /**
  * TransactionsService
@@ -51,13 +50,6 @@ export default class TransactionsService extends BaseService {
     this.date = getDate(this.getState());
   }
 
-  get(): TransactionModel[] {
-
-    this.syncFromStore();
-
-    return this.list;
-  }
-
   set(list: TransactionModel[]): void {
 
     this.dispatch(setList(list));
@@ -70,28 +62,35 @@ export default class TransactionsService extends BaseService {
 
   add(transaction: TransactionModel): void {
 
+    this.syncFromStore();
+
     const currentMonth = Number(moment(this.date).format('YYYYMM'));
     const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
-    if (currentMonth <= transactionMonth) {
+    if (transactionMonth <= currentMonth) {
       this.dispatch(updateReport({
         transaction,
         hasMonthly: currentMonth == transactionMonth,
         operator: 'add'
       }));
     }
+
     this.dispatch(addTransaction(transaction));
   }
 
   update(transaction: TransactionModel, oldTransaction: TransactionModel): void {
 
+    this.syncFromStore();
+
+    this.dispatch(updateReport({
+      transaction: oldTransaction,
+      hasMonthly: true,
+      operator: 'sub'
+    }));
+
     const currentMonth = Number(moment(this.date).format('YYYYMM'));
     const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
-    if (currentMonth <= transactionMonth) {
-      this.dispatch(updateReport({
-        transaction: oldTransaction,
-        hasMonthly: currentMonth == transactionMonth,
-        operator: 'sub'
-      }));
+    console.log('update', currentMonth, transactionMonth);
+    if (transactionMonth <= currentMonth) {
       this.dispatch(updateReport({
         transaction,
         hasMonthly: currentMonth == transactionMonth,
@@ -99,11 +98,7 @@ export default class TransactionsService extends BaseService {
       }));
     }
 
-    if (currentMonth == transactionMonth) {
-      this.dispatch(updateTransaction(transaction));
-    } else {
-      this.dispatch(removeTransactionFromList(transaction));
-    }
+    this.dispatch(updateTransaction(transaction));
   }
 
   async storeReceiptPicture(transaction: TransactionModel): Promise<void> {
@@ -118,10 +113,12 @@ export default class TransactionsService extends BaseService {
 
   remove(index: number): void {
 
+    this.syncFromStore();
+
     const transaction = this.list[index];
     const currentMonth = Number(moment(this.date).format('YYYYMM'));
     const transactionMonth = Number(moment(transaction.timestamp).format('YYYYMM'));
-    if (currentMonth <= transactionMonth) {
+    if (transactionMonth <= currentMonth) {
       this.dispatch(updateReport({
         transaction: transaction,
         hasMonthly: currentMonth == transactionMonth,

@@ -83,15 +83,20 @@ export const TransactionsSlice = createSlice({
 
       const transaction = action.payload;
 
-      // case the transaction is supposed to be on the current list
+      // find the transaction on the list
+      const index = findTransactionIndex(transaction, state.list);
+
+      // case the transaction is still within the current month
       if (moment(state.date).isSame(transaction.timestamp, 'month')) {
 
-        // find the transaction on the current list and replace it
-        const index = findTransactionIndex(transaction, state.list);
+        // update the transaction data
         state.list.splice(index, 1, transaction);
-
-        // sort the current list to put the new transaction in the right position
         TransactionsSlice.caseReducers.sortList(state);
+
+      } else {
+
+        // remove the transaction from the current list
+        state.list.splice(index, 1);
       }
 
       // find the transaction on the list to save and replace or add it

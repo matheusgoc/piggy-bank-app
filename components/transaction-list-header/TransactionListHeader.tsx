@@ -103,6 +103,14 @@ const TransactionListHeader = (props: TransactionListHeaderProps) => {
     const generalBalance = generalReport.incomes - generalReport.expenses + savingsPlan.balance;
     const monthlyBalance = monthlyIncomes - monthlyExpenses;
     const prevMonthBalance = generalBalance - monthlyBalance;
+    // console.log(
+    //   'balance',
+    //   monthlyIncomes,
+    //   monthlyExpenses,
+    //   generalBalance,
+    //   monthlyBalance,
+    //   prevMonthBalance
+    // );
     if (prevMonthBalance > 0) {
       monthlyIncomes += prevMonthBalance;
     } else {
