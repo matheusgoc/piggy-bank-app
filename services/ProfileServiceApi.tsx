@@ -117,7 +117,6 @@ export default class ProfileServiceApi extends ProfileService {
       // update
       if (profileToSave['id']) {
 
-        uri = 'profile/'+profileToSave['id'];
         delete(profileToSave['password']);
         const res = await this.api.put(uri, profileToSave);
         this.mapToStore(res.data);
