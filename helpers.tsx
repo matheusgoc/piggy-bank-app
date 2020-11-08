@@ -1,5 +1,6 @@
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import React from 'react';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import { store } from './store';
@@ -43,4 +44,20 @@ export const formatCurrency = (number: number|string) => {
 
 export const unformatCurrency = (currencyFormat:string)  => {
   return currencyFormat.replace(/[^0-9.-]+/g,'');
+}
+
+export class RootNavigation {
+  public static navigationRef = React.createRef<any>();
+  public static navigate = (name, params?) => {
+    RootNavigation.navigationRef.current?.navigate(name, params);
+  }
+  public static goBack = () => {
+    RootNavigation.navigationRef.current?.goBack();
+  }
+  public static resetToSignIn = () => {
+    RootNavigation.navigationRef.current?.reset({
+      index: 0,
+      routes: [{name: 'SignIn'}],
+    })
+  }
 }

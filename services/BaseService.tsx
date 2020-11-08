@@ -1,6 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
-import { API_URL, TOAST } from '../constants';
+import { API_URL, HTTP_STATUS, TOAST } from '../constants';
 import { store } from '../store';
+import { RootNavigation, showLoading } from '../helpers';
+import { ProfileModel } from '../models/ProfileModel';
+import { clearProfile, setToken } from '../features/profile/ProfileSlice';
+import { clearTransactions } from '../features/transactions/TransactionsSlice';
+import { clearReports } from '../features/reports/ReportsSlice';
+import { clearCategories } from '../features/categories/CategoriesSlice';
 
 export interface IService {
   store(): void
@@ -70,12 +76,31 @@ export default class BaseService {
   }
 
   handleHttpError(method, msg, error, hasErrorAlert = true) {
+
     const errorJSON = (error.toJSON && typeof(error.toJSON) === 'function')? error.toJSON() : null;
-    console.warn(method + ': ' + error, errorJSON );
-    if (hasErrorAlert) {
+
+    // cast token has expired or revoked
+    if (error.response?.status == HTTP_STATUS.UNAUTHORIZED) {
+
+      // go back to SignIn view
+      this.signOut(false).then(() => {
+        TOAST.ref.alertWithType(
+          'error',
+          'Your access has expired or revoked',
+          'Sign in again',
+          null,
+          8000,
+        );
+        RootNavigation.resetToSignIn();
+      });
+
+    } else if (hasErrorAlert) {
+
       TOAST.ref.alertWithType('error', 'Error', msg);
-      throw new Error(msg);
     }
+
+    console.warn(method + ': ' + error, errorJSON );
+    throw new Error(msg);
   }
 
   dispatch(action) {
@@ -84,5 +109,39 @@ export default class BaseService {
 
   getState() {
     return store.getState();
+  }
+
+  /**
+   * Revoke the user's access token and
+   * clear states and storage data
+   * to log the user out
+   */
+  async signOut(revoke=true):Promise<void> {
+    try {
+
+      if (revoke) {
+        // revoke the current token
+        await this.api.get('profile/revoke');
+      }
+
+      // reset token and profile
+      this.setToken(null);
+      this.dispatch(clearProfile());
+
+      // reset transaction
+      this.dispatch(clearTransactions());
+
+      // reset reports
+      this.dispatch(clearReports());
+
+      // reset categories
+      this.dispatch(clearCategories());
+
+    } catch (error) {
+
+      const method = 'ProfileServiceApi.signOut';
+      const msg = 'The logout has fail';
+      this.handleHttpError(method, msg, error);
+    }
   }
 }

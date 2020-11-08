@@ -63,7 +63,7 @@ export default class TransactionsServiceApi extends TransactionsService {
 
       const method = 'TransactionsServiceApi.load';
       const msg = 'Unable to retrieve transactions from the server';
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error, false);
     }
   }
 

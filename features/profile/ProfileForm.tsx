@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FormikProps } from 'formik';
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
 import { COLORS, US_STATES } from '../../constants';
 import InputField from '../../components/input-field/InputField';
@@ -16,6 +17,13 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
     values,
     isValid,
   } = props;
+
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: values.id? 'Update my profile' : 'Create my profile',
+    });
+  }, [navigation, values.id]);
 
   const initialStates = Object.entries(US_STATES).map(([abbr, name]) => {
     return {abbr, name}

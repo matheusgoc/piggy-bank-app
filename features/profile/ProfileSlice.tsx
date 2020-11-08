@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
+import { ProfileModel } from '../../models/ProfileModel';
 
 export const ProfileSlice = createSlice({
   name: 'profile',
   initialState: {
     onboard: true,
-    data: null,
+    data:  new ProfileModel(),
     token: null,
   },
   reducers: {
@@ -17,12 +18,16 @@ export const ProfileSlice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload;
+    },
+    clearProfile: (state) => {
+      state.token = null;
+      state.data = new ProfileModel();
     }
   },
 });
 
 //actions
-export const { setOnboard, setProfile, setToken } = ProfileSlice.actions;
+export const { setOnboard, setProfile, setToken, clearProfile } = ProfileSlice.actions;
 
 //selectors
 export const getProfile = state => state.profile.data;

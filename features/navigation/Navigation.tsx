@@ -16,6 +16,7 @@ import Transaction from '../transactions/Transaction';
 import TransactionsView from '../transactions/TransactionsView';
 import ResetPasswordEmail from '../profile/ResetPasswordEmail';
 import ResetPasswordPIN from '../profile/ResetPasswordPIN';
+import { RootNavigation } from '../../helpers';
 enableScreens();
 
 const Navigation = () => {
@@ -157,7 +158,7 @@ const Navigation = () => {
 
   return (
     <>
-      <NavigationContainer>
+      <NavigationContainer ref={RootNavigation.navigationRef}>
         <RootStack.Navigator>
           { (onboard && !token) ? features.onboard : null }
           { (token)
@@ -167,11 +168,11 @@ const Navigation = () => {
                 { features.transactions.add }
                 { features.transactions.edit }
                 { features.transactions.view }
-                { features.resetPasswordEmail }
               </>
             ) : (
               <>
                 { features.signIn }
+                { features.resetPasswordEmail }
               </>
             )
           }

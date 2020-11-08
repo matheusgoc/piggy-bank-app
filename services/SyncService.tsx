@@ -44,11 +44,9 @@ export default class SyncService extends BaseService{
 
       } catch (error) {
 
-        sync.handleHttpError(
-          'SyncService.load: ',
-          'Error on loading data from server',
-          error
-        );
+        const method = 'SyncService.load';
+        const msg = 'Error on loading data from server';
+        sync.handleHttpError(method, msg, error, false);
 
       } finally {
 

@@ -25,7 +25,6 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
     setValues,
     errors,
     touched,
-    route
   } = props;
 
   const dispatch = useDispatch();

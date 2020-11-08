@@ -26,7 +26,11 @@ const Settings = () => {
       title: 'My Profile',
       icon: {name: 'user', type: 'font-awesome'},
       handleOnPress: ()=> {
-        navigation.navigate('Profile');
+        navigation.navigate('Profile', {
+          options: {
+            'title': 'Update my profile'
+          }
+        });
       }
     },
     {

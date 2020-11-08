@@ -34,7 +34,7 @@ export default class ProfileServiceApi extends ProfileService {
 
       const method = 'ProfileServiceApi.load';
       let msg = 'Server error in attempt to load profile';
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error, false);
     }
   }
 
@@ -66,40 +66,6 @@ export default class ProfileServiceApi extends ProfileService {
       if (error.response && error.response.status == HTTP_STATUS.FORBIDDEN) {
         msg = 'The email or password is invalid!';
       }
-      this.handleHttpError(method, msg, error);
-    }
-  }
-
-  /**
-   * Revoke the user's access token and
-   * clear states and storage data
-   * to log the user out
-   */
-  async signOut():Promise<void> {
-    try {
-
-      // revoke the current token
-      await this.api.get('profile/revoke');
-
-      // reset token and profile
-      this.clear();
-
-      // reset transaction
-      const transactionService = new TransactionsService();
-      transactionService.clear();
-
-      // reset reports
-      const reportService = new ReportService();
-      reportService.clear();
-
-      // reset categories
-      const categoriesService = new CategoriesService();
-      categoriesService.clear();
-
-    } catch (error) {
-
-      const method = 'ProfileServiceApi.signOut';
-      const msg = 'The logout has fail';
       this.handleHttpError(method, msg, error);
     }
   }

@@ -139,7 +139,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
 const styles = StyleSheet.create({
   style: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.secondary,
     height: '100%',
   },
   container: {
