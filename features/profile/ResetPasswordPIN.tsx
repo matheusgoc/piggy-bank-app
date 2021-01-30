@@ -10,7 +10,7 @@ import * as Progress from 'react-native-progress';
 
 const CELL_COUNT = 6;
 const PIN_TIME = 5 * 60;
-const UnderlineExample = ({navigation, route}) => {
+const ResetPasswordPIN = ({navigation, route}) => {
 
   let keyboard = useRef(null);
   const windowWidth = useWindowDimensions().width;
@@ -22,18 +22,12 @@ const UnderlineExample = ({navigation, route}) => {
   });
 
   const [timer, setTimer] = useState(PIN_TIME);
-
-
   useEffect(() => {
-    let interval = null;
-    if (timer > 0) {
-      clearTimeout(interval);
-      interval = setTimeout(() => {
-        setTimer(timer - 1);
-      }, 1000);
-    }
-    return () => clearTimeout(interval);
-  }, [timer]);
+    const interval = setInterval(() => {
+      setTimer(timer => timer - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const serviceApi = new ProfileServiceApi();
 
@@ -215,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UnderlineExample;
+export default ResetPasswordPIN;
