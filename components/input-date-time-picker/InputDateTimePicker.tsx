@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Button } from 'react-native-elements';
 import moment from 'moment';
 import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
@@ -116,7 +116,7 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
         onConfirm={handleConfirm}
         onCancel={handleCancel}
         isDarkModeEnabled={false}
-        display={(Platform.OS == 'android')? 'spinner' : 'default'}
+        display='spinner'
         {...props}
       />
       <Text style={styles.errorMessage}>
