@@ -21,7 +21,10 @@
     "ios": {
       "bundleIdentifier": "com.matheuscamara.PiggyBankApp",
       "buildNumber": "1",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "UIUserInterfaceStyle": "Light"
+      }
     },
     "android": {
       "package": "com.matheuscamara.PiggyBankApp",
