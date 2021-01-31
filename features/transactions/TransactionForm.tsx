@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -26,8 +26,13 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
   // set default date
   const currentDate = useSelector(getDate);
   const yearAndMonth = moment(currentDate).format('YYYY-MM');
-  const day = moment().format('-DD');
-  const defaultDate = moment(yearAndMonth + day, 'YYYY-MM-DD').toDate();
+  const day = new Date().getDate();
+  let defaultDate = moment(yearAndMonth + '-' + day, 'YYYY-MM-DD').toDate();
+
+  // set the last day of the month case it's more then 28 and the months doesn't have it
+  if (day > 28 && defaultDate.toString().toLowerCase() === "invalid date") {
+    defaultDate = moment(currentDate).clone().endOf('month').toDate();
+  }
 
   //set receipt image
   let receipt = null;
