@@ -17,23 +17,29 @@ const ReportSavingsPlan = () => {
   const generalReport: ReportModel = useSelector(getGeneralReport);
   const monthlyReport: ReportModel = useSelector(getMonthlyReport);
 
-  const calcMonthlyTargetAchieved = () => {
-    let total = monthlyReport.incomes - monthlyReport.expenses;
+  const calcMonthlyTargetReached = () => {
+    const incomes: number = monthlyReport.incomes ?? 0;
+    const expenses: number = monthlyReport.expenses ?? 0;
+    const total = incomes - expenses;
     return (total < 0)? 0 : total;
   };
 
-  const percentMonthlyTargetAchieved = () => {
-    let percent = calcMonthlyTargetAchieved() / savingsTarget.targetMonthlySavings;
+  const percentMonthlyTargetReached = () => {
+    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0;
+    const percent = (targetMonthlySavings)? calcMonthlyTargetReached() / targetMonthlySavings : 0;
     return (percent > 1)? 1 : percent;
   }
 
-  const calcTotalTargetAchieved = () => {
-    let total = generalReport.incomes - generalReport.expenses;
+  const calcTotalTargetReached = () => {
+    const incomes: number = generalReport.incomes ?? 0;
+    const expenses: number = generalReport.expenses ?? 0;
+    const total = incomes - expenses;
     return (total < 0)? 0 : total;
   };
 
-  const percentTotalTargetAchieved = () => {
-    let percent = calcTotalTargetAchieved() / savingsTarget.targetTotalSavings;
+  const percentTotalTargetReached = () => {
+    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0;
+    const percent = (targetMonthlySavings)? calcTotalTargetReached() / targetMonthlySavings : 0;
     return (percent > 1)? 1 : percent;
   }
 
@@ -50,13 +56,13 @@ const ReportSavingsPlan = () => {
             <Text>{formatCurrency(savingsTarget.targetMonthlySavings)}</Text>
             <Progress.Bar
               color={COLORS.primary}
-              progress={percentMonthlyTargetAchieved()}
+              progress={percentMonthlyTargetReached()}
               width={windowWidth * 0.35}
               height={15}
             />
           </View>
           <Text style={styles.textRight}>
-            {formatCurrency(calcMonthlyTargetAchieved())}
+            {formatCurrency(calcMonthlyTargetReached())}
           </Text>
         </View>
         <View style={[styles.target, styles.totalTarget]}>
@@ -64,14 +70,14 @@ const ReportSavingsPlan = () => {
           <View style={styles.progress}>
             <Progress.Bar
               color={COLORS.primary}
-              progress={percentTotalTargetAchieved()}
+              progress={percentTotalTargetReached()}
               width={windowWidth * 0.35}
               height={15}
             />
             <Text>{formatCurrency(savingsTarget.targetTotalSavings)}</Text>
           </View>
           <Text style={styles.textRight}>
-            {formatCurrency(calcTotalTargetAchieved())}
+            {formatCurrency(calcTotalTargetReached())}
           </Text>
         </View>
       </View>
