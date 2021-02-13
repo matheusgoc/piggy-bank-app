@@ -11,7 +11,7 @@ const profileService = new ProfileServiceApi();
 
 const Profile = withFormik<ProfileModel, ProfileModel>({
 
-  mapPropsToValues: props => {
+  mapPropsToValues: () => {
 
     // map profile from storage
     profileService.syncFromStore();
@@ -49,9 +49,9 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
-      gender: profile.gender.value,
+      gender: profile.gender?.value,
       birthday: profile.birthday,
-      state: profile.state.abbr,
+      state: profile.state?.abbr,
       city: profile.city,
       postalCode: profile.postalCode,
     });
@@ -65,7 +65,7 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
 
         TOAST.ref.alertWithType(
           'success',
-          "Your profile's information has been updated",
+          "Your profile has been updated",
           '',
         );
 

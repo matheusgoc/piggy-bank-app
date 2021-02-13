@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { Button, Icon, IconProps, ListItem, Overlay, SearchBar } from 'react-native-elements';
+import { Button, Icon, IconProps, Overlay, SearchBar } from 'react-native-elements';
 import { FormikProps } from 'formik';
 import { COLORS } from '../../constants';
 
@@ -29,11 +29,12 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
 
   // define initial value
   let initialValue = null;
-  if (props.value && props.value[props.searchKey]) {
+
+  if (props.value?.[props.searchKey]) {
 
     initialValue = props.value[props.searchKey];
 
-  } else if(props.formik?.values[props.name][props.searchKey]) {
+  } else if(props.formik?.values[props.name]?.[props.searchKey]) {
 
     initialValue = props.formik.values[props.name][props.searchKey];
   }
@@ -115,7 +116,7 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
     }
   }
 
-  const renderItem = ({ item, index, separators }) => {
+  const renderItem = ({ item, index }) => {
 
     return (
       <Pressable onPress={() => handleItemPress(item)}>
