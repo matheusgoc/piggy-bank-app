@@ -169,13 +169,10 @@ const Navigation = () => {
                 { features.transactions.edit }
                 { features.transactions.view }
               </>
-            ) : (
-              <>
-                { features.signIn }
-                { features.resetPasswordEmail }
-              </>
-            )
+            ) : null
           }
+          { features.signIn }
+          { features.resetPasswordEmail }
           { features.terms }
           { features.profile }
           { features.savings }

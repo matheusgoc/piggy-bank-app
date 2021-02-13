@@ -9,7 +9,7 @@ import { showLoading } from '../../helpers';
 
 const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
 
-  mapPropsToValues: props => {
+  mapPropsToValues: () => {
 
     return new ProfileCredentialsModel();
   },
@@ -32,6 +32,8 @@ const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
       TOAST.ref.alertWithType('info',
         'Hi ' + profile.lastName + ',',
         'you are welcome!');
+
+      bag.props.navigation.navigate('Main');
 
     }).catch((error) => {
       console.warn('SigIn.handleSubmit: ' + error);
