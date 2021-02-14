@@ -1,13 +1,9 @@
 import ProfileService from './ProfileService';
-import BaseService from './BaseService';
 import { ProfileModel } from '../models/ProfileModel';
 import moment from 'moment';
 import { HTTP_STATUS } from '../constants';
 import SyncService from './SyncService';
-import TransactionsService from './TransactionsService';
-import ReportService from './ReportService';
-import CategoriesService from './CategoriesService';
-import { store } from '../store';
+import { RootNavigation } from '../helpers';
 
 /**
  * ProfileServiceApi
@@ -101,6 +97,8 @@ export default class ProfileServiceApi extends ProfileService {
       let msg = 'Unable to save the profile due a server error. Try again later!';
       if (error.response && error.response.status == HTTP_STATUS.CONFLICT) {
         msg = 'A profile with the same email already exists';
+        RootNavigation.goBack();
+        RootNavigation.goBack();
       }
       this.handleHttpError(method, msg, error);
     }
