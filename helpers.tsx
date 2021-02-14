@@ -54,10 +54,10 @@ export class RootNavigation {
   public static goBack = () => {
     RootNavigation.navigationRef.current?.goBack();
   }
-  public static resetToSignIn = () => {
+  public static reset = (view) => {
     RootNavigation.navigationRef.current?.reset({
       index: 0,
-      routes: [{name: 'SignIn'}],
+      routes: [{name: view}],
     })
   }
 }

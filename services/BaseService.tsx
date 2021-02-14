@@ -1,9 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_URL, HTTP_STATUS, TOAST } from '../constants';
 import { store } from '../store';
-import { RootNavigation, showLoading } from '../helpers';
-import { ProfileModel } from '../models/ProfileModel';
-import { clearProfile, setToken } from '../features/profile/ProfileSlice';
+import { RootNavigation } from '../helpers';
+import { clearProfile } from '../features/profile/ProfileSlice';
 import { clearTransactions } from '../features/transactions/TransactionsSlice';
 import { clearReports } from '../features/reports/ReportsSlice';
 import { clearCategories } from '../features/categories/CategoriesSlice';
@@ -91,7 +90,7 @@ export default class BaseService {
           null,
           8000,
         );
-        RootNavigation.resetToSignIn();
+        RootNavigation.reset('SignIn');
       });
 
     } else if (hasErrorAlert) {

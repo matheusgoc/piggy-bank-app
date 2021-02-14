@@ -7,7 +7,7 @@ import { store } from '../../store';
 import { setOnboard } from './ProfileSlice';
 import ProfileServiceApi from '../../services/ProfileServiceApi';
 import { ACTIONS, TOAST } from '../../constants';
-import { showLoading } from '../../helpers';
+import { RootNavigation, showLoading } from '../../helpers';
 import { getAction } from '../navigation/NavigationSlice';
 
 export interface PasswordProps {
@@ -18,13 +18,13 @@ export interface PasswordProps {
 
 const Password = withFormik<PasswordProps, ProfilePasswordModel>({
 
-  mapPropsToValues: props => {
+  mapPropsToValues: () => {
 
     // reset password fields
     return new ProfilePasswordModel();
   },
 
-  validationSchema: props => {
+  validationSchema: () => {
     const action = getAction(store.getState());
     const validation = {
       password: Yup.string()
@@ -122,7 +122,7 @@ const Password = withFormik<PasswordProps, ProfilePasswordModel>({
             8000
           );
 
-          bag.props.navigation.navigate('SignIn');
+          RootNavigation.reset('SignIn');
 
         }).catch((error: Error) => {
           console.warn('Password.handleSubmit: ' + error.message);
