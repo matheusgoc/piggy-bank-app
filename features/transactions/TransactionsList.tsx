@@ -83,7 +83,7 @@ const TransactionsList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.secondary,
     height: '100%'
   },
   empty: {

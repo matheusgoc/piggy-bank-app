@@ -17,6 +17,7 @@ import TransactionsView from '../transactions/TransactionsView';
 import ResetPasswordEmail from '../profile/ResetPasswordEmail';
 import ResetPasswordPIN from '../profile/ResetPasswordPIN';
 import { RootNavigation } from '../../helpers';
+import AddBankAccount from '../banking/AddBankAccount';
 enableScreens();
 
 const Navigation = () => {
@@ -153,7 +154,20 @@ const Navigation = () => {
           }}
         />
       ),
-    }
+    },
+    banking: {
+      addAccount: (
+        <RootStack.Screen
+          name='AddBankAccount'
+          component={ AddBankAccount }
+          options={{
+            title: 'Add Bank Accout',
+            headerBackTitleVisible: false,
+            headerTintColor: COLORS.primary,
+          }}
+        />
+      ),
+    },
   }
 
   return (
@@ -178,6 +192,7 @@ const Navigation = () => {
           { features.savings }
           { features.password }
           { features.resetPasswordPIN }
+          { features.banking.addAccount }
         </RootStack.Navigator>
       </NavigationContainer>
     </>
