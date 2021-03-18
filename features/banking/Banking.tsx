@@ -1,14 +1,22 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Icon, Button, Divider } from 'react-native-elements';
+import { SafeAreaView, Text, View, StyleSheet, FlatList, ListRenderItem, ListRenderItemInfo } from "react-native";
+import { useSelector } from 'react-redux';
+import { Button, Divider, Icon } from 'react-native-elements';
 import { COLORS } from '../../constants';
-import BankingServiceApi from '../../services/BankingServiceApi';
-import { showLoading } from '../../helpers';
 import { useNavigation } from '@react-navigation/native';
+import { getInstitutions } from './BankingSlice';
+import { InstitutionModel } from '../../models/InstitutionModel';
 
 const Banking = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
+  const institutions: InstitutionModel[] = useSelector(getInstitutions)
+  const renderItem = (institution: InstitutionModel, index) => (
+      <View style={styles.institution}>
+        <Icon name="university" type='font-awesome-5' color={COLORS.gray} size={50} />
+        <Text style={styles.institutionTitle}>{institution.name}</Text>
+      </View>
+  );
 
   return (
     <SafeAreaView>
@@ -18,7 +26,7 @@ const Banking = () => {
           <Text style={styles.headerTitleText}>Bank Accounts</Text>
         </View>
         <Button
-          onPress={() => navigation.navigate('AddBankAccount')}
+          onPress={() => navigation.navigate('AddInstitution')}
           icon={{
             name: "plus-circle",
             color: COLORS.primary,
@@ -30,17 +38,27 @@ const Banking = () => {
         />
       </View>
       <Divider />
-      <View style={styles.empty}>
-        <Icon
-          name='exclamation-triangle'
-          type='font-awesome'
-          size={50}
-          color={COLORS.gray}
+      {(institutions.length === 0)? (
+        <View style={styles.empty}>
+          <Icon
+            name='exclamation-triangle'
+            type='font-awesome'
+            size={50}
+            color={COLORS.gray}
+          />
+          <Text style={styles.emptyText}>
+            No banking accounts added
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={institutions}
+          renderItem={({item, index}) => renderItem(item, index)}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          contentContainerStyle={styles.listContainer}
         />
-        <Text style={styles.emptyText}>
-          No banking accounts added
-        </Text>
-      </View>
+      )}
     </SafeAreaView>
   )
 }
@@ -75,7 +93,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     paddingTop: 10
+  },
+  listContainer: {
+    margin: 20,
+  },
+  institution: {
+    alignItems: 'center',
+    width: '50%',
+    height: 150,
+  },
+  institutionTitle: {
+    width: 150,
+    textAlign: 'center',
+    paddingTop: 10,
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: COLORS.black,
   }
-});
+})
 
 export default Banking

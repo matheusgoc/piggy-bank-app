@@ -5,38 +5,74 @@ import PlaidLink from '../../components/plaid-link/PlaidLink';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as WebBrowser from 'expo-web-browser';
-import { COLORS } from '../../constants';
+import { COLORS, TOAST } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
 
-const AddBankAccount = () => {
+const AddInstitution = () => {
 
-  const [linkToken, setLinkToken] = useState(null);
+  const navigation = useNavigation()
+
+  const [linkToken, setLinkToken] = useState(null)
 
   const getLinkToken = async () => {
-    showLoading(true);
-    const bankingServiceApi = new BankingServiceApi();
-    const token = await bankingServiceApi.getLinkToken();
-    showLoading(false);
+    showLoading(true)
+    const bankingServiceApi = new BankingServiceApi()
+    const token = await bankingServiceApi.getLinkToken()
+    showLoading(false)
 
-    return token;
+    return token
   }
 
   const handleLink = async () => {
-    const token = await getLinkToken();
-    setLinkToken(token);
+    const token = await getLinkToken()
+    setLinkToken(token)
   }
 
-  const handleConnect = (params) => {
-    console.log('handleConnect', params);
+  const handleConnect = (params, attempts = 0) => {
+
+    console.log('handleConnect', params)
+
+    const bankingServiceApi = new BankingServiceApi()
+
+    showLoading(true)
+    bankingServiceApi.exchangePublicToken(params.public_token).then((institution) => {
+
+      TOAST.ref.alertWithType(
+        'success',
+        'New Institution Add',
+        `The ${institution} institution was add!`,
+      );
+
+      navigation.goBack()
+
+    }).catch((error) => {
+
+      // try to save up to 3 times when get an error
+      if (attempts < 3) {
+        handleConnect(params, ++attempts)
+        return;
+      }
+
+      TOAST.ref.alertWithType(
+        'error',
+        'Server Error',
+        "Unable to add an institution!",
+      );
+      console.warn('Transaction.handleConnect: ' + error.message)
+
+    }).finally(() => {
+      showLoading(false)
+    });
   }
 
   const handleExit = (params) => {
-    console.log('handleExit', params);
-    setLinkToken(null);
+    console.log('handleExit', params)
+    setLinkToken(null)
   }
 
   const openInfoUrl = async () => {
-    const url = 'https://plaid.com/legal/#consumers';
-    await WebBrowser.openBrowserAsync(url);
+    const url = 'https://plaid.com/legal/#consumers'
+    await WebBrowser.openBrowserAsync(url)
   }
 
   return (
@@ -100,4 +136,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default AddBankAccount;
+export default AddInstitution;

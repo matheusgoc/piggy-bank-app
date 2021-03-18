@@ -7,6 +7,7 @@ import TransactionsServiceApi from './TransactionsServiceApi';
 import { setDeleteEnable } from '../features/transactions/TransactionsSlice';
 import moment from 'moment';
 import ProfileServiceApi from './ProfileServiceApi';
+import BankingServiceApi from './BankingServiceApi';
 
 export default class SyncService extends BaseService{
 
@@ -36,6 +37,7 @@ export default class SyncService extends BaseService{
           sync.setToken(token);
           await sync.loadCategories();
           await sync.loadTransactions();
+          await sync.loadInstitutions();
           if (!reload) {
             await sync.loadProfile();
           }
@@ -99,6 +101,20 @@ export default class SyncService extends BaseService{
 
       const method = 'SyncService.loadTransactions';
       let msg = 'Unable to load transactions';
+      this.handleHttpError(method, msg, error, false);
+    }
+  }
+
+  private async loadInstitutions() {
+    try {
+
+      const api = new BankingServiceApi();
+      await api.load();
+
+    } catch (error) {
+
+      const method = 'SyncService.loadInstitutions';
+      let msg = 'Unable to load institutions';
       this.handleHttpError(method, msg, error, false);
     }
   }
