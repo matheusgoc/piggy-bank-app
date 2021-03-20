@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { InstitutionModel } from '../models/InstitutionModel';
 
 export default class BankingServiceApi extends BankingService {
+
   constructor() {
     super()
   }
@@ -17,7 +18,7 @@ export default class BankingServiceApi extends BankingService {
       const res: AxiosResponse = await this.api.get('banking/institutions')
 
       const institutions = res.data.map((institution): InstitutionModel => {
-        return BankingServiceApi.mapToStore(institution)
+        return BankingServiceApi.mapInstitutionToStore(institution)
       })
 
       this.set(institutions)
@@ -64,7 +65,7 @@ export default class BankingServiceApi extends BankingService {
         'public_token': publicToken
       })
 
-      const institution = BankingServiceApi.mapToStore(res.data)
+      const institution = BankingServiceApi.mapInstitutionToStore(res.data)
       this.add(institution)
 
       return institution
@@ -78,15 +79,73 @@ export default class BankingServiceApi extends BankingService {
   }
 
   /**
-   * Format an institution data that comes from the API server
+   * Delete an institution from the server and remove it from the device's storage
+   *
+   * @param institution
+   * @param index
+   */
+  async delete(institution: InstitutionModel, index): Promise<void> {
+
+    try {
+
+      await this.api.delete('banking/institutions/' + institution.id)
+      this.remove(index);
+
+    } catch (error) {
+
+      const method = 'BankingServiceApi.deleteInstitution'
+      const msg = 'Unable to remove an institution'
+      this.handleHttpError(method, msg, error, false)
+    }
+  }
+
+  /**
+   * Retrieve an institution's accounts
    *
    * @param institution
    */
-  static mapToStore(institution): InstitutionModel {
+  async getAccounts(institution: InstitutionModel): Promise<AccountModel[]> {
+
+    try {
+
+      const res: AxiosResponse = await this.api.get('banking/institutions/' + institution.id + '/accounts')
+      return res.data.map((data) => BankingServiceApi.mapAccountToStore(data))
+
+    } catch (error) {
+
+      const method = 'BankingServiceApi.getAccounts'
+      const msg = 'Unable to retrieve the institution accounts'
+      this.handleHttpError(method, msg, error, false)
+    }
+  }
+
+  /**
+   * Format an institution data that comes from the API server
+   *
+   * @param data
+   */
+  static mapInstitutionToStore(data): InstitutionModel {
     return {
-      id: institution['id'],
-      name: institution['name'],
-      logo: institution['logo'],
+      id: data['id'],
+      name: data['name'],
+      logo: data['logo'],
+    }
+  }
+
+  /**
+   * Format an institution account data that comes from the API server
+   *
+   * @param data
+   */
+  static mapAccountToStore(data): AccountModel {
+    return {
+      id: data['account_id'],
+      mask: data['mask'],
+      name: data['name'],
+      officialName: data['official_name'],
+      type: data['type'],
+      subtype: data['subtype'],
+      checked: false,
     }
   }
 }

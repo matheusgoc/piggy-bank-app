@@ -18,6 +18,7 @@ import ResetPasswordEmail from '../profile/ResetPasswordEmail';
 import ResetPasswordPIN from '../profile/ResetPasswordPIN';
 import { RootNavigation } from '../../helpers';
 import AddInstitution from '../banking/AddInstitution';
+import AccountsList from '../banking/AccountsList';
 enableScreens();
 
 const Navigation = () => {
@@ -167,6 +168,15 @@ const Navigation = () => {
           }}
         />
       ),
+      accountsList: (
+        <RootStack.Screen
+          name='AccountsList'
+          component={ AccountsList }
+          options={{
+            headerShown: false,
+          }}
+        />
+      ),
     },
   }
 
@@ -193,6 +203,7 @@ const Navigation = () => {
           { features.password }
           { features.resetPasswordPIN }
           { features.banking.addInstitution }
+          { features.banking.accountsList }
         </RootStack.Navigator>
       </NavigationContainer>
     </>

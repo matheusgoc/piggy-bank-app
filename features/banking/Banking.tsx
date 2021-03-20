@@ -1,29 +1,33 @@
-import React from 'react';
-import { SafeAreaView, Text, View, StyleSheet, FlatList, ListRenderItem, ListRenderItemInfo } from "react-native";
-import { useSelector } from 'react-redux';
-import { Button, Divider, Icon } from 'react-native-elements';
-import { COLORS } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
-import { getInstitutions } from './BankingSlice';
-import { InstitutionModel } from '../../models/InstitutionModel';
+import React from 'react'
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useSelector } from 'react-redux'
+import { Button, Divider, Icon } from 'react-native-elements'
+import { COLORS } from '../../constants'
+import { useNavigation } from '@react-navigation/native'
+import { getInstitutions } from './BankingSlice'
+import { InstitutionModel } from '../../models/InstitutionModel'
 
 const Banking = () => {
 
   const navigation = useNavigation()
   const institutions: InstitutionModel[] = useSelector(getInstitutions)
   const renderItem = (institution: InstitutionModel, index) => (
-      <View style={styles.institution}>
+    <TouchableOpacity
+      style={styles.institution}
+      onPress={() => navigation.navigate('AccountsList', {index})}>
+      <View>
         <Icon name="university" type='font-awesome-5' color={COLORS.gray} size={50} />
         <Text style={styles.institutionTitle}>{institution.name}</Text>
       </View>
+    </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTitle}>
           <Icon name='university' type='font-awesome' color={COLORS.primary} />
-          <Text style={styles.headerTitleText}>Bank Accounts</Text>
+          <Text style={styles.headerTitleText}>Institutions</Text>
         </View>
         <Button
           onPress={() => navigation.navigate('AddInstitution')}
@@ -47,7 +51,7 @@ const Banking = () => {
             color={COLORS.gray}
           />
           <Text style={styles.emptyText}>
-            No banking accounts added
+            No institutions added!
           </Text>
         </View>
       ) : (
@@ -64,6 +68,10 @@ const Banking = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: COLORS.secondary,
+  },
   header : {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -92,7 +100,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     fontSize: 14,
     fontWeight: 'bold',
-    paddingTop: 10
+    paddingTop: 10,
   },
   listContainer: {
     margin: 20,

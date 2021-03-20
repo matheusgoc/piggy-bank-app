@@ -40,7 +40,7 @@ const AddInstitution = () => {
       TOAST.ref.alertWithType(
         'success',
         'New Institution Add',
-        `The ${institution} institution was add!`,
+        `The ${institution.name} institution was add!`,
       );
 
       navigation.goBack()
