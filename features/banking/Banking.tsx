@@ -6,15 +6,23 @@ import { COLORS } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
 import { getInstitutions } from './BankingSlice'
 import { InstitutionModel } from '../../models/InstitutionModel'
+import BankingService from '../../services/BankingService';
 
 const Banking = () => {
 
   const navigation = useNavigation()
   const institutions: InstitutionModel[] = useSelector(getInstitutions)
+
+  const selectInstitution = ((index) => {
+    const bankingService = new BankingService()
+    bankingService.setIndex(index)
+    navigation.navigate('AccountsList')
+  })
+
   const renderItem = (institution: InstitutionModel, index) => (
     <TouchableOpacity
       style={styles.institution}
-      onPress={() => navigation.navigate('AccountsList', {index})}>
+      onPress={() => { selectInstitution(index) }}>
       <View>
         <Icon name="university" type='font-awesome-5' color={COLORS.gray} size={50} />
         <Text style={styles.institutionTitle}>{institution.name}</Text>

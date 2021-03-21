@@ -1,9 +1,10 @@
-class AccountModel {
-  id: string = ''
-  mask: string = ''
-  name: string = ''
-  officialName: string = ''
-  type: string = ''
-  subtype: string = ''
+export class AccountModel {
+  id: string = null
+  mask: string = null
+  name: string = null
+  officialName: string = null
+  type: string = null
+  subtype: string = null
   checked: boolean = false
 }
+

@@ -1,6 +1,7 @@
 import BankingService from './BankingService';
 import { AxiosResponse } from 'axios';
 import { InstitutionModel } from '../models/InstitutionModel';
+import { AccountModel } from '../models/AccountModel';
 
 export default class BankingServiceApi extends BankingService {
 

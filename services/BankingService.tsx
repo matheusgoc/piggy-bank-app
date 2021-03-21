@@ -4,6 +4,7 @@ import {
   setInstitutions,
   addInstitution,
   removeInstitution,
+  setInstitutionIndex,
 } from '../features/banking/BankingSlice';
 
 export default class BankingService extends BaseService {
@@ -21,5 +22,9 @@ export default class BankingService extends BaseService {
 
   remove(index) {
     this.dispatch(removeInstitution(index))
+  }
+
+  setIndex(index) {
+    this.dispatch(setInstitutionIndex(index))
   }
 }

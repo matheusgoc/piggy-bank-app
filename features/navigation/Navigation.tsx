@@ -19,6 +19,7 @@ import ResetPasswordPIN from '../profile/ResetPasswordPIN';
 import { RootNavigation } from '../../helpers';
 import AddInstitution from '../banking/AddInstitution';
 import AccountsList from '../banking/AccountsList';
+import BankingCalendar from '../banking/BankingCalendar';
 enableScreens();
 
 const Navigation = () => {
@@ -177,6 +178,15 @@ const Navigation = () => {
           }}
         />
       ),
+      calendar: (
+        <RootStack.Screen
+          name='BankingCalendar'
+          component={ BankingCalendar }
+          options={{
+            headerShown: false,
+          }}
+        />
+      )
     },
   }
 
@@ -204,6 +214,7 @@ const Navigation = () => {
           { features.resetPasswordPIN }
           { features.banking.addInstitution }
           { features.banking.accountsList }
+          { features.banking.calendar }
         </RootStack.Navigator>
       </NavigationContainer>
     </>
