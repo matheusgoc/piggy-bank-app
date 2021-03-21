@@ -38,7 +38,7 @@ const baseStyles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
   },
   label: {
-    fontSize: 15,
+    fontSize: 20,
     color: COLORS.primary,
   },
 })

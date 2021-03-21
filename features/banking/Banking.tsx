@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { getInstitutions } from './BankingSlice'
 import { InstitutionModel } from '../../models/InstitutionModel'
 import BankingService from '../../services/BankingService';
+import BankingEmptyState from '../../components/banking/BankingEmptyState';
 
 const Banking = () => {
 
@@ -50,19 +51,7 @@ const Banking = () => {
         />
       </View>
       <Divider />
-      {(institutions.length === 0)? (
-        <View style={styles.empty}>
-          <Icon
-            name='exclamation-triangle'
-            type='font-awesome'
-            size={50}
-            color={COLORS.gray}
-          />
-          <Text style={styles.emptyText}>
-            No institutions added!
-          </Text>
-        </View>
-      ) : (
+      {(institutions.length === 0)? (<BankingEmptyState message="No institutions!" />) : (
         <FlatList
           data={institutions}
           renderItem={({item, index}) => renderItem(item, index)}
@@ -97,18 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     paddingLeft: 10,
-  },
-  empty: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    paddingBottom: 100,
-  },
-  emptyText: {
-    color: COLORS.gray,
-    fontSize: 14,
-    fontWeight: 'bold',
-    paddingTop: 10,
   },
   listContainer: {
     margin: 20,

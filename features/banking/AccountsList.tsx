@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionModel } from '../../models/InstitutionModel'
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import { Button, Icon, ListItem } from 'react-native-elements'
+import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
+import { Button, ListItem } from 'react-native-elements'
 import { COLORS, TOAST } from '../../constants'
 import BankingServiceApi from '../../services/BankingServiceApi'
 import { AccountModel } from '../../models/AccountModel';
@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import AccountListPlaceholder from '../../components/banking/AccountListPlaceholder'
 import BankingHeader from '../../components/banking/BankingHeader'
 import BankingListLabel from '../../components/banking/BankingListLabel'
-
+import BankingEmptyState from '../../components/banking/BankingEmptyState';
 
 const AccountsList = () => {
 
@@ -71,19 +71,7 @@ const AccountsList = () => {
     </ListItem>
   )
 
-  const emptyState = (
-    <View style={styles.empty}>
-      <Icon
-        name='exclamation-triangle'
-        type='font-awesome'
-        size={50}
-        color={COLORS.gray}
-      />
-      <Text style={styles.emptyText}>
-        No accounts!
-      </Text>
-    </View>
-  )
+  const emptyState = (<BankingEmptyState message="No accounts!" />)
 
   const placeholder = Array(5).fill('').map((value, index) => (
     <AccountListPlaceholder index={index} />
@@ -143,18 +131,6 @@ const styles = StyleSheet.create({
     maxWidth: 200,
     paddingLeft: 10,
     fontSize: 25,
-  },
-  empty: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    paddingBottom: 100,
-  },
-  emptyText: {
-    color: COLORS.gray,
-    fontSize: 14,
-    fontWeight: 'bold',
-    paddingTop: 10,
   },
   list: {
     marginBottom: 130,

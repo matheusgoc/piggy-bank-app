@@ -10,11 +10,19 @@ import { InstitutionModel } from '../../models/InstitutionModel'
 import { getInstitutionIndex, getInstitutions } from '../../features/banking/BankingSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-const BankingHeader = () => {
+const BankingHeader = (props: {height?:string|number}) => {
 
   const navigation: StackNavigationProp<any> = useNavigation()
   const institutionIndex = useSelector(getInstitutionIndex)
   const institution: InstitutionModel = useSelector(getInstitutions)[institutionIndex]
+
+  const styles = StyleSheet.create({
+    ...baseStyles,
+    container: {
+      ...baseStyles.container,
+      height: props.height ?? '10%',
+    },
+  });
 
   const deleteInstitution = () => {
 
@@ -80,7 +88,7 @@ const BankingHeader = () => {
   )
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

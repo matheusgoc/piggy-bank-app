@@ -2,6 +2,7 @@ import BankingService from './BankingService';
 import { AxiosResponse } from 'axios';
 import { InstitutionModel } from '../models/InstitutionModel';
 import { AccountModel } from '../models/AccountModel';
+import { BankingTransactionModel } from '../models/BankingTransactionModel';
 
 export default class BankingServiceApi extends BankingService {
 
@@ -115,7 +116,38 @@ export default class BankingServiceApi extends BankingService {
     } catch (error) {
 
       const method = 'BankingServiceApi.getAccounts'
-      const msg = 'Unable to retrieve the institution accounts'
+      const msg = "Unable to retrieve the institution's accounts"
+      this.handleHttpError(method, msg, error, false)
+    }
+  }
+
+  /**
+   * Retrieve the banking transactions from provided accounts on a determined period and range
+   *
+   * @param institution: InstitutionModel
+   * @param start - Start Date on YYYY-MM-DD ISO format
+   * @param end - End Date on YYYY-MM-DD ISO format
+   * @param accounts - accounts ids separated by coma ","
+   * @param page - current page for pagination beginning from 0
+   */
+  async getTransactions(
+    institution: InstitutionModel,
+    start: string, end: string,
+    accounts: string,
+    page: number,
+  ): Promise<BankingTransactionModel[]> {
+    try {
+
+      const count = 20
+      const offset = (page - 1) * count
+      const url = `banking/institutions/${institution.id}/transactions/${start}/${end}/`
+      const res: AxiosResponse = await this.api.get(url, {params: {accounts,count,offset}})
+      return res.data.map((data) => BankingServiceApi.mapTransactionToStore(data))
+
+    } catch (error) {
+
+      const method = 'BankingServiceApi.getTransactions'
+      const msg = "Unable to retrieve the institution's transactions"
       this.handleHttpError(method, msg, error, false)
     }
   }
@@ -147,6 +179,30 @@ export default class BankingServiceApi extends BankingService {
       type: data['type'],
       subtype: data['subtype'],
       checked: false,
+    }
+  }
+
+  static mapTransactionToStore(data): BankingTransactionModel {
+    return {
+      id: data['transaction_id'],
+      amount: data['amount'],
+      isPending: data['pending'],
+      channel: data['payment_channel'],
+      name: data['name'],
+      merchantName: data['merchant_name'],
+      date: data['date'],
+      categories: data['category'],
+      currency: data['iso_currency_code'] ?? data['unofficial_currency_code'],
+      location: {
+        address: data['location']['address'],
+        city: data['location']['city'],
+        region: data['location']['region'],
+        postalCode: data['location']['postal_code'],
+        country: data['location']['country'],
+        lat: data['location']['lat'],
+        lon: data['location']['lon'],
+        storeNumber: data['location']['store_number']
+      }
     }
   }
 }
