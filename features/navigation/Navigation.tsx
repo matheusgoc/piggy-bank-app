@@ -21,6 +21,7 @@ import AddInstitution from '../banking/AddInstitution';
 import AccountsList from '../banking/AccountsList';
 import BankingCalendar from '../banking/BankingCalendar';
 import BankingTransactionsList from '../banking/BankingTransactionsList';
+import BankingTransactionView from '../banking/BankingTransactionView';
 enableScreens();
 
 const Navigation = () => {
@@ -197,6 +198,16 @@ const Navigation = () => {
           }}
         />
       ),
+
+      transactionView: (
+        <RootStack.Screen
+          name='BankingTransactionView'
+          component={ BankingTransactionView }
+          options={{
+            headerShown: false,
+          }}
+        />
+      ),
     },
   }
 
@@ -226,6 +237,7 @@ const Navigation = () => {
           { features.banking.accountsList }
           { features.banking.calendar }
           { features.banking.transactionsList }
+          { features.banking.transactionView }
         </RootStack.Navigator>
       </NavigationContainer>
     </>

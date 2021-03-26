@@ -114,16 +114,17 @@ const BankingTransactionsList = (props: BankingTransactionsListProps) => {
   }
 
   const selectTransaction = (transaction: BankingTransactionModel) => {
-    console.log('selectTransaction', transaction)
+    navigation.navigate('BankingTransactionView', {transaction: JSON.stringify(transaction)})
   }
 
   const renderTransactionItem = (transaction: BankingTransactionModel) => {
     return (
-      <BankingTransactionsListItem transaction={transaction} onPress={selectTransaction} />
+      <BankingTransactionsListItem
+        transaction={transaction}
+        onPress={selectTransaction}
+      />
     )
   }
-
-  const emptyState = (<BankingEmptyState message="No transactions!" />)
 
   const placeholder = Array(20).fill('').map((value, index) => (
     <TransactionListPlaceholder index={index} />
@@ -159,7 +160,7 @@ const BankingTransactionsList = (props: BankingTransactionsListProps) => {
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <BankingHeader />
-        {(!loading && transactionsList.length == 0)? emptyState : list}
+        {(!loading && transactionsList.length == 0)? <BankingEmptyState message="No transactions!" /> : list}
       </View>
     </SafeAreaView>
   )
