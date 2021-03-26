@@ -99,7 +99,11 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
         successMsg,
       );
 
-      bag.props.navigation.goBack();
+      if (bag.props.route?.params?.backView) {
+        bag.props.navigation.navigate(bag.props.route?.params?.backView);
+      } else {
+        bag.props.navigation.goBack();
+      }
 
     }).catch((error) => {
 
