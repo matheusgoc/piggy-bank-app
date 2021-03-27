@@ -36,7 +36,7 @@ const BankingTransactionView = (props: BankingTransactionProps) => {
       id: null,
       amount: Math.abs(transaction.amount),
       place: transaction.name,
-      category: {
+      category: (category == 'new')? null : {
         id: null,
         isNew: true,
         name: category,
@@ -47,7 +47,7 @@ const BankingTransactionView = (props: BankingTransactionProps) => {
       type: (transaction.amount > 0)? 'I' : 'E',
       orderDate: date.toDate(),
       orderTime: null,
-      timestamp: date.valueOf(),
+      timestamp: null,
       description: null,
       isNewReceipt: false,
       isReceiptRemoved: false,

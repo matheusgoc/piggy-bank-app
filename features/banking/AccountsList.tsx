@@ -80,23 +80,27 @@ const AccountsList = () => {
   const list = (
     <>
       <View style={styles.list}>
-        <BankingListLabel label="Select the accounts which you want to check the transactions:" />
+        <BankingListLabel label="Select the accounts which you want to import the transactions:" />
         <View style={styles.listContainer}>
           {(loading)? placeholder : (
             <FlatList
               data={accounts}
               renderItem={({item}) => renderAccountItem(item)}
               keyExtractor={item => item.id}
+              ListFooterComponent={<View style={{height: 100}} />}
             />
           )}
         </View>
       </View>
-      <Button
-        title="Next"
-        containerStyle={styles.listButton}
-        disabled={selectedAccountsCounter <= 0}
-        onPress={next}
-      />
+      <View style={styles.btnGroup}>
+        <Button
+          title="Next"
+          containerStyle={styles.btn}
+          disabled={selectedAccountsCounter <= 0}
+          onPress={next}
+        />
+      </View>
+
     </>
   )
 
@@ -138,12 +142,18 @@ const styles = StyleSheet.create({
   listContainer: {
     height: '90%',
   },
-  listButton: {
+  btnGroup: {
     position: 'absolute',
+    width: '100%',
+    height: '5%',
+    bottom: 0,
+    paddingBottom: 10,
+    backgroundColor: COLORS.secondary,
+  },
+  btn: {
     alignSelf: 'center',
     width: '80%',
-    bottom: 10,
-  },
+  }
 })
 
 export default AccountsList

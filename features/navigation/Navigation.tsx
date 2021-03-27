@@ -22,6 +22,7 @@ import AccountsList from '../banking/AccountsList';
 import BankingCalendar from '../banking/BankingCalendar';
 import BankingTransactionsList from '../banking/BankingTransactionsList';
 import BankingTransactionView from '../banking/BankingTransactionView';
+import { StyleSheet } from 'react-native';
 enableScreens();
 
 const Navigation = () => {
@@ -62,66 +63,42 @@ const Navigation = () => {
       <RootStack.Screen
         name='Terms'
         component={ Terms }
-        options={{
-          title: 'Terms of service',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Terms of service')}
       />
     ),
     profile: (
       <RootStack.Screen
         name='Profile'
         component={ Profile }
-        options={{
-          title: 'Create my Profile',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Create my Profile')}
       />
     ),
     savings: (
       <RootStack.Screen
         name='Savings'
         component={ Savings }
-        options={{
-          title: 'Plan my Savings',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Plan my Savings')}
       />
     ),
     password: (
       <RootStack.Screen
         name='Password'
         component={ Password }
-        options={{
-          title: 'Define my password',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Define my password')}
       />
     ),
     resetPasswordEmail: (
       <RootStack.Screen
         name='ResetPasswordEmail'
         component={ ResetPasswordEmail }
-        options={{
-          title: 'Reset my password',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Reset my password')}
       />
     ),
     resetPasswordPIN: (
       <RootStack.Screen
         name='ResetPasswordPIN'
         component={ ResetPasswordPIN }
-        options={{
-          title: 'Reset my password',
-          headerBackTitleVisible: false,
-          headerTintColor: COLORS.primary
-        }}
+        options={getOptions('Reset my password')}
       />
     ),
     transactions: {
@@ -129,33 +106,21 @@ const Navigation = () => {
         <RootStack.Screen
           name='Transaction'
           component={ Transaction }
-          options={{
-            title: 'Add Transaction',
-            headerBackTitleVisible: false,
-            headerTintColor: COLORS.primary,
-          }}
+          options={getOptions('Add Transaction')}
         />
       ),
       edit: (
         <RootStack.Screen
           name='TransactionEdit'
           component={ Transaction }
-          options={{
-            title: 'Edit Transaction',
-            headerBackTitleVisible: false,
-            headerTintColor: COLORS.primary,
-          }}
+          options={getOptions('Edit Transaction')}
         />
       ),
       view: (
         <RootStack.Screen
           name='TransactionView'
           component={ TransactionsView }
-          options={{
-            title: 'View Transaction',
-            headerBackTitleVisible: false,
-            headerTintColor: COLORS.primary,
-          }}
+          options={getOptions('View Transaction')}
         />
       ),
     },
@@ -164,11 +129,7 @@ const Navigation = () => {
         <RootStack.Screen
           name='AddInstitution'
           component={ AddInstitution }
-          options={{
-            title: 'Add Institution',
-            headerBackTitleVisible: false,
-            headerTintColor: COLORS.primary,
-          }}
+          options={getOptions('Add Institution')}
         />
       ),
       accountsList: (
@@ -243,5 +204,21 @@ const Navigation = () => {
     </>
   )
 }
+
+const getOptions = (title) => {
+  return {
+    title: title,
+    headerBackTitleVisible: false,
+    headerTintColor: COLORS.primary,
+    headerTitleStyle: styles.title,
+  }
+}
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  }
+})
 
 export default Navigation;

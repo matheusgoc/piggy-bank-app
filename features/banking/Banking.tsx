@@ -8,6 +8,7 @@ import { getInstitutions } from './BankingSlice'
 import { InstitutionModel } from '../../models/InstitutionModel'
 import BankingService from '../../services/BankingService';
 import BankingEmptyState from '../../components/banking/BankingEmptyState';
+import BankingListLabel from '../../components/banking/BankingListLabel';
 
 const Banking = () => {
 
@@ -36,7 +37,7 @@ const Banking = () => {
       <View style={styles.header}>
         <View style={styles.headerTitle}>
           <Icon name='university' type='font-awesome' color={COLORS.primary} />
-          <Text style={styles.headerTitleText}>Institutions</Text>
+          <Text style={styles.headerTitleText}>Banking</Text>
         </View>
         <Button
           onPress={() => navigation.navigate('AddInstitution')}
@@ -52,13 +53,16 @@ const Banking = () => {
       </View>
       <Divider />
       {(institutions.length === 0)? (<BankingEmptyState message="No institutions!" />) : (
-        <FlatList
-          data={institutions}
-          renderItem={({item, index}) => renderItem(item, index)}
-          keyExtractor={item => item.id.toString()}
-          numColumns={2}
-          contentContainerStyle={styles.listContainer}
-        />
+        <>
+          <BankingListLabel label="Select the institution you want to import the transaction:" />
+          <FlatList
+            data={institutions}
+            renderItem={({item, index}) => renderItem(item, index)}
+            keyExtractor={item => item.id.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.listContainer}
+          />
+        </>
       )}
     </SafeAreaView>
   )

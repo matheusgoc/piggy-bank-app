@@ -118,13 +118,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   calendar: {
-    height: '80%',
+    height: '75%',
   },
   btnGroup: {
     position: 'absolute',
+    width: '100%',
+    height: '5%',
     bottom: 0,
     paddingBottom: 10,
-    width: '100%',
     backgroundColor: COLORS.secondary,
   },
   btn: {

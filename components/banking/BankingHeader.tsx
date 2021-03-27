@@ -79,7 +79,7 @@ const BankingHeader = (props: {height?:string|number}) => {
         </View>
         <Button
           onPress={handleInstitutionDelete}
-          icon={{name: 'delete-forever', type: 'material', color: COLORS.error, size: 30}}
+          icon={{name: 'minus-circle', type: 'font-awesome-5', color: COLORS.error, size: 20}}
           type='clear'
         />
       </View>

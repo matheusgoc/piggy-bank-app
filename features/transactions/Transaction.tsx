@@ -36,12 +36,23 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
 
     // set transaction from list
     if (props.route?.params?.transaction) {
+
       transaction = JSON.parse(props.route?.params?.transaction);
       oldTransaction = {...transaction};
       transaction.amount = Math.abs(transaction.amount);
+      console.log(transaction, transaction.timestamp, transaction.orderDate, transaction.orderTime)
+
+      // handle date and time
       if (transaction.timestamp) {
         transaction.orderDate = new Date(transaction.timestamp);
         transaction.orderTime = new Date(transaction.timestamp);
+      } else {
+        if (transaction.orderDate) {
+          transaction.orderDate = new Date(transaction.orderDate)
+        }
+        if (transaction.orderTime) {
+          transaction.orderTime = new Date(transaction.orderTime)
+        }
       }
     }
 
