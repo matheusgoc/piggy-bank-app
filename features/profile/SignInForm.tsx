@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -19,6 +19,7 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
     isValid,
     errors,
     touched,
+    resetForm
   } = props;
 
   return (
@@ -62,7 +63,10 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
             }}
           />
           <TouchableOpacity>
-            <Text onPress={() => navigation.navigate('ResetPasswordEmail')} style={styles.linkForgotten}>
+            <Text style={styles.linkForgotten} onPress={() => {
+              resetForm()
+              navigation.navigate('ResetPasswordEmail')
+            }}>
               Forgotten password?
             </Text>
           </TouchableOpacity>
@@ -70,7 +74,7 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
         <View>
           <Button
             title="Sign In"
-            style={styles.btSignIn}
+            containerStyle={styles.btSignIn}
             disabled={!isValid}
             onPressOut={() => {
               handleSubmit();
@@ -78,7 +82,10 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
           />
           <View style={styles.signUp}>
             <Text>Don't you have a profile yet?</Text>
-            <TouchableOpacity onPress={() => { navigation.navigate('Terms'); }}>
+            <TouchableOpacity onPress={() => {
+              resetForm()
+              navigation.navigate('Terms');
+            }}>
               <Text style={styles.linkSignUp}>Sign Up</Text>
             </TouchableOpacity>
           </View>

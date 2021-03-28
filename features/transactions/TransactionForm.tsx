@@ -100,7 +100,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
             <InputDateTimePicker
               name='orderDate'
               mode='date'
-              label='*Date'
+              label='* Date'
               width='50%'
               formik={props}
               default={defaultDate}
@@ -121,7 +121,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               autoCapitalize='sentences'
               multiline={true}
               numberOfLines={4}
-              style={{height: 100}}
+              style={{height: 120}}
               maxLength={244}
             />
           </View>

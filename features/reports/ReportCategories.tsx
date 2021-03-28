@@ -14,6 +14,7 @@ import {
 import { COLORS, PALLET } from '../../constants';
 import { ReportModel } from '../../models/ReportModel';
 import { formatCurrency } from '../../helpers';
+import { number } from 'prop-types';
 
 interface ReportCategoriesProps {
   type: 'general' | 'monthly',
@@ -59,11 +60,13 @@ const ReportCategories = (props: ReportCategoriesProps) => {
     if (report && Object.keys(report).length) {
       const total = getTotal();
       for (let [category, value] of Object.entries(report)) {
-        const percent = Math.round(value / total * 100);
-        if (isLegend) {
-          data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)});
-        } else{
-          data.push({x: category, y:value, label: percent + '%'});
+        if (typeof value == 'number') {
+          const percent = Math.round(value / total * 100);
+          if (isLegend) {
+            data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)});
+          } else{
+            data.push({x: category, y:value, label: percent + '%'});
+          }
         }
       }
     }
@@ -92,7 +95,7 @@ const ReportCategories = (props: ReportCategoriesProps) => {
               domainPadding={10}
             >
               <VictoryAxis dependentAxis tickFormat={(tick) => {
-                return (tick >= 0)? (tick / 1000) + 'K' : tick;
+                return (tick >= 1000)? (tick / 1000) + 'K' : tick;
               }} />
               <VictoryBar
                 data={data}
@@ -180,6 +183,7 @@ const baseStyles = StyleSheet.create({
   },
   graph: {},
   empty: {
+    height: 350,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,

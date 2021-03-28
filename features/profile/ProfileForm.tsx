@@ -9,6 +9,7 @@ import { COLORS, US_STATES } from '../../constants';
 import InputField from '../../components/input-field/InputField';
 import { ProfileModel } from '../../models/ProfileModel';
 import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
+import moment from 'moment';
 
 const ProfileForm = (props: FormikProps<ProfileModel>) => {
 
@@ -106,6 +107,8 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
               label='Birthday'
               width='50%'
               formik={props}
+              maximumDate={new Date()}
+              default={moment().subtract(20, 'years').date(1).month(0).toDate()}
             />
           </View>
           <View style={styles.row}>

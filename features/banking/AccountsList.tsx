@@ -145,14 +145,13 @@ const styles = StyleSheet.create({
   btnGroup: {
     position: 'absolute',
     width: '100%',
-    height: '5%',
     bottom: 0,
     paddingBottom: 10,
     backgroundColor: COLORS.secondary,
   },
   btn: {
     alignSelf: 'center',
-    width: '80%',
+    width: '85%',
   }
 })
 

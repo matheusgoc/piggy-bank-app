@@ -88,11 +88,11 @@ const BankingCalender = (props) => {
     <SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <BankingHeader />
-        <BankingListLabel label="Pick one day or more to list the transactions:" />
+        <BankingListLabel label="Pick a day or a period to list the transactions:" />
         <CalendarList style={styles.calendar}
           onDayPress={handleCalendar}
           pastScrollRange={23}
-          futureScrollRange={1}
+          futureScrollRange={2}
           scrollEnabled={true}
           markingType={'period'}
           markedDates={calendarPeriod}
@@ -118,19 +118,18 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   calendar: {
-    height: '75%',
+    height: '65%',
   },
   btnGroup: {
     position: 'absolute',
     width: '100%',
-    height: '5%',
     bottom: 0,
     paddingBottom: 10,
     backgroundColor: COLORS.secondary,
   },
   btn: {
     alignSelf: 'center',
-    width: '80%',
+    width: '85%',
   }
 })
 

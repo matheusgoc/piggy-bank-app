@@ -140,14 +140,15 @@ const BankingTransactionsList = (props: BankingTransactionsListProps) => {
             sections={transactionsList}
             renderItem={({item}) => renderTransactionItem(item)}
             keyExtractor={item => item.id}
+            stickySectionHeadersEnabled={true}
             renderSectionHeader={({ section: { title } }) => (
               <View style={styles.section}>
                 <Text style={styles.sectionText}>{title}</Text>
               </View>
             )}
-            ListFooterComponent={(loading)?
-              <ActivityIndicator style={{margin: 20}} /> :
-              (stopLoading)? <Text style={styles.stopLoadingText}>No more transactions to load!</Text> : null
+            ListFooterComponent={(stopLoading)?
+              <Text style={styles.stopLoadingText}>No more transactions to load!</Text> :
+              <ActivityIndicator size='large' color={COLORS.primary} style={{margin: 20}} />
             }
             onEndReached={loadTransactions}
           />

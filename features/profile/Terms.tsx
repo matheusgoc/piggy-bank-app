@@ -7,25 +7,6 @@ const Terms = (props) => {
 
   const [terms, setTerms] = useState(false);
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white',
-    },
-    scrollView: {
-      backgroundColor: 'white',
-      marginHorizontal: 20,
-    },
-    text: {
-      fontSize: 16,
-      paddingTop: Constants.statusBarHeight,
-    },
-    save: {
-      paddingHorizontal: 10,
-      marginBottom: 10,
-    }
-  });
-
   const onNext = () => {
     if (!terms) {
       Alert.alert(
@@ -120,9 +101,32 @@ const Terms = (props) => {
         onPress={() => {
           setTerms(!terms);
         }}/>
-      <Button title="Next" style={styles.save} onPress={ onNext } />
+      <Button
+        title="Next"
+        containerStyle={styles.btSave}
+        onPress={ onNext }
+      />
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  scrollView: {
+    backgroundColor: 'white',
+    marginHorizontal: 20,
+  },
+  text: {
+    fontSize: 16,
+    paddingTop: Constants.statusBarHeight,
+  },
+  btSave: {
+    marginHorizontal: 10,
+    marginBottom: 5,
+  }
+});
 
 export default Terms;

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
-import { Image, StatusBar, Text, View } from 'react-native';
+import { Image, OpaqueColorValue, Platform, StatusBar, Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import { setOnboard } from './ProfileSlice';
@@ -8,6 +8,16 @@ import { setOnboard } from './ProfileSlice';
 export default function Onboard(props) {
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (Platform.OS == 'android') {
+      StatusBar.setBackgroundColor('transparent')
+    }
+    StatusBar.setBarStyle('light-content')
+    return () => {
+      StatusBar.setBarStyle('dark-content')
+    }
+  }, [])
 
   const startView = (
     <View style={{ marginTop: 20 }}>
@@ -52,6 +62,7 @@ export default function Onboard(props) {
     <Onboarding
       showDone={ false }
       skipToPage={ 3 }
+      controlStatusBar={false}
       pages={[
         {
           title: 'Welcome!',

@@ -30,6 +30,10 @@
       "package": "com.matheuscamara.PiggyBankApp",
       "versionCode": 1
     },
+    "androidNavigationBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#ffffff"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }

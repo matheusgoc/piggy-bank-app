@@ -1,12 +1,11 @@
 import IMask from 'imask';
 import { Theme } from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
+
 // @ts-ignore
 import { BASE_PATH_API, BASE_PATH_STORAGE } from '@env';
-// export const STORAGE_URL = BASE_PATH_STORAGE;
-// export const API_URL = BASE_PATH_API;
-export const STORAGE_URL = 'http://192.168.1.143:81/storage/';
-export const API_URL = 'http://192.168.1.143:81/api/';
+export const STORAGE_URL = BASE_PATH_STORAGE;
+export const API_URL = BASE_PATH_API;
 export const PLAID_VIEW_URL = 'https://cdn.plaid.com/link/v2/stable/link.html?isWebview=true&token=';
 
 export const COLORS = {

@@ -103,14 +103,6 @@ const TransactionListHeader = (props: TransactionListHeaderProps) => {
     const generalBalance = generalReport.incomes - generalReport.expenses + savingsPlan.balance;
     const monthlyBalance = monthlyIncomes - monthlyExpenses;
     const prevMonthBalance = generalBalance - monthlyBalance;
-    // console.log(
-    //   'balance',
-    //   monthlyIncomes,
-    //   monthlyExpenses,
-    //   generalBalance,
-    //   monthlyBalance,
-    //   prevMonthBalance
-    // );
     if (prevMonthBalance > 0) {
       monthlyIncomes += prevMonthBalance;
     } else {
@@ -181,10 +173,10 @@ const TransactionListHeader = (props: TransactionListHeaderProps) => {
           disabled={props.disableDelete || !list.length || loading}
           onPress={() => handleOnDelete()}
           icon={{
-            name: (isDeleteEnable)? 'delete-forever' : 'delete-sweep',
+            name: (isDeleteEnable && list.length > 0)? 'delete-forever' : 'delete-sweep',
             color: (props.disableDelete || !list.length || loading)
               ? COLORS.mediumGray
-              : (isDeleteEnable)? COLORS.error : COLORS.primary,
+              : (isDeleteEnable && list.length > 0)? COLORS.error : COLORS.primary,
             type: 'material',
             size: 30,
           }}

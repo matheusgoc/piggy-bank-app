@@ -141,7 +141,12 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       <View>
         {(props.hideButtonLabel)? null :
           (
-            <Text style={styles.overlayLabel}>{props.label}</Text>
+            <Text style={[
+              styles.overlayLabel,
+              {color:(error)? COLORS.error : COLORS.primary}
+            ]}>
+              {props.label}
+            </Text>
           )
         }
         <Button
@@ -231,7 +236,7 @@ const baseStyles = StyleSheet.create({
     color: COLORS.error,
     minHeight: 20,
     fontSize: 12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     paddingVertical: 5,
   },
   overlay: {
@@ -244,7 +249,6 @@ const baseStyles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.primary,
   },
   overlayTitle: {
     height: 50,
