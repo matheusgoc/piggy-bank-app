@@ -1,43 +1,43 @@
-import React from 'react';
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useSelector } from 'react-redux';
-import { FormikProps } from 'formik';
-import { Button } from 'react-native-elements';
-import moment from 'moment';
-import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
-import { COLORS, STORAGE_URL } from '../../constants';
-import InputField from '../../components/input-field/InputField';
-import CurrencyField from '../../components/currency-field/CurrencyField';
-import { TransactionModel } from '../../models/TransactionModel';
-import TakePicture from '../../components/take-picture/TakePicture';
-import DropDownCategory from '../../components/drop-down/DropDownCategory';
-import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
-import { getDate } from './TransactionsSlice';
+import React from 'react'
+import { StyleSheet, Text, View } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useSelector } from 'react-redux'
+import { FormikProps } from 'formik'
+import { Button } from 'react-native-elements'
+import moment from 'moment'
+import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker'
+import { COLORS, STORAGE_URL } from '../../constants'
+import InputField from '../../components/input-field/InputField'
+import CurrencyField from '../../components/currency-field/CurrencyField'
+import { TransactionModel } from '../../models/TransactionModel'
+import TakePicture from '../../components/take-picture/TakePicture'
+import DropDownCategory from '../../components/drop-down/DropDownCategory'
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay'
+import { getDate } from './TransactionsSlice'
 
 const TransactionForm = (props: FormikProps<TransactionModel>) => {
 
   const {
     handleSubmit,
     values,
-  } = props;
+  } = props
 
   // set default date
-  const currentDate = useSelector(getDate);
-  const yearAndMonth = moment(currentDate).format('YYYY-MM');
-  const day = new Date().getDate();
-  let defaultDate = moment(yearAndMonth + '-' + day, 'YYYY-MM-DD').toDate();
+  const currentDate = useSelector(getDate)
+  const yearAndMonth = moment(currentDate).format('YYYY-MM')
+  const day = new Date().getDate()
+  let defaultDate = moment(yearAndMonth + '-' + day, 'YYYY-MM-DD').toDate()
 
   // set the last day of the month case it's more then 28 and the months doesn't have it
   if (day > 28 && defaultDate.toString().toLowerCase() === "invalid date") {
-    defaultDate = moment(currentDate).clone().endOf('month').toDate();
+    defaultDate = moment(currentDate).clone().endOf('month').toDate()
   }
 
   //set receipt image
-  let receipt = null;
+  let receipt = null
   if (values.receipt) {
-    receipt = (values.isNewReceipt)? values.receipt : STORAGE_URL + values.receipt;
+    receipt = (values.isNewReceipt)? values.receipt : STORAGE_URL + values.receipt
   }
 
   return (
@@ -55,12 +55,12 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
               title='Receipt Picture'
               width='50%'
               onTake={() => {
-                values.isNewReceipt = true;
-                values.isReceiptRemoved = false;
+                values.isNewReceipt = true
+                values.isReceiptRemoved = false
               }}
               onRemove={() => {
-                values.isNewReceipt = false;
-                values.isReceiptRemoved = true;
+                values.isNewReceipt = false
+                values.isReceiptRemoved = true
               }}
             />
             <View style={{width: '50%'}}>
@@ -134,7 +134,7 @@ const TransactionForm = (props: FormikProps<TransactionModel>) => {
         <Button
           title='Save'
           onPressOut={() => {
-            handleSubmit();
+            handleSubmit()
           }}
         />
       </View>
@@ -171,6 +171,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingRight: 10,
   }
-});
+})
 
-export default TransactionForm;
+export default TransactionForm

@@ -1,25 +1,25 @@
-import React from 'react';
-import { withFormik } from 'formik';
-import * as Yup from 'yup';
-import ProfileForm from './ProfileForm';
-import { ProfileModel } from '../../models/ProfileModel';
-import { TOAST, US_STATES } from '../../constants';
-import ProfileServiceApi from '../../services/ProfileServiceApi';
-import { showLoading } from '../../helpers';
+import React from 'react'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
+import ProfileForm from './ProfileForm'
+import { ProfileModel } from '../../models/ProfileModel'
+import { TOAST, US_STATES } from '../../constants'
+import ProfileServiceApi from '../../services/ProfileServiceApi'
+import { showLoading } from '../../helpers'
 
-const profileService = new ProfileServiceApi();
+const profileService = new ProfileServiceApi()
 
 const Profile = withFormik<ProfileModel, ProfileModel>({
 
   mapPropsToValues: () => {
 
     // map profile from storage
-    profileService.syncFromStore();
-    let profile = profileService.get();
+    profileService.syncFromStore()
+    let profile = profileService.get()
 
     // set gender
     if (profile.gender) {
-      profile.gender = {label: (profile.gender == 'M')? 'Male' : 'Female', value: profile.gender};
+      profile.gender = {label: (profile.gender == 'M')? 'Male' : 'Female', value: profile.gender}
     }
 
     // set state
@@ -27,7 +27,7 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
       profile.state = {abbr: profile.state, name: US_STATES[profile.state]}
     }
 
-    return profile;
+    return profile
   },
 
   validationSchema: Yup.object({
@@ -54,36 +54,36 @@ const Profile = withFormik<ProfileModel, ProfileModel>({
       state: profile.state?.abbr,
       city: profile.city,
       postalCode: profile.postalCode,
-    });
-    profileService.store();
+    })
+    profileService.store()
 
     // update
     if (profile.id) {
 
-      showLoading(true);
+      showLoading(true)
       profileService.save().then(() => {
 
         TOAST.ref.alertWithType(
           'success',
           "Your profile has been updated",
           '',
-        );
+        )
 
-        bag.props.navigation.goBack();
+        bag.props.navigation.goBack()
 
       }).catch((error: Error) => {
-        console.warn('Savings.handleSubmit: ' + error.message);
+        console.warn('Savings.handleSubmit: ' + error.message)
       }).finally(() => {
-        showLoading(false);
-      });
+        showLoading(false)
+      })
 
     // create
     } else {
 
-      bag.props.navigation.navigate('Savings');
+      bag.props.navigation.navigate('Savings')
     }
   },
 
-})(ProfileForm);
+})(ProfileForm)
 
-export default Profile;
+export default Profile

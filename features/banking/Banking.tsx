@@ -6,9 +6,9 @@ import { COLORS } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
 import { getInstitutions } from './BankingSlice'
 import { InstitutionModel } from '../../models/InstitutionModel'
-import BankingService from '../../services/BankingService';
-import BankingEmptyState from '../../components/banking/BankingEmptyState';
-import BankingListLabel from '../../components/banking/BankingListLabel';
+import BankingService from '../../services/BankingService'
+import BankingEmptyState from '../../components/banking/BankingEmptyState'
+import BankingListLabel from '../../components/banking/BankingListLabel'
 
 const Banking = () => {
 
@@ -30,7 +30,7 @@ const Banking = () => {
         <Text style={styles.institutionTitle}>{institution.name}</Text>
       </View>
     </TouchableOpacity>
-  );
+  )
 
   return (
     <SafeAreaView style={styles.container}>

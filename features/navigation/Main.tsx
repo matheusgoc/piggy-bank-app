@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
-import Reports from '../reports/Reports';
-import TransactionsList from '../transactions/TransactionsList';
-import Banking from '../banking/Banking';
-import Settings from '../settings/Settings';
-import { Icon } from 'react-native-elements';
-import { COLORS } from '../../constants';
-import TabAddButton from '../../components/tab-add-button/TabAddButton';
-import Transaction from '../transactions/Transaction';
+import React, { useState } from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useNavigation } from '@react-navigation/native'
+import Reports from '../reports/Reports'
+import TransactionsList from '../transactions/TransactionsList'
+import Banking from '../banking/Banking'
+import Settings from '../settings/Settings'
+import { Icon } from 'react-native-elements'
+import { COLORS } from '../../constants'
+import TabAddButton from '../../components/tab-add-button/TabAddButton'
+import Transaction from '../transactions/Transaction'
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 
 const Main = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
   const [view, setView] = useState(null)
 
   return (
@@ -22,19 +22,19 @@ const Main = () => {
       initialRouteName='Transactions'
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size}) => {
-          let type = 'font-awesome-5';
-          let icon;
+          let type = 'font-awesome-5'
+          let icon
           switch (route.name) {
-            case 'Reports': icon = 'chart-line'; break;
-            case 'Transactions': icon = 'exchange-alt'; break;
+            case 'Reports': icon = 'chart-line'; break
+            case 'Transactions': icon = 'exchange-alt'; break
             case 'Banking':
-              icon = 'university';
-              type = 'font-awesome';
-              break;
-            case 'Settings': icon = 'cog'; break;
-            default: icon = 'question';
+              icon = 'university'
+              type = 'font-awesome'
+              break
+            case 'Settings': icon = 'cog'; break
+            default: icon = 'question'
           }
-          return <Icon name={icon} color={color} size={size} type={type} />;
+          return <Icon name={icon} color={color} size={size} type={type} />
         },
       })}
       tabBarOptions={{
@@ -55,7 +55,7 @@ const Main = () => {
         options={{
           tabBarButton: () => (
             <TabAddButton onPress={() => {
-              navigation.navigate((view == 'Banking')? 'AddInstitution' : 'Transaction');
+              navigation.navigate((view == 'Banking')? 'AddInstitution' : 'Transaction')
             }} />
           ),
         }}
@@ -70,4 +70,4 @@ const Main = () => {
   )
 }
 
-export default Main;
+export default Main

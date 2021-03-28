@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ACTIONS } from '../../constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ACTIONS } from '../../constants'
 
 export const NavigationSlice = createSlice({
   name: 'navigation',
@@ -9,20 +9,20 @@ export const NavigationSlice = createSlice({
   },
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+      state.loading = action.payload
     },
     setAction: (state, action: PayloadAction<ACTIONS>) => {
-      state.action = action.payload;
+      state.action = action.payload
     }
   },
-});
+})
 
 //actions
-export const { setLoading, setAction } = NavigationSlice.actions;
+export const { setLoading, setAction } = NavigationSlice.actions
 
 //selectors
-export const isLoading = state => state.navigation.loading;
-export const getAction = state => state.navigation.action;
+export const isLoading = state => state.navigation.loading
+export const getAction = state => state.navigation.action
 
 //reducer
-export default NavigationSlice.reducer;
+export default NavigationSlice.reducer

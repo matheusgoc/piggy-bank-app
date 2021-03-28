@@ -1,5 +1,5 @@
-import CategoriesService from './CategoriesService';
-import { CategoryModel } from '../models/CategoryModel';
+import CategoriesService from './CategoriesService'
+import { CategoryModel } from '../models/CategoryModel'
 
 /**
  * CategoriesServiceApi
@@ -10,7 +10,7 @@ import { CategoryModel } from '../models/CategoryModel';
 export default class CategoriesServiceApi extends CategoriesService {
 
   constructor() {
-    super();
+    super()
   }
 
   /**
@@ -19,16 +19,16 @@ export default class CategoriesServiceApi extends CategoriesService {
   async load(): Promise<void> {
     try {
 
-      const res = await this.api.get('categories');
+      const res = await this.api.get('categories')
       this.list = res.data.map((item): CategoryModel => {
-        return this.mapToStore(item);
-      });
+        return this.mapToStore(item)
+      })
 
     } catch(error) {
 
-      const method = 'CategoriesServiceApi.load';
-      const msg = 'Unable to retrieve categories from the server';
-      this.handleHttpError(method, msg, error);
+      const method = 'CategoriesServiceApi.load'
+      const msg = 'Unable to retrieve categories from the server'
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -38,17 +38,17 @@ export default class CategoriesServiceApi extends CategoriesService {
   async search(search: string): Promise<CategoryModel[]> {
     try {
 
-      const res = await this.api.get('categories/search/' + search);
+      const res = await this.api.get('categories/search/' + search)
 
       return res.data.map((item): CategoryModel => {
-        return this.mapToStore(item);
-      });
+        return this.mapToStore(item)
+      })
 
     } catch(error) {
 
-      const method = 'CategoriesServiceApi.load';
-      const msg = 'Unable to retrieve categories from the server';
-      this.handleHttpError(method, msg, error);
+      const method = 'CategoriesServiceApi.load'
+      const msg = 'Unable to retrieve categories from the server'
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -58,20 +58,20 @@ export default class CategoriesServiceApi extends CategoriesService {
   async save():Promise<void> {
 
     const categoriesToSave = this.listToSave.map((category) => {
-      return this.mapToApi(category);
-    });
+      return this.mapToApi(category)
+    })
 
     try {
 
-      await this.api.post('categories', categoriesToSave);
-      this.listToSave = [];
-      this.store();
+      await this.api.post('categories', categoriesToSave)
+      this.listToSave = []
+      this.store()
 
     } catch (error) {
 
-      const method = 'CategoriesServiceApi.save';
-      let msg = 'Unable to save the category due to a server error. Try again later!';
-      this.handleHttpError(method, msg, error);
+      const method = 'CategoriesServiceApi.save'
+      let msg = 'Unable to save the category due to a server error. Try again later!'
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -81,20 +81,20 @@ export default class CategoriesServiceApi extends CategoriesService {
   async delete():Promise<void> {
 
     const idsToRemove = this.listToRemove.map((category) => {
-      return category.id;
-    }).join(',');
+      return category.id
+    }).join(',')
 
     try {
 
-      await this.api.delete('categories/' + idsToRemove);
-      this.listToRemove = [];
-      this.store();
+      await this.api.delete('categories/' + idsToRemove)
+      this.listToRemove = []
+      this.store()
 
     } catch (error) {
 
-      const method = 'CategoriesServiceApi.delete';
-      let msg = 'Unable to remove the category due to a server error. Try again later!';
-      this.handleHttpError(method, msg, error);
+      const method = 'CategoriesServiceApi.delete'
+      let msg = 'Unable to remove the category due to a server error. Try again later!'
+      this.handleHttpError(method, msg, error)
     }
   }
 

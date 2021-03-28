@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
-import Constants from 'expo-constants';
-import { Button, CheckBox } from 'react-native-elements';
+import React, { useState } from 'react'
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native'
+import Constants from 'expo-constants'
+import { Button, CheckBox } from 'react-native-elements'
 
 const Terms = (props) => {
 
-  const [terms, setTerms] = useState(false);
+  const [terms, setTerms] = useState(false)
 
   const onNext = () => {
     if (!terms) {
@@ -13,9 +13,9 @@ const Terms = (props) => {
         "Sorry!",
         "You must accept the Terms of service to proceed!",
         [{ text: "OK" }]
-      );
+      )
     } else {
-      props.navigation.navigate('Profile');
+      props.navigation.navigate('Profile')
     }
   }
 
@@ -99,7 +99,7 @@ const Terms = (props) => {
         title='I agree to the terms of service'
         checked={ terms }
         onPress={() => {
-          setTerms(!terms);
+          setTerms(!terms)
         }}/>
       <Button
         title="Next"
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 5,
   }
-});
+})
 
-export default Terms;
+export default Terms

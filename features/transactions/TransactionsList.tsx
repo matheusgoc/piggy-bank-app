@@ -1,25 +1,25 @@
-import React from 'react';
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useDispatch, useSelector } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Divider, Icon } from 'react-native-elements';
-import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
+import React from 'react'
+import { FlatList, StyleSheet, Text, View } from "react-native"
+import { useDispatch, useSelector } from 'react-redux'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Divider, Icon } from 'react-native-elements'
+import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader'
 import { TransactionModel } from '../../models/TransactionModel'
-import TransactionListItem from '../../components/transaction-list-item/TransactionListItem';
-import { getList, getLoadingList, setDeleteEnable } from './TransactionsSlice';
-import TransactionListPlaceholder from '../../components/transaction-list-item/TransactionListPlaceholder';
-import { COLORS } from '../../constants';
+import TransactionListItem from '../../components/transaction-list-item/TransactionListItem'
+import { getList, getLoadingList, setDeleteEnable } from './TransactionsSlice'
+import TransactionListPlaceholder from '../../components/transaction-list-item/TransactionListPlaceholder'
+import { COLORS } from '../../constants'
 
 const TransactionsList = ({ navigation }) => {
 
-  const dispatch = useDispatch();
-  const loading = useSelector(getLoadingList);
-  const list = useSelector(getList);
+  const dispatch = useDispatch()
+  const loading = useSelector(getLoadingList)
+  const list = useSelector(getList)
 
-  const handleItemPress = (transaction: TransactionModel | string, index: number) => {
+  const handleItemPress = (transaction: TransactionModel | string) => {
 
-    dispatch(setDeleteEnable(false));
-    navigation.navigate('TransactionEdit', { transaction: JSON.stringify(transaction) });
+    dispatch(setDeleteEnable(false))
+    navigation.navigate('TransactionEdit', { transaction: JSON.stringify(transaction) })
   }
 
   const renderItem = (transaction: TransactionModel, index: number) => {
@@ -28,19 +28,19 @@ const TransactionsList = ({ navigation }) => {
       <TransactionListItem
         index={index}
         transaction={{...transaction}}
-        onPress={() => handleItemPress(transaction, index)}
+        onPress={() => handleItemPress(transaction)}
       />
-    );
-  };
+    )
+  }
 
   const renderList = () => {
-    let listToRender = null
+    let listToRender
 
     if (loading) {
 
       listToRender = Array(5).fill('').map((value, index) => {
         return (<TransactionListPlaceholder key={index} index={index} />)
-      });
+      })
 
     } else if (list.length) {
 
@@ -50,7 +50,7 @@ const TransactionsList = ({ navigation }) => {
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={item => item.key}
         />
-      );
+      )
 
     } else {
 
@@ -66,10 +66,10 @@ const TransactionsList = ({ navigation }) => {
             No transactions on this month
           </Text>
         </View>
-      );
+      )
     }
 
-    return listToRender;
+    return listToRender
   }
 
   return (
@@ -98,6 +98,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 10
   }
-});
+})
 
 export default TransactionsList

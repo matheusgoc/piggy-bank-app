@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from "react-native";
-import DropDownPicker from 'react-native-dropdown-picker';
-import { FormikProps } from 'formik';
-import { COLORS } from '../../constants';
-import { BottomSheet, BottomSheetProps, Button, ListItem } from 'react-native-elements';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View } from "react-native"
+import { FormikProps } from 'formik'
+import { COLORS } from '../../constants'
+import { BottomSheet, Button, ListItem } from 'react-native-elements'
 
 interface DropDown {
   items: Array<{label: string, value: string|number}>,
@@ -19,17 +18,17 @@ interface DropDown {
 
 const DropDown = (props: DropDown) => {
 
-  const [value, setValue] = useState(props.value || props.formik?.values[props.name]);
-  const [visible, setVisible] = useState(false);
-  const [error, showError]:any = useState('');
+  const [value, setValue] = useState(props.value || props.formik?.values[props.name])
+  const [visible, setVisible] = useState(false)
+  const [error, showError]:any = useState('')
   useEffect(() => {
     if (props.formik && props.name) {
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
         ? props.formik.errors[props.name]
         : ''
-      );
+      )
     }
-  });
+  })
 
   const styles = StyleSheet.create({
     ...baseStyles,
@@ -41,21 +40,21 @@ const DropDown = (props: DropDown) => {
       ...baseStyles.label,
       color: (error)? COLORS.error : COLORS.primary,
     }
-  });
+  })
 
   const handleOnOpen = () => {
-    setVisible(true);
-  };
+    setVisible(true)
+  }
 
   const handleOnPress = (item) => {
-    setVisible(false);
-    setValue(item);
+    setVisible(false)
+    setValue(item)
     if (props.formik?.values[props.name]) {
-      props.formik.values[props.name] = item.value;
-      props.formik.validateForm();
+      props.formik.values[props.name] = item.value
+      props.formik.validateForm()
     }
     if (props.onChange) {
-      props.onChange(item);
+      props.onChange(item)
     }
   }
 
@@ -121,6 +120,6 @@ const baseStyles = StyleSheet.create({
     paddingLeft: 5,
     paddingVertical: 5,
   },
-});
+})
 
-export default DropDown;
+export default DropDown

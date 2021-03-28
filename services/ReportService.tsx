@@ -1,13 +1,13 @@
-import BaseService from './BaseService';
+import BaseService from './BaseService'
 import {
   getGeneralReport,
   getMonthlyReport,
   setGeneralReport,
   setMonthlyReport,
   clearReports,
-} from '../features/reports/ReportsSlice';
-import { store } from '../store';
-import { ReportModel } from '../models/ReportModel';
+} from '../features/reports/ReportsSlice'
+import { store } from '../store'
+import { ReportModel } from '../models/ReportModel'
 
 /**
  * ReportService
@@ -17,20 +17,20 @@ import { ReportModel } from '../models/ReportModel';
  */
 export default class ReportService extends BaseService {
 
-  protected general: ReportModel;
-  protected monthly: ReportModel;
+  protected general: ReportModel
+  protected monthly: ReportModel
 
   constructor() {
-    super();
-    this.syncFromStore();
+    super()
+    this.syncFromStore()
   }
 
   /**
    * Exchange the current reports with the stored ones
    */
   syncFromStore() {
-    this.general = {...getGeneralReport(store.getState())};
-    this.monthly = {...getMonthlyReport(store.getState())};
+    this.general = {...getGeneralReport(store.getState())}
+    this.monthly = {...getMonthlyReport(store.getState())}
   }
 
   /**
@@ -38,7 +38,7 @@ export default class ReportService extends BaseService {
    */
   getGeneral(): ReportModel {
 
-    return this.general;
+    return this.general
   }
 
   /**
@@ -46,7 +46,7 @@ export default class ReportService extends BaseService {
    */
   getMonthly(): ReportModel {
 
-    return this.monthly;
+    return this.monthly
   }
 
   /**
@@ -54,8 +54,8 @@ export default class ReportService extends BaseService {
    * @param general
    */
   setGeneral(general: ReportModel): void {
-    this.general = general;
-    this.dispatch(setGeneralReport(this.general));
+    this.general = general
+    this.dispatch(setGeneralReport(this.general))
   }
 
   /**
@@ -63,14 +63,14 @@ export default class ReportService extends BaseService {
    * @param monthly
    */
   setMonthly(monthly: ReportModel): void {
-    this.monthly = monthly;
-    this.dispatch(setMonthlyReport(this.monthly));
+    this.monthly = monthly
+    this.dispatch(setMonthlyReport(this.monthly))
   }
 
   /**
    * Reset all reports
    */
   clear(): void {
-    this.dispatch(clearReports());
+    this.dispatch(clearReports())
   }
 }

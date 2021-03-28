@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyleProp, StyleSheet, Text, View } from "react-native";
-import { Icon, IconProps } from 'react-native-elements';
+import React from 'react'
+import { StyleProp, StyleSheet, Text, View } from "react-native"
+import { Icon, IconProps } from 'react-native-elements'
 
 interface TextIconProps extends IconProps {
   textStyle?: StyleProp<any>,
@@ -15,7 +15,7 @@ const TextIcon = (props: TextIconProps) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
-  });
+  })
 
   return (
     <View style={styles.container}>

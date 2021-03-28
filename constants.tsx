@@ -1,12 +1,15 @@
-import IMask from 'imask';
-import { Theme } from 'react-native-elements';
-import DropdownAlert from 'react-native-dropdownalert';
+import IMask from 'imask'
+import { Theme } from 'react-native-elements'
+import DropdownAlert from 'react-native-dropdownalert'
 
 // @ts-ignore
-import { BASE_PATH_API, BASE_PATH_STORAGE } from '@env';
-export const STORAGE_URL = BASE_PATH_STORAGE;
-export const API_URL = BASE_PATH_API;
-export const PLAID_VIEW_URL = 'https://cdn.plaid.com/link/v2/stable/link.html?isWebview=true&token=';
+import { BASE_PATH_API, BASE_PATH_STORAGE } from '@env'
+export const STORAGE_URL = BASE_PATH_STORAGE
+export const API_URL = BASE_PATH_API
+export const PLAID_VIEW_URL = 'https://cdn.plaid.com/link/v2/stable/link.html?isWebview=true&token='
+// export const STORAGE_URL = 'http://192.168.1.143:81/storage/';
+// export const API_URL = 'http://192.168.1.143:81/api/';
+
 
 export const COLORS = {
   primary: '#006600',
@@ -76,7 +79,7 @@ export const THEME:Theme = {
       fontSize: 12,
     }
   }
-};
+}
 
 export const US_STATES = {
   'AL': 'Alabama',
@@ -138,7 +141,7 @@ export const US_STATES = {
   'WV': 'West Virginia',
   'WI': 'Wisconsin',
   'WY': 'Wyoming'
-};
+}
 
 export const MASKS = {
   //^([0-9]{5})([\-]{1}[0-9]{4})?$
@@ -159,7 +162,7 @@ export const MASKS = {
   digit: IMask.createMask({
     mask: /^\d+$/
   })
-};
+}
 
 export const TOAST: { ref: DropdownAlert } = {
   ref: null,

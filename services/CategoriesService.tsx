@@ -1,4 +1,4 @@
-import BaseService, { IService } from './BaseService';
+import BaseService, { IService } from './BaseService'
 import {
   getList,
   getListToRemove,
@@ -7,9 +7,9 @@ import {
   setListToRemove,
   setListToSave,
   clearCategories,
-} from '../features/categories/CategoriesSlice';
-import { CategoryModel } from '../models/CategoryModel';
-import { store } from '../store';
+} from '../features/categories/CategoriesSlice'
+import { CategoryModel } from '../models/CategoryModel'
+import { store } from '../store'
 
 /**
  * TransactionsService
@@ -19,31 +19,31 @@ import { store } from '../store';
  */
 export default class CategoriesService extends BaseService implements IService {
 
-  protected list: CategoryModel[];
-  protected listToSave: CategoryModel[];
-  protected listToRemove: CategoryModel[];
+  protected list: CategoryModel[]
+  protected listToSave: CategoryModel[]
+  protected listToRemove: CategoryModel[]
 
   constructor() {
-    super();
-    this.syncFromStore();
+    super()
+    this.syncFromStore()
   }
 
   /**
    * Store the categories' lists
    */
   store() {
-    store.dispatch(setList(this.list));
-    store.dispatch(setListToSave(this.listToSave));
-    store.dispatch(setListToRemove(this.listToRemove));
+    store.dispatch(setList(this.list))
+    store.dispatch(setListToSave(this.listToSave))
+    store.dispatch(setListToRemove(this.listToRemove))
   }
 
   /**
    * Exchange the current categories' lists with the stored list
    */
   syncFromStore() {
-    this.list = [...getList(store.getState())];
-    this.listToSave = [...getListToSave(store.getState())];
-    this.listToRemove = [...getListToRemove(store.getState())];
+    this.list = [...getList(store.getState())]
+    this.listToSave = [...getListToSave(store.getState())]
+    this.listToRemove = [...getListToRemove(store.getState())]
   }
 
   /**
@@ -51,7 +51,7 @@ export default class CategoriesService extends BaseService implements IService {
    */
   get(): CategoryModel[] {
 
-    return this.list;
+    return this.list
   }
 
   /**
@@ -59,7 +59,7 @@ export default class CategoriesService extends BaseService implements IService {
    * @param list
    */
   set(list: CategoryModel[]): void {
-    this.list = (list)? list : [];
+    this.list = (list)? list : []
   }
 
   /**
@@ -68,10 +68,10 @@ export default class CategoriesService extends BaseService implements IService {
    */
   add(newCategory: CategoryModel): void {
 
-    this.list.push({...newCategory});
-    this.listToSave.push({...newCategory});
+    this.list.push({...newCategory})
+    this.listToSave.push({...newCategory})
 
-    this.store();
+    this.store()
   }
 
   /**
@@ -80,17 +80,17 @@ export default class CategoriesService extends BaseService implements IService {
    */
   update(category: CategoryModel): void {
 
-    const index = this.findSameCategoryIndex(category);
-    this.list[index] = {...category};
+    const index = this.findSameCategoryIndex(category)
+    this.list[index] = {...category}
 
-    const indexToSave = this.findSameCategoryIndex(category, this.listToSave);
+    const indexToSave = this.findSameCategoryIndex(category, this.listToSave)
     if (indexToSave >= 0) {
-      this.listToSave[indexToSave] = {...category};
+      this.listToSave[indexToSave] = {...category}
     } else {
-      this.listToSave.push({...category});
+      this.listToSave.push({...category})
     }
 
-    this.store();
+    this.store()
   }
 
   /**
@@ -98,21 +98,21 @@ export default class CategoriesService extends BaseService implements IService {
    * @param categoryToRemove
    */
   remove(categoryToRemove: CategoryModel): void {
-    const categoryToRemoveIndex = this.findSameCategoryIndex(categoryToRemove, this.listToSave);
-    const removedCategory = this.list.splice(categoryToRemoveIndex, 1)[0];
-    this.removeFromListToSave(removedCategory);
+    const categoryToRemoveIndex = this.findSameCategoryIndex(categoryToRemove, this.listToSave)
+    const removedCategory = this.list.splice(categoryToRemoveIndex, 1)[0]
+    this.removeFromListToSave(removedCategory)
     if (removedCategory.id) {
-      this.listToRemove.push(removedCategory);
+      this.listToRemove.push(removedCategory)
     }
 
-    this.store();
+    this.store()
   }
 
   /**
    * Reset all categories list
    */
   clear(): void {
-    this.dispatch(clearCategories());
+    this.dispatch(clearCategories())
   }
 
   /**
@@ -121,9 +121,9 @@ export default class CategoriesService extends BaseService implements IService {
    * @private
    */
   private removeFromListToSave(categoryToRemove: CategoryModel): void {
-    const toRemoveIndex = this.findSameCategoryIndex(categoryToRemove, this.listToSave);
+    const toRemoveIndex = this.findSameCategoryIndex(categoryToRemove, this.listToSave)
     if (toRemoveIndex >= 0) {
-      this.listToSave.splice(toRemoveIndex, 1);
+      this.listToSave.splice(toRemoveIndex, 1)
     }
   }
 
@@ -134,9 +134,9 @@ export default class CategoriesService extends BaseService implements IService {
    * @private
    */
   private findSameCategoryIndex(categoryToFind: CategoryModel, list: CategoryModel[] = this.list): number {
-    const categoryToFindJSON = JSON.stringify(categoryToFind);
+    const categoryToFindJSON = JSON.stringify(categoryToFind)
     return (list.length)? list.findIndex((category) => {
       return JSON.stringify(category) === categoryToFindJSON
-    }) : -1;
+    }) : -1
   }
 }

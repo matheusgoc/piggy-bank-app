@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import { Icon } from 'react-native-elements';
-import { COLORS } from '../../constants';
+import React from 'react'
+import { GestureResponderEvent, StyleSheet, View } from "react-native"
+import { Icon } from 'react-native-elements'
+import { COLORS } from '../../constants'
 
 interface TabAddButtonProps {
-  onPress?(event: GestureResponderEvent): void;
+  onPress?(event: GestureResponderEvent): void
 }
 
 const TabAddButton = (props: TabAddButtonProps) => {
@@ -19,7 +19,7 @@ const TabAddButton = (props: TabAddButtonProps) => {
       borderWidth: 3,
       borderColor: COLORS.primary,
     }
-  });
+  })
 
   return (
     <View style={styles.container}>

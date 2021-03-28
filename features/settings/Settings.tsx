@@ -1,25 +1,25 @@
-import React from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Avatar, Divider, Icon, ListItem } from 'react-native-elements';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react'
+import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { Avatar, Divider, Icon, ListItem } from 'react-native-elements'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 import { setAction } from '../navigation/NavigationSlice'
-import { ACTIONS, COLORS, TOAST } from '../../constants';
-import { getProfile } from '../profile/ProfileSlice';
-import { showLoading } from '../../helpers';
-import ProfileServiceApi from '../../services/ProfileServiceApi';
+import { ACTIONS, COLORS, TOAST } from '../../constants'
+import { getProfile } from '../profile/ProfileSlice'
+import { showLoading } from '../../helpers'
+import ProfileServiceApi from '../../services/ProfileServiceApi'
 
 const Settings = () => {
 
-  const dispatch = useDispatch();
-  const profile = useSelector(getProfile);
-  const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const profile = useSelector(getProfile)
+  const navigation = useNavigation()
   const list = [
     {
       title: 'My Savings Plan',
       icon: {name: 'bullseye', type: 'font-awesome'},
       handleOnPress: ()=> {
-        navigation.navigate('Savings');
+        navigation.navigate('Savings')
       }
     },
     {
@@ -30,36 +30,36 @@ const Settings = () => {
           options: {
             'title': 'Update my profile'
           }
-        });
+        })
       }
     },
     {
       title: 'Change My Password',
       icon: {name: 'lock-outline', type: 'material-community'},
       handleOnPress: ()=> {
-        dispatch(setAction(ACTIONS.CHANGE_PASSWORD));
-        navigation.navigate('Password');
+        dispatch(setAction(ACTIONS.CHANGE_PASSWORD))
+        navigation.navigate('Password')
       }
     },
     {
       title: 'Categories',
       icon: {name: 'list', type: 'font-awesome'},
       handleOnPress: ()=> {
-        console.log('Categories');
+        console.log('Categories')
       }
     },
     {
       title: 'Notifications',
       icon: {name: 'bell-o', type: 'font-awesome'},
       handleOnPress: ()=> {
-        console.log('Notifications');
+        console.log('Notifications')
       }
     },
     {
       title: 'About',
       icon: {name: 'info', type: 'font-awesome'},
       handleOnPress: ()=> {
-        console.log('About');
+        console.log('About')
       }
     },
     {
@@ -77,21 +77,21 @@ const Settings = () => {
             {
               text: "Yes",
               onPress: () => {
-                  showLoading(true);
-                  const profileService = new ProfileServiceApi();
+                  showLoading(true)
+                  const profileService = new ProfileServiceApi()
                   profileService.signOut().then(() => {
                   TOAST.ref.alertWithType(
                     'success',
                     'Good Bye!',
                     'You logged out from your account!',
-                  );
+                  )
                 }).finally(() => {
-                  showLoading(false);
-                });
+                  showLoading(false)
+                })
               }
             }
           ]
-        );
+        )
       },
     },
   ]
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.black,
   }
-});
+})
 
 export default Settings
 

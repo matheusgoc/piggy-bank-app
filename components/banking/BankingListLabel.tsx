@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { COLORS } from '../../constants';
-import { Divider } from 'react-native-elements';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { COLORS } from '../../constants'
+import { Divider } from 'react-native-elements'
 
 interface BankingListLabelProps {
   label: string,
@@ -16,7 +16,7 @@ const BankingListLabel = (props: BankingListLabelProps) => {
       ...baseStyles.container,
       height: props.height ?? '10%',
     },
-  });
+  })
 
   return (
     <>

@@ -1,13 +1,13 @@
-import { combineReducers } from "redux";
-import AsyncStorage from '@react-native-community/async-storage';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import ProfileSlice from './features/profile/ProfileSlice';
-import NavigationSlice from './features/navigation/NavigationSlice';
-import TransactionsSlice from './features/transactions/TransactionsSlice';
-import CategoriesSlice from './features/categories/CategoriesSlice';
-import ReportsSlice from './features/reports/ReportsSlice';
-import BankingSlice from './features/banking/BankingSlice';
+import { combineReducers } from "redux"
+import AsyncStorage from '@react-native-community/async-storage'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { persistReducer } from 'redux-persist'
+import ProfileSlice from './features/profile/ProfileSlice'
+import NavigationSlice from './features/navigation/NavigationSlice'
+import TransactionsSlice from './features/transactions/TransactionsSlice'
+import CategoriesSlice from './features/categories/CategoriesSlice'
+import ReportsSlice from './features/reports/ReportsSlice'
+import BankingSlice from './features/banking/BankingSlice'
 
 const persistConfig = {
   key: 'root',
@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
   transactions: TransactionsSlice,
   reports: ReportsSlice,
   banking: BankingSlice,
-});
+})
 
 export const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
@@ -30,4 +30,4 @@ export const store = configureStore({
     serializableCheck: false,
     immutableCheck: false,
   })
-});
+})

@@ -1,46 +1,46 @@
-import React from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
-import { useSelector } from 'react-redux';
-import { Icon } from 'react-native-elements';
-import * as Progress from 'react-native-progress';
-import { COLORS } from '../../constants';
-import { formatCurrency } from '../../helpers';
-import { ReportModel } from '../../models/ReportModel';
-import { getGeneralReport, getMonthlyReport } from './ReportsSlice';
-import { getSavings } from '../profile/ProfileSlice';
-import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
+import React from 'react'
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native"
+import { useSelector } from 'react-redux'
+import { Icon } from 'react-native-elements'
+import * as Progress from 'react-native-progress'
+import { COLORS } from '../../constants'
+import { formatCurrency } from '../../helpers'
+import { ReportModel } from '../../models/ReportModel'
+import { getGeneralReport, getMonthlyReport } from './ReportsSlice'
+import { getSavings } from '../profile/ProfileSlice'
+import { ProfileSavingsModel } from '../../models/ProfileSavingsModel'
 
 const ReportSavingsPlan = () => {
 
-  const windowWidth = useWindowDimensions().width;
-  const savingsTarget: ProfileSavingsModel = useSelector(getSavings);
-  const generalReport: ReportModel = useSelector(getGeneralReport);
-  const monthlyReport: ReportModel = useSelector(getMonthlyReport);
+  const windowWidth = useWindowDimensions().width
+  const savingsTarget: ProfileSavingsModel = useSelector(getSavings)
+  const generalReport: ReportModel = useSelector(getGeneralReport)
+  const monthlyReport: ReportModel = useSelector(getMonthlyReport)
 
   const calcMonthlyTargetReached = () => {
-    const incomes: number = monthlyReport.incomes ?? 0;
-    const expenses: number = monthlyReport.expenses ?? 0;
-    const total = incomes - expenses;
-    return (total < 0)? 0 : total;
-  };
+    const incomes: number = monthlyReport.incomes ?? 0
+    const expenses: number = monthlyReport.expenses ?? 0
+    const total = incomes - expenses
+    return (total < 0)? 0 : total
+  }
 
   const percentMonthlyTargetReached = () => {
-    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0;
-    const percent = (targetMonthlySavings)? calcMonthlyTargetReached() / targetMonthlySavings : 0;
-    return (percent > 1)? 1 : percent;
+    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0
+    const percent = (targetMonthlySavings)? calcMonthlyTargetReached() / targetMonthlySavings : 0
+    return (percent > 1)? 1 : percent
   }
 
   const calcTotalTargetReached = () => {
-    const incomes: number = generalReport.incomes ?? 0;
-    const expenses: number = generalReport.expenses ?? 0;
-    const total = incomes - expenses;
-    return (total < 0)? 0 : total;
-  };
+    const incomes: number = generalReport.incomes ?? 0
+    const expenses: number = generalReport.expenses ?? 0
+    const total = incomes - expenses
+    return (total < 0)? 0 : total
+  }
 
   const percentTotalTargetReached = () => {
-    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0;
-    const percent = (targetMonthlySavings)? calcTotalTargetReached() / targetMonthlySavings : 0;
-    return (percent > 1)? 1 : percent;
+    const targetMonthlySavings = savingsTarget.targetMonthlySavings ?? 0
+    const percent = (targetMonthlySavings)? calcTotalTargetReached() / targetMonthlySavings : 0
+    return (percent > 1)? 1 : percent
   }
 
   return (
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     width: '40%',
     alignItems: 'center',
   },
-});
+})
 
 export default ReportSavingsPlan

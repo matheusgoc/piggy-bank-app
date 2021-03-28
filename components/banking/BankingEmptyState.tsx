@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
-import { Icon } from 'react-native-elements';
-import { COLORS } from '../../constants';
+import { StyleSheet, Text, View } from 'react-native'
+import { Icon } from 'react-native-elements'
+import { COLORS } from '../../constants'
 
 const BankingEmptyState = (props: {message: string}) => (
   <View style={styles.container}>

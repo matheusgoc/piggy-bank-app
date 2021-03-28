@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { FormikProps } from 'formik';
-import { Button } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker';
-import { COLORS, US_STATES } from '../../constants';
-import InputField from '../../components/input-field/InputField';
-import { ProfileModel } from '../../models/ProfileModel';
-import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
-import moment from 'moment';
+import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { FormikProps } from 'formik'
+import { Button } from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'
+import InputDateTimePicker from '../../components/input-date-time-picker/InputDateTimePicker'
+import { COLORS, US_STATES } from '../../constants'
+import InputField from '../../components/input-field/InputField'
+import { ProfileModel } from '../../models/ProfileModel'
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay'
+import moment from 'moment'
 
 const ProfileForm = (props: FormikProps<ProfileModel>) => {
 
@@ -17,28 +17,28 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
     handleSubmit,
     values,
     isValid,
-  } = props;
+  } = props
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: values.id? 'Update my profile' : 'Create my profile',
-    });
-  }, [navigation, values.id]);
+    })
+  }, [navigation, values.id])
 
   const initialStates = Object.entries(US_STATES).map(([abbr, name]) => {
     return {abbr, name}
-  });
-  const [states, setStates] = useState(initialStates);
+  })
+  const [states, setStates] = useState(initialStates)
 
   const searchStates = (search) => {
-    let statesList = [];
+    let statesList = []
     Object.entries(US_STATES).map(([abbr, name]) => {
       if (name.indexOf(search) >= 0) {
-        statesList.push({abbr, name});
+        statesList.push({abbr, name})
       }
-    });
-    setStates(statesList);
+    })
+    setStates(statesList)
   }
 
   return (
@@ -158,7 +158,7 @@ const ProfileForm = (props: FormikProps<ProfileModel>) => {
             title={(values.id)? 'Save' : 'Next'}
             disabled={!isValid}
             onPressOut={() => {
-              handleSubmit();
+              handleSubmit()
             }}
           />
         </View>
@@ -194,6 +194,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingRight: 10,
   }
-});
+})
 
-export default ProfileForm;
+export default ProfileForm

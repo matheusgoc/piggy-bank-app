@@ -1,18 +1,18 @@
-import React from 'react';
-import { withFormik } from 'formik';
-import * as Yup from 'yup';
-import TransactionForm from './TransactionForm';
-import { TransactionModel } from '../../models/TransactionModel';
-import TransactionsServiceApi from '../../services/TransactionsServiceApi';
-import { TOAST } from '../../constants';
-import { showLoading } from '../../helpers';
+import React from 'react'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
+import TransactionForm from './TransactionForm'
+import { TransactionModel } from '../../models/TransactionModel'
+import TransactionsServiceApi from '../../services/TransactionsServiceApi'
+import { TOAST } from '../../constants'
+import { showLoading } from '../../helpers'
 
 interface TransactionsListProps {
-  transaction: TransactionModel;
+  transaction: TransactionModel
   route: any,
 }
 
-const transactionsServiceApi = new TransactionsServiceApi();
+const transactionsServiceApi = new TransactionsServiceApi()
 
 const extractTimestamp = (transaction) => {
   if (transaction.orderTime) {
@@ -20,32 +20,32 @@ const extractTimestamp = (transaction) => {
       transaction.orderTime.getHours(),
       transaction.orderTime.getMinutes(),
       transaction.orderTime.getSeconds(),
-    );
+    )
   }
 
-  return transaction.orderDate.getTime();
+  return transaction.orderDate.getTime()
 }
 
-let oldTransaction = null;
+let oldTransaction = null
 
 const Transaction = withFormik<TransactionsListProps, TransactionModel>({
 
   mapPropsToValues: props => {
 
-    let transaction: TransactionModel = new TransactionModel();
+    let transaction: TransactionModel = new TransactionModel()
 
     // set transaction from list
     if (props.route?.params?.transaction) {
 
-      transaction = JSON.parse(props.route?.params?.transaction);
-      oldTransaction = {...transaction};
-      transaction.amount = Math.abs(transaction.amount);
+      transaction = JSON.parse(props.route?.params?.transaction)
+      oldTransaction = {...transaction}
+      transaction.amount = Math.abs(transaction.amount)
       console.log(transaction, transaction.timestamp, transaction.orderDate, transaction.orderTime)
 
       // handle date and time
       if (transaction.timestamp) {
-        transaction.orderDate = new Date(transaction.timestamp);
-        transaction.orderTime = new Date(transaction.timestamp);
+        transaction.orderDate = new Date(transaction.timestamp)
+        transaction.orderTime = new Date(transaction.timestamp)
       } else {
         if (transaction.orderDate) {
           transaction.orderDate = new Date(transaction.orderDate)
@@ -62,7 +62,7 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
       value: transaction.type
     }
 
-    return transaction;
+    return transaction
   },
 
   validationSchema: Yup.object().shape({
@@ -84,22 +84,22 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
 
   handleSubmit: (transaction: TransactionModel, bag:any)  => {
 
-    showLoading(true);
+    showLoading(true)
 
     // set timestamp
-    transaction.timestamp = extractTimestamp(transaction);
+    transaction.timestamp = extractTimestamp(transaction)
 
     // set type
-    transaction.type = transaction.type.value;
+    transaction.type = transaction.type.value
 
     // save at device storage
-    let successMsg: string;
+    let successMsg: string
     if (transaction.id) {
-      transactionsServiceApi.update(transaction, oldTransaction);
-      successMsg = 'The transaction was updated!';
+      transactionsServiceApi.update(transaction, oldTransaction)
+      successMsg = 'The transaction was updated!'
     } else {
-      transactionsServiceApi.add(transaction);
-      successMsg = 'A new transaction was add!';
+      transactionsServiceApi.add(transaction)
+      successMsg = 'A new transaction was add!'
     }
 
     // persist at cloud server
@@ -108,24 +108,24 @@ const Transaction = withFormik<TransactionsListProps, TransactionModel>({
         'success',
         'Transaction saved',
         successMsg,
-      );
+      )
 
       if (bag.props.route?.params?.backView) {
-        bag.props.navigation.navigate(bag.props.route?.params?.backView);
+        bag.props.navigation.navigate(bag.props.route?.params?.backView)
       } else {
-        bag.props.navigation.goBack();
+        bag.props.navigation.goBack()
       }
 
     }).catch((error) => {
 
-      console.warn('Transaction.handleSubmit: ' + error.message);
+      console.warn('Transaction.handleSubmit: ' + error.message)
 
     }).finally(() => {
 
-      showLoading(false);
-    });
+      showLoading(false)
+    })
   },
 
-})(TransactionForm);
+})(TransactionForm)
 
-export default Transaction;
+export default Transaction

@@ -1,17 +1,17 @@
-import React from 'react';
-import { withFormik } from 'formik';
-import * as Yup from 'yup';
-import SignInForm from './SignInForm';
-import { ProfileCredentialsModel } from '../../models/ProfileCredentialsModel';
-import ProfileServiceApi from '../../services/ProfileServiceApi';
-import { TOAST } from '../../constants';
-import { RootNavigation, showLoading } from '../../helpers';
+import React from 'react'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
+import SignInForm from './SignInForm'
+import { ProfileCredentialsModel } from '../../models/ProfileCredentialsModel'
+import ProfileServiceApi from '../../services/ProfileServiceApi'
+import { TOAST } from '../../constants'
+import { RootNavigation, showLoading } from '../../helpers'
 
 const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
 
   mapPropsToValues: () => {
 
-    return new ProfileCredentialsModel();
+    return new ProfileCredentialsModel()
   },
 
   validationSchema: Yup.object({
@@ -24,24 +24,24 @@ const SignIn = withFormik<ProfileCredentialsModel, ProfileCredentialsModel>({
 
   handleSubmit: (credentials: ProfileCredentialsModel)  => {
 
-    const profileServiceApi = new ProfileServiceApi();
-    showLoading(true);
+    const profileServiceApi = new ProfileServiceApi()
+    showLoading(true)
     profileServiceApi.signIn(credentials.email, credentials.password).then(function () {
 
-      const profile = profileServiceApi.get();
+      const profile = profileServiceApi.get()
       TOAST.ref.alertWithType('info',
         'Hi ' + profile.lastName + ',',
-        'you are welcome!');
+        'you are welcome!')
 
-      RootNavigation.reset('Main');
+      RootNavigation.reset('Main')
 
     }).catch((error) => {
-      console.warn('SigIn.handleSubmit: ' + error);
+      console.warn('SigIn.handleSubmit: ' + error)
     }).finally(() => {
-      showLoading(false);
-    });
+      showLoading(false)
+    })
   },
 
-})(SignInForm);
+})(SignInForm)
 
-export default SignIn;
+export default SignIn

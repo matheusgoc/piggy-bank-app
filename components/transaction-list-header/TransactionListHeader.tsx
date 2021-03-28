@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { Button } from 'react-native-elements';
-import { COLORS } from '../../constants';
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
+import { Button } from 'react-native-elements'
+import { COLORS } from '../../constants'
 import {
-  getList,
-  getDate,
-  setDate,
-  getLoadingList,
-  setLoadingList,
-  setDeleteEnable,
   checkDeleteEnable,
-} from '../../features/transactions/TransactionsSlice';
-import {
-  getGeneralReport,
-  getMonthlyReport,
-} from '../../features/reports/ReportsSlice';
-import {
-  getSavings
-} from '../../features/profile/ProfileSlice'
-import TransactionsServiceApi from '../../services/TransactionsServiceApi';
-import { formatCurrency } from '../../helpers';
-import { ReportModel } from '../../models/ReportModel';
-import { ProfileSavingsModel } from '../../models/ProfileSavingsModel';
+  getDate,
+  getList,
+  getLoadingList,
+  setDate,
+  setDeleteEnable,
+  setLoadingList,
+} from '../../features/transactions/TransactionsSlice'
+import { getGeneralReport, getMonthlyReport, } from '../../features/reports/ReportsSlice'
+import { getSavings } from '../../features/profile/ProfileSlice'
+import TransactionsServiceApi from '../../services/TransactionsServiceApi'
+import { formatCurrency } from '../../helpers'
+import { ReportModel } from '../../models/ReportModel'
+import { ProfileSavingsModel } from '../../models/ProfileSavingsModel'
 
 interface TransactionListHeaderProps {
   disableDelete?: boolean,
@@ -31,63 +26,62 @@ interface TransactionListHeaderProps {
 
 const TransactionListHeader = (props: TransactionListHeaderProps) => {
 
-  const serviceApi = new TransactionsServiceApi();
-  const dispatch = useDispatch();
+  const serviceApi = new TransactionsServiceApi()
+  const dispatch = useDispatch()
 
-  const list = useSelector(getList);
-  const date = useSelector(getDate);
-  const loading = useSelector(getLoadingList);
-  const isDeleteEnable = useSelector(checkDeleteEnable);
+  const list = useSelector(getList)
+  const date = useSelector(getDate)
+  const loading = useSelector(getLoadingList)
+  const isDeleteEnable = useSelector(checkDeleteEnable)
 
-  const generalReport: ReportModel = useSelector(getGeneralReport);
-  const monthlyReport: ReportModel = useSelector(getMonthlyReport);
-  const savingsPlan: ProfileSavingsModel = useSelector(getSavings);
+  const generalReport: ReportModel = useSelector(getGeneralReport)
+  const monthlyReport: ReportModel = useSelector(getMonthlyReport)
+  const savingsPlan: ProfileSavingsModel = useSelector(getSavings)
 
-  const [timeout, enableTimeout] = useState(null);
-  let reqCount = 0;
+  const [timeout, enableTimeout] = useState(null)
 
   const styles = StyleSheet.create({
     ...baseStyles,
-  });
+  })
 
   const handleOnChangeMonth = (direction: 'before'|'after') => {
 
-    clearTimeout(timeout);
+    clearTimeout(timeout)
 
-    dispatch(setDeleteEnable(false));
-    dispatch(setLoadingList(true));
+    dispatch(setDeleteEnable(false))
+    dispatch(setLoadingList(true))
 
-    let currentDate = moment(date);
-    currentDate.startOf('month');
-    const previousDate = moment(currentDate);
+    let currentDate = moment(date)
+    currentDate.startOf('month')
+    const previousDate = moment(currentDate)
     switch (direction) {
       case 'before':
-        currentDate.subtract(1, 'month');
-        break;
+        currentDate.subtract(1, 'month')
+        break
       case 'after':
-        currentDate.add(1, 'month');
-        break;
+        currentDate.add(1, 'month')
+        break
     }
 
-    dispatch(setDate(currentDate.toDate()));
+    dispatch(setDate(currentDate.toDate()))
     enableTimeout(setTimeout(() => {
-      const year = currentDate.format('YYYY');
-      const month = currentDate.format('MM');
+      const year = currentDate.format('YYYY')
+      const month = currentDate.format('MM')
       serviceApi.load(year, month).catch((error) => {
-        dispatch(setDate(previousDate.toDate()));
-        console.warn('TransactionListHeader.handleOnChangeMonth: ' + error);
+        dispatch(setDate(previousDate.toDate()))
+        console.warn('TransactionListHeader.handleOnChangeMonth: ' + error)
       }).finally(() => {
-        dispatch(setLoadingList(false));
-      });
-    },3000));
+        dispatch(setLoadingList(false))
+      })
+    },3000))
   }
 
   const handleOnSearch = () => {
-    console.log('TransactionListHeader.handleOnSearch');
+    console.log('TransactionListHeader.handleOnSearch')
   }
 
   const handleOnDelete = () => {
-    dispatch(setDeleteEnable(!isDeleteEnable));
+    dispatch(setDeleteEnable(!isDeleteEnable))
   }
 
   const showBalance = () => {
@@ -95,18 +89,18 @@ const TransactionListHeader = (props: TransactionListHeaderProps) => {
     if (loading || !monthlyReport || !generalReport) {
       return (
         <ActivityIndicator color={COLORS.primary} />
-      );
+      )
     }
 
-    let monthlyIncomes = monthlyReport.incomes;
-    let monthlyExpenses = monthlyReport.expenses;
-    const generalBalance = generalReport.incomes - generalReport.expenses + savingsPlan.balance;
-    const monthlyBalance = monthlyIncomes - monthlyExpenses;
-    const prevMonthBalance = generalBalance - monthlyBalance;
+    let monthlyIncomes = monthlyReport.incomes
+    let monthlyExpenses = monthlyReport.expenses
+    const generalBalance = generalReport.incomes - generalReport.expenses + savingsPlan.balance
+    const monthlyBalance = monthlyIncomes - monthlyExpenses
+    const prevMonthBalance = generalBalance - monthlyBalance
     if (prevMonthBalance > 0) {
-      monthlyIncomes += prevMonthBalance;
+      monthlyIncomes += prevMonthBalance
     } else {
-      monthlyExpenses -= prevMonthBalance;
+      monthlyExpenses -= prevMonthBalance
     }
 
     return (
@@ -225,6 +219,6 @@ const baseStyles = StyleSheet.create({
     width: 50,
     padding: 0,
   }
-});
+})
 
 export default TransactionListHeader

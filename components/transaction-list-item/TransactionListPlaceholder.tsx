@@ -1,5 +1,5 @@
-import React from 'react';
-import { Divider, ListItem } from 'react-native-elements';
+import React from 'react'
+import { ListItem } from 'react-native-elements'
 import ContentLoader, { Circle, Rect } from "react-content-loader/native"
 
 const TransactionListPlaceholder = ({index}) => {

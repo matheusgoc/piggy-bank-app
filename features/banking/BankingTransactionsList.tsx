@@ -12,7 +12,7 @@ import BankingEmptyState from '../../components/banking/BankingEmptyState'
 import TransactionListPlaceholder from '../../components/transaction-list-item/TransactionListPlaceholder'
 import { BankingTransactionModel } from '../../models/BankingTransactionModel'
 import moment from 'moment'
-import BankingTransactionsListItem from '../../components/banking/BankingTransactionsListItem';
+import BankingTransactionsListItem from '../../components/banking/BankingTransactionsListItem'
 
 interface BankingTransactionsListProps {
   route: {
@@ -37,7 +37,7 @@ const BankingTransactionsList = (props: BankingTransactionsListProps) => {
 
   const [transactionsList, setTransactionsList] = useState([])
   const [page, setPage] = useState(1)
-  const listRef = useRef<SectionList>(null);
+  const listRef = useRef<SectionList>(null)
 
   useEffect(() => loadTransactions(), [])
 

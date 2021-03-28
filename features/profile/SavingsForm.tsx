@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { FormikProps } from 'formik';
-import { Button, Card, Icon, Overlay } from 'react-native-elements';
-import { COLORS } from '../../constants';
-import { ProfileModel } from '../../models/ProfileModel';
-import CurrencyField from '../../components/currency-field/CurrencyField';
-import { formatCurrency } from '../../helpers';
-import DropDownOverlay from '../../components/drop-down/DropDownOverlay';
+import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { FormikProps } from 'formik'
+import { Button, Card, Icon, Overlay } from 'react-native-elements'
+import { COLORS } from '../../constants'
+import { ProfileModel } from '../../models/ProfileModel'
+import CurrencyField from '../../components/currency-field/CurrencyField'
+import { formatCurrency } from '../../helpers'
+import DropDownOverlay from '../../components/drop-down/DropDownOverlay'
 
 const SavingsForm = (props: FormikProps<ProfileModel>) => {
 
@@ -15,52 +15,52 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
     handleSubmit,
     isValid,
     values,
-  } = props;
+  } = props
 
-  const [overlay, setOverlay] = useState(false);
-  const [resultMessage, setResultMessage] = useState(null);
+  const [overlay, setOverlay] = useState(false)
+  const [resultMessage, setResultMessage] = useState(null)
 
   // Handle form's submission to display the savings' plan summary
   const onNext = () => {
 
     if (values.id || (!values.targetMonthlySavings && !values.targetTotalSavings)) {
-      handleSubmit();
-      return;
+      handleSubmit()
+      return
     }
 
     // format monthly target
-    const monthlyTargetFormat = formatCurrency(values.targetMonthlySavings);
+    const monthlyTargetFormat = formatCurrency(values.targetMonthlySavings)
 
     // format total target
     const totalTarget = (values.targetMonthlySavings > values.targetTotalSavings)
       ? values.targetMonthlySavings
-      : values.targetTotalSavings;
-    const totalTargetFormat = formatCurrency(totalTarget);
+      : values.targetTotalSavings
+    const totalTargetFormat = formatCurrency(totalTarget)
 
     // calculate the time prediction for the target
-    const savingsTotalMonths = Math.ceil(totalTarget / values.targetMonthlySavings);
-    const savingsYears = Math.floor(savingsTotalMonths / 12);
-    const savingsMonths = savingsTotalMonths % 12;
-    let periodText = '';
+    const savingsTotalMonths = Math.ceil(totalTarget / values.targetMonthlySavings)
+    const savingsYears = Math.floor(savingsTotalMonths / 12)
+    const savingsMonths = savingsTotalMonths % 12
+    let periodText = ''
     if (savingsYears > 0) {
-      periodText += savingsYears + ' year';
-      periodText += (savingsYears > 1)? 's ' : ' ';
-      periodText += (savingsMonths > 0)? 'and ': '';
+      periodText += savingsYears + ' year'
+      periodText += (savingsYears > 1)? 's ' : ' '
+      periodText += (savingsMonths > 0)? 'and ': ''
     }
     if (savingsMonths > 0) {
-      periodText += savingsMonths + ' month';
-      periodText += (savingsMonths > 1)? 's ' : ' ';
+      periodText += savingsMonths + ' month'
+      periodText += (savingsMonths > 1)? 's ' : ' '
     }
 
     // determine balance signal
-    values.balance = Math.abs(values.balance);
+    values.balance = Math.abs(values.balance)
     if (values.balanceSignal == 'owed' || values.balanceSignal?.value == 'owed') {
-      values.balance = -values.balance;
+      values.balance = -values.balance
     }
 
     // calculate new balance with target and format it
-    let newBalance = values.balance + totalTarget;
-    let newBalanceFormat = formatCurrency(newBalance);
+    let newBalance = values.balance + totalTarget
+    let newBalanceFormat = formatCurrency(newBalance)
 
     // display the modal message
     setResultMessage((
@@ -76,8 +76,8 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
         </Text>
         <Text style={styles.summaryNewBalance}>{newBalanceFormat}</Text>
       </>
-    ));
-    setOverlay(true);
+    ))
+    setOverlay(true)
   }
 
   return (
@@ -144,7 +144,7 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
             title={(values.id)? 'Save' : 'Next'}
             disabled={!isValid}
             onPress={() => {
-              onNext();
+              onNext()
             }}
           />
         </View>
@@ -166,8 +166,8 @@ const SavingsForm = (props: FormikProps<ProfileModel>) => {
             buttonStyle={styles.overlayButton}
             titleStyle={styles.overlayButtonTitle}
             onPress={() => {
-              handleSubmit();
-              setOverlay(false);
+              handleSubmit()
+              setOverlay(false)
             }}
           />
         </View>
@@ -248,6 +248,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     fontSize: 20,
   },
-});
+})
 
-export default SavingsForm;
+export default SavingsForm

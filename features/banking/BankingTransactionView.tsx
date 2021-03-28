@@ -3,11 +3,11 @@ import { BankingTransactionModel } from '../../models/BankingTransactionModel'
 import BankingHeader from '../../components/banking/BankingHeader'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import moment from 'moment'
-import { formatCurrency } from '../../helpers';
-import { Card, ListItem } from 'react-native-elements';
-import { COLORS } from '../../constants';
-import { TransactionModel } from '../../models/TransactionModel';
-import { useNavigation } from '@react-navigation/native';
+import { formatCurrency } from '../../helpers'
+import { Card, ListItem } from 'react-native-elements'
+import { COLORS } from '../../constants'
+import { TransactionModel } from '../../models/TransactionModel'
+import { useNavigation } from '@react-navigation/native'
 
 interface BankingTransactionProps {
   route: {
@@ -135,6 +135,6 @@ const baseStyles = StyleSheet.create({
     color: COLORS.primary,
     fontWeight: 'bold',
   }
-});
+})
 
 export default BankingTransactionView

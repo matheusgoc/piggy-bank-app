@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from "react-native";
-import { Button, Icon } from 'react-native-elements';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View } from "react-native"
+import { Button, Icon } from 'react-native-elements'
 import {
+  VictoryAxis,
   VictoryBar,
   VictoryChart,
+  VictoryLabel,
   VictoryLegend,
   VictoryPie,
-  VictoryLabel,
   VictoryTheme,
-  VictoryAxis,
-  LineSegment,
-} from "victory-native";
-import { COLORS, PALLET } from '../../constants';
-import { ReportModel } from '../../models/ReportModel';
-import { formatCurrency } from '../../helpers';
-import { number } from 'prop-types';
+} from "victory-native"
+import { COLORS, PALLET } from '../../constants'
+import { ReportModel } from '../../models/ReportModel'
+import { formatCurrency } from '../../helpers'
 
 interface ReportCategoriesProps {
   type: 'general' | 'monthly',
@@ -23,15 +21,15 @@ interface ReportCategoriesProps {
 
 const ReportCategories = (props: ReportCategoriesProps) => {
 
-  const [type, setType] = useState('expense');
-  const [graph, setGraph] = useState('pie');
+  const [type, setType] = useState('expense')
+  const [graph, setGraph] = useState('pie')
 
   const changeType = () => {
-    setType((type == 'expense')? 'income' : 'expense');
+    setType((type == 'expense')? 'income' : 'expense')
   }
 
   const changeGraph = () => {
-    setGraph((graph == 'pie')? 'chart' : 'pie');
+    setGraph((graph == 'pie')? 'chart' : 'pie')
   }
 
   const styles = StyleSheet.create({
@@ -40,45 +38,45 @@ const ReportCategories = (props: ReportCategoriesProps) => {
       ...baseStyles.headerButtonTitle,
       color: (type == 'expense')? COLORS.error : COLORS.primary,
     }
-  });
+  })
 
   const getCategoriesReport = () => {
     return (type == 'expense')
       ? props.report.categories.expenses
-      : props.report.categories.incomes;
+      : props.report.categories.incomes
   }
 
   const getTotal = () => {
     return (type == 'expense')
       ? props.report.expenses
-      : props.report.incomes;
+      : props.report.incomes
   }
 
   const getData = (isLegend = false) => {
-    const report = getCategoriesReport();
-    let data = [];
+    const report = getCategoriesReport()
+    let data = []
     if (report && Object.keys(report).length) {
-      const total = getTotal();
+      const total = getTotal()
       for (let [category, value] of Object.entries(report)) {
         if (typeof value == 'number') {
-          const percent = Math.round(value / total * 100);
+          const percent = Math.round(value / total * 100)
           if (isLegend) {
-            data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)});
+            data.push({name: category + '\n' + percent + '% - ' + formatCurrency(value)})
           } else{
-            data.push({x: category, y:value, label: percent + '%'});
+            data.push({x: category, y:value, label: percent + '%'})
           }
         }
       }
     }
-    return data;
+    return data
   }
 
   const displayChart = () => {
 
-    const data = getData();
-    const totalItems = Object.keys(getCategoriesReport()).length;
+    const data = getData()
+    const totalItems = Object.keys(getCategoriesReport()).length
 
-    let chart = null;
+    let chart
     if (data && data.length) {
       chart = (
         <>
@@ -95,7 +93,7 @@ const ReportCategories = (props: ReportCategoriesProps) => {
               domainPadding={10}
             >
               <VictoryAxis dependentAxis tickFormat={(tick) => {
-                return (tick >= 1000)? (tick / 1000) + 'K' : tick;
+                return (tick >= 1000)? (tick / 1000) + 'K' : tick
               }} />
               <VictoryBar
                 data={data}
@@ -136,7 +134,7 @@ const ReportCategories = (props: ReportCategoriesProps) => {
       )
     }
 
-    return chart;
+    return chart
   }
 
   return (
@@ -194,6 +192,6 @@ const baseStyles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 10
   }
-});
+})
 
 export default ReportCategories

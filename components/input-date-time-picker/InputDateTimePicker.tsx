@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from "react-native";
-import { Button } from 'react-native-elements';
-import moment from 'moment';
-import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker";
-import { FormikProps } from 'formik';
-import { COLORS } from '../../constants';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View } from "react-native"
+import { Button } from 'react-native-elements'
+import moment from 'moment'
+import DateTimePickerModal, { ReactNativeModalDateTimePickerProps } from "react-native-modal-datetime-picker"
+import { FormikProps } from 'formik'
+import { COLORS } from '../../constants'
 
 interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 'onCancel'|'onConfirm'> {
   label: string,
@@ -19,19 +19,19 @@ interface InputDateTimePicker extends Omit<ReactNativeModalDateTimePickerProps, 
 
 const InputDateTimePicker = (props: InputDateTimePicker) => {
 
-  const mode: any = (props.mode) ? props.mode : 'date';
-  const width = (props.width)? props.width : (mode === 'date')? 160 : 150;
+  const mode: any = (props.mode) ? props.mode : 'date'
+  const width = (props.width)? props.width : (mode === 'date')? 160 : 150
 
-  const [visible, setVisible] = useState(false);
-  const [error, showError]:any = useState(false);
+  const [visible, setVisible] = useState(false)
+  const [error, showError]:any = useState(false)
   useEffect(() => {
     if (props.formik && props.name) {
       showError((props.formik.touched[props.name] && props.formik.errors[props.name])
         ? props.formik.errors[props.name]
         : ''
-      );
+      )
     }
-  });
+  })
 
   const styles = StyleSheet.create({
     ...baseStyles,
@@ -51,43 +51,43 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
       ...baseStyles.buttonTitle,
       color: (error)? COLORS.error : COLORS.black,
     },
-  });
+  })
 
-  let formatValue = '--';
-  let initialValue:Date = props.formik?.values[props.name] || props.value;
+  let formatValue = '--'
+  let initialValue:Date = props.formik?.values[props.name] || props.value
   if (initialValue && initialValue instanceof Date) {
-    formatValue = formatDateTime(initialValue, mode);
+    formatValue = formatDateTime(initialValue, mode)
   }
 
-  const [value, setValue] = useState(initialValue);
-  const [format, setFormat] = useState(formatValue);
+  const [value, setValue] = useState(initialValue)
+  const [format, setFormat] = useState(formatValue)
 
   const handleConfirm = (dt:Date) => {
-    setVisible(false);
-    dt.setMilliseconds(0);
-    dt.setSeconds(0);
-    setValue(dt);
-    setFormat(formatDateTime(dt, mode));
+    setVisible(false)
+    dt.setMilliseconds(0)
+    dt.setSeconds(0)
+    setValue(dt)
+    setFormat(formatDateTime(dt, mode))
     if (props.onPick) {
-      props.onPick(dt);
+      props.onPick(dt)
     }
     if(props.formik && props.name){
-      props.formik.setFieldValue(props.name, dt);
+      props.formik.setFieldValue(props.name, dt)
     }
   }
 
   const handleCancel = () => {
-    setVisible(false);
+    setVisible(false)
     if(props.formik && props.name){
-      props.formik.setFieldTouched(props.name, true);
+      props.formik.setFieldTouched(props.name, true)
     }
   }
 
   const handleButtonPress = () => {
     if (!value) {
-      setValue((props.default)? props.default : new Date());
+      setValue((props.default)? props.default : new Date())
     }
-    setVisible(true);
+    setVisible(true)
   }
 
   return (
@@ -129,16 +129,16 @@ const InputDateTimePicker = (props: InputDateTimePicker) => {
 // get date format as ##-##-#### and time format as ##:## AM | PM
 const formatDateTime = (dt?:Date, mode = 'date') => {
 
-  let format = '--';
+  let format = '--'
   if (dt) {
     switch (mode) {
-      case 'date': format = moment(dt).format('L'); break;
-      case 'time': format =  moment(dt).format('LT'); break;
+      case 'date': format = moment(dt).format('L'); break
+      case 'time': format =  moment(dt).format('LT'); break
     }
   }
 
-  return format;
-};
+  return format
+}
 
 const baseStyles = StyleSheet.create({
   container: {
@@ -165,6 +165,6 @@ const baseStyles = StyleSheet.create({
     paddingLeft: 5,
     paddingVertical: 5,
   }
-});
+})
 
-export default InputDateTimePicker;
+export default InputDateTimePicker

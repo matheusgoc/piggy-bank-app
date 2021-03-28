@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Button } from 'react-native-elements';
+import React from 'react'
+import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Button } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import InputField from '../../components/input-field/InputField';
-import { FormikProps } from 'formik';
-import { useNavigation } from '@react-navigation/native';
-import { ProfileCredentialsModel } from '../../models/ProfileCredentialsModel';
-import { COLORS } from '../../constants';
+import InputField from '../../components/input-field/InputField'
+import { FormikProps } from 'formik'
+import { useNavigation } from '@react-navigation/native'
+import { ProfileCredentialsModel } from '../../models/ProfileCredentialsModel'
+import { COLORS } from '../../constants'
 
 const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
 
-  StatusBar.setBarStyle('dark-content');
+  StatusBar.setBarStyle('dark-content')
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const {
     handleSubmit,
@@ -20,7 +20,7 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
     errors,
     touched,
     resetForm
-  } = props;
+  } = props
 
   return (
     <SafeAreaView style={styles.style}>
@@ -77,14 +77,14 @@ const SignInForm = (props: FormikProps<ProfileCredentialsModel>) => {
             containerStyle={styles.btSignIn}
             disabled={!isValid}
             onPressOut={() => {
-              handleSubmit();
+              handleSubmit()
             }}
           />
           <View style={styles.signUp}>
             <Text>Don't you have a profile yet?</Text>
             <TouchableOpacity onPress={() => {
               resetForm()
-              navigation.navigate('Terms');
+              navigation.navigate('Terms')
             }}>
               <Text style={styles.linkSignUp}>Sign Up</Text>
             </TouchableOpacity>
@@ -136,6 +136,6 @@ const styles = StyleSheet.create({
     padding:10,
     fontWeight: 'bold',
   },
-});
+})
 
-export default SignInForm;
+export default SignInForm

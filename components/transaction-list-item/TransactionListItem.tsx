@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Avatar, Button, Icon, ListItem, ListItemProps } from 'react-native-elements';
-import { TransactionModel } from '../../models/TransactionModel';
-import { Alert, StyleSheet, Text, View } from 'react-native';
-import { COLORS, TOAST } from '../../constants';
-import moment from 'moment';
-import { formatCurrency, showLoading } from '../../helpers';
-import { checkDeleteEnable } from '../../features/transactions/TransactionsSlice';
-import TransactionsServiceApi from '../../services/TransactionsServiceApi';
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Avatar, Button, Icon, ListItem, ListItemProps } from 'react-native-elements'
+import { TransactionModel } from '../../models/TransactionModel'
+import { Alert, StyleSheet, Text, View } from 'react-native'
+import { COLORS, TOAST } from '../../constants'
+import moment from 'moment'
+import { formatCurrency, showLoading } from '../../helpers'
+import { checkDeleteEnable } from '../../features/transactions/TransactionsSlice'
+import TransactionsServiceApi from '../../services/TransactionsServiceApi'
 
 interface TransactionListItemProps extends ListItemProps {
   transaction: TransactionModel,
@@ -16,19 +16,19 @@ interface TransactionListItemProps extends ListItemProps {
 
 const TransactionListItem = (props: TransactionListItemProps) => {
 
-  const isDeleteEnable = useSelector(checkDeleteEnable);
-  const [isConfirmDeleteEnable, setConfirmDelete] = useState(false);
+  const isDeleteEnable = useSelector(checkDeleteEnable)
+  const [isConfirmDeleteEnable, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     if (!isDeleteEnable) {
-      setConfirmDelete(false);
+      setConfirmDelete(false)
     }
   }, [isDeleteEnable])
 
-  const { timestamp, category, place, amount, key }: TransactionModel = props.transaction;
-  const date = moment(timestamp).format('MMM[\n]DD');
-  const time = moment(timestamp).format('hh:mma');
-  const amountFormat = formatCurrency(amount);
+  const { timestamp, category, place, amount }: TransactionModel = props.transaction
+  const date = moment(timestamp).format('MMM[\n]DD')
+  const time = moment(timestamp).format('hh:mma')
+  const amountFormat = formatCurrency(amount)
 
   const styles = StyleSheet.create({
     ...baseStyles,
@@ -36,7 +36,7 @@ const TransactionListItem = (props: TransactionListItemProps) => {
       ...baseStyles.amountInfoText,
       color: (amount > 0)? COLORS.success : COLORS.error,
     }
-  });
+  })
 
   const handleOnRemove = () => {
     Alert.alert(
@@ -46,29 +46,29 @@ const TransactionListItem = (props: TransactionListItemProps) => {
         {
           text: "No",
           onPress: () => {
-            setConfirmDelete(false);
+            setConfirmDelete(false)
           },
           style: "cancel"
         },
         {
           text: "Yes",
           onPress: () => {
-            showLoading(true);
-            const apiService = new TransactionsServiceApi();
-            apiService.remove(props.index);
+            showLoading(true)
+            const apiService = new TransactionsServiceApi()
+            apiService.remove(props.index)
             apiService.delete(props.transaction).then(() => {
               TOAST.ref.alertWithType(
                 'success',
                 'Transaction removed',
                 'The transaction has been removed',
-              );
+              )
             }).finally(() => {
-              showLoading(false);
-            });
+              showLoading(false)
+            })
           }
         }
       ]
-    );
+    )
   }
 
   return (
@@ -163,6 +163,6 @@ const baseStyles = StyleSheet.create({
     height: 50,
     backgroundColor: COLORS.error,
   }
-});
+})
 
 export default TransactionListItem

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { FormikProps } from 'formik';
-import { Button, Divider } from 'react-native-elements';
-import * as Progress from 'react-native-progress';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import InputField from '../../components/input-field/InputField';
-import { ProfilePasswordModel } from '../../models/ProfilePasswordModel';
-import { ACTIONS, COLORS } from '../../constants';
-import TextIcon from '../../components/text-icon/TextIcon';
-import { PasswordProps } from './Password';
-import { setAction, getAction } from '../navigation/NavigationSlice';
-import { getProfile } from './ProfileSlice';
-import ProfileServiceApi from '../../services/ProfileServiceApi';
-import { showLoading } from '../../helpers';
+import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { FormikProps } from 'formik'
+import { Button, Divider } from 'react-native-elements'
+import * as Progress from 'react-native-progress'
+import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import InputField from '../../components/input-field/InputField'
+import { ProfilePasswordModel } from '../../models/ProfilePasswordModel'
+import { ACTIONS, COLORS } from '../../constants'
+import TextIcon from '../../components/text-icon/TextIcon'
+import { PasswordProps } from './Password'
+import { getAction, setAction } from '../navigation/NavigationSlice'
+import { getProfile } from './ProfileSlice'
+import ProfileServiceApi from '../../services/ProfileServiceApi'
+import { showLoading } from '../../helpers'
 
 const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) => {
 
@@ -25,23 +25,23 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
     setValues,
     errors,
     touched,
-  } = props;
+  } = props
 
-  const dispatch = useDispatch();
-  const profile = useSelector(getProfile);
-  const action = useSelector(getAction);
+  const dispatch = useDispatch()
+  const profile = useSelector(getProfile)
+  const action = useSelector(getAction)
 
-  const [length, hasLength] = useState(false);
-  const [specialChar, hasSpecialChar] = useState(false);
-  const [capitalLetter, hasCapitalLetter] = useState(false);
-  const [number, hasNumber] = useState(false);
+  const [length, hasLength] = useState(false)
+  const [specialChar, hasSpecialChar] = useState(false)
+  const [capitalLetter, hasCapitalLetter] = useState(false)
+  const [number, hasNumber] = useState(false)
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const validateStrength = (password) => {
 
     // remove spaces
-    password = password.replace(/\s+/, '');
+    password = password.replace(/\s+/, '')
 
     // check password constraints
     const test = {
@@ -49,18 +49,18 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
       specialChar: /\W|_/.test(password),
       capitalLetter: /[A-Z]/.test(password),
       number: /\d/.test(password),
-    };
-    hasLength(test.length);
-    hasSpecialChar(test.specialChar);
-    hasCapitalLetter(test.capitalLetter);
-    hasNumber(test.number);
+    }
+    hasLength(test.length)
+    hasSpecialChar(test.specialChar)
+    hasCapitalLetter(test.capitalLetter)
+    hasNumber(test.number)
 
     // calculate strength
-    let strength = 0;
-    strength += (test.length)? .25 : 0;
-    strength += (test.specialChar)? .25 : 0;
-    strength += (test.capitalLetter)? .25 : 0;
-    strength += (test.number)? .25 : 0;
+    let strength = 0
+    strength += (test.length)? .25 : 0
+    strength += (test.specialChar)? .25 : 0
+    strength += (test.capitalLetter)? .25 : 0
+    strength += (test.number)? .25 : 0
 
     // set strength and password
     setValues({
@@ -68,23 +68,23 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
       strength,
       confirmation: values.confirmation,
       current: values.current,
-    });
-  };
+    })
+  }
 
   const handleResetPassword = () => {
 
-    const profileServiceApi = new ProfileServiceApi();
-    showLoading(true);
+    const profileServiceApi = new ProfileServiceApi()
+    showLoading(true)
     profileServiceApi.requestPIN(profile.email).then(function () {
 
-      dispatch(setAction(ACTIONS.RESET_PASSWORD_LOGGED));
-      navigation.navigate('ResetPasswordPIN', { email: profile.email });
+      dispatch(setAction(ACTIONS.RESET_PASSWORD_LOGGED))
+      navigation.navigate('ResetPasswordPIN', { email: profile.email })
 
     }).catch((error) => {
-      console.warn('PasswordForm.handleResetPassword: ' + error);
+      console.warn('PasswordForm.handleResetPassword: ' + error)
     }).finally(() => {
-      showLoading(false);
-    });
+      showLoading(false)
+    })
   }
 
   return (
@@ -180,7 +180,7 @@ const PasswordForm = (props: PasswordProps & FormikProps<ProfilePasswordModel>) 
             title={(action == ACTIONS.CREATE_PROFILE)? 'Create my profile' : 'Change my password'}
             disabled={!isValid}
             onPressOut={() => {
-              handleSubmit();
+              handleSubmit()
             }}
           />
         </View>
@@ -249,6 +249,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-});
+})
 
-export default PasswordForm;
+export default PasswordForm

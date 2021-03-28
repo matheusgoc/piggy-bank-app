@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { Button, Icon, IconProps, Overlay, SearchBar } from 'react-native-elements';
-import { FormikProps } from 'formik';
-import { COLORS } from '../../constants';
+import React, { useEffect, useState } from 'react'
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native"
+import { Button, Icon, IconProps, Overlay, SearchBar } from 'react-native-elements'
+import { FormikProps } from 'formik'
+import { COLORS } from '../../constants'
 
 export interface DropDownOverlayProps {
   items: object[],
@@ -28,22 +28,22 @@ export interface DropDownOverlayProps {
 const DropDownOverlay = (props: DropDownOverlayProps) => {
 
   // define initial value
-  let initialValue = null;
+  let initialValue = null
 
   if (props.value?.[props.searchKey]) {
 
-    initialValue = props.value[props.searchKey];
+    initialValue = props.value[props.searchKey]
 
   } else if(props.formik?.values[props.name]?.[props.searchKey]) {
 
-    initialValue = props.formik.values[props.name][props.searchKey];
+    initialValue = props.formik.values[props.name][props.searchKey]
   }
 
-  const [overlay, setOverlay] = useState(false);
-  const [value, setValue] = useState(initialValue);
-  const [search, setSearch] = useState(initialValue);
+  const [overlay, setOverlay] = useState(false)
+  const [value, setValue] = useState(initialValue)
+  const [search, setSearch] = useState(initialValue)
 
-  const [error, showError]:any = useState('');
+  const [error, showError]:any = useState('')
   useEffect(() => {
 
     if (props.formik && props.name) {
@@ -52,9 +52,9 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
         props.formik.errors[props.name]?.[props.searchKey])
         ? props.formik.errors[props.name][props.searchKey]
         : ''
-      );
+      )
     }
-  });
+  })
 
   let styles = StyleSheet.create({
     ...baseStyles,
@@ -86,33 +86,33 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
       ...baseStyles.flatList,
       maxHeight: (props.onSearch)? '82%' : '100%',
     }
-  });
+  })
 
   const handleItemPress = (item) => {
-    setValue(item[props.searchKey]);
-    setSearch(item[props.searchKey]);
+    setValue(item[props.searchKey])
+    setSearch(item[props.searchKey])
     if (props.name && props.formik?.values) {
-      props.formik.values[props.name] = item;
-      props.formik.validateForm();
+      props.formik.values[props.name] = item
+      props.formik.validateForm()
     }
     if (props.onChange) {
-      props.onChange(item);
+      props.onChange(item)
     }
-    setTimeout(() => setOverlay(false), 500);
+    setTimeout(() => setOverlay(false), 500)
   }
 
   const handleOnOpen = () => {
-    setOverlay(true);
+    setOverlay(true)
     if (props.onOpen) {
-      props.onOpen();
+      props.onOpen()
     }
   }
 
   const handleOnClose = () => {
-    setOverlay(false);
-    props.formik.setFieldTouched(props.name + '.' + props.searchKey, true);
+    setOverlay(false)
+    props.formik.setFieldTouched(props.name + '.' + props.searchKey, true)
     if (props.onClose) {
-      props.onClose();
+      props.onClose()
     }
   }
 
@@ -133,8 +133,8 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
           </Text>
         </View>
       </Pressable>
-    );
-  };
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -185,8 +185,8 @@ const DropDownOverlay = (props: DropDownOverlayProps) => {
               containerStyle={styles.searchBarContainer}
               showLoading={props.loading}
               onChangeText={(text) => {
-                setSearch(text);
-                return props.onSearch(text);
+                setSearch(text)
+                return props.onSearch(text)
               }}
             />
           ) : null}
@@ -288,6 +288,6 @@ const baseStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   flatList: {},
-});
+})
 
 export default DropDownOverlay

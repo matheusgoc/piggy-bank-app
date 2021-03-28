@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
-import CategoriesServiceApi from '../../services/CategoriesServiceApi';
-import DropDownOverlay from './DropDownOverlay';
-import { FormikProps } from 'formik';
+import React, { useState } from 'react'
+import AwesomeDebouncePromise from 'awesome-debounce-promise'
+import CategoriesServiceApi from '../../services/CategoriesServiceApi'
+import DropDownOverlay from './DropDownOverlay'
+import { FormikProps } from 'formik'
 
 export interface DropDownCategoryProps {
   formik: FormikProps<any>,
@@ -10,41 +10,41 @@ export interface DropDownCategoryProps {
 
 const DropDownCategory = (props: DropDownCategoryProps) => {
 
-  const categoryApi = new CategoriesServiceApi();
-  const defaultCategoriesList = categoryApi.get();
+  const categoryApi = new CategoriesServiceApi()
+  const defaultCategoriesList = categoryApi.get()
 
-  const [categories, setCategories] = useState(defaultCategoriesList);
-  const [searchingCategory, setSearchingCategory] = useState(false);
+  const [categories, setCategories] = useState(defaultCategoriesList)
+  const [searchingCategory, setSearchingCategory] = useState(false)
 
   const searchCategories = (name: string):void => {
 
-    name = name.trim();
+    name = name.trim()
 
     if (!name) {
 
-      setCategories(defaultCategoriesList);
+      setCategories(defaultCategoriesList)
 
     } else {
 
-      setSearchingCategory(true);
+      setSearchingCategory(true)
 
       categoryApi.search(name).then((categoriesList) => {
 
-        const sameCategoryIndex = categoriesList.findIndex(category => category.name === name);
+        const sameCategoryIndex = categoriesList.findIndex(category => category.name === name)
         if (sameCategoryIndex < 0) {
-          categoriesList.unshift({id: null, name, isNew: true});
+          categoriesList.unshift({id: null, name, isNew: true})
         }
 
-        setCategories(categoriesList);
+        setCategories(categoriesList)
 
       }).catch(() => {
-        setCategories([]);
+        setCategories([])
       }).finally(() => {
-        setSearchingCategory(false);
-      });
+        setSearchingCategory(false)
+      })
     }
   }
-  const searchCategoriesDebounce = AwesomeDebouncePromise(searchCategories, 500);
+  const searchCategoriesDebounce = AwesomeDebouncePromise(searchCategories, 500)
 
   return (
     <DropDownOverlay

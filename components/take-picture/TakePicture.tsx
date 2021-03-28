@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -9,16 +9,16 @@ import {
   Text,
   TouchableHighlight,
   View
-} from "react-native";
-import ImageZoom from 'react-native-image-pan-zoom';
-import * as Sharing from 'expo-sharing';
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import { Icon, Overlay } from 'react-native-elements';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-import { ImagePickerOptions } from 'expo-image-picker';
-import { COLORS, TOAST } from '../../constants';
-import { FormikProps } from 'formik';
+} from "react-native"
+import ImageZoom from 'react-native-image-pan-zoom'
+import * as Sharing from 'expo-sharing'
+import { useActionSheet } from '@expo/react-native-action-sheet'
+import { Icon, Overlay } from 'react-native-elements'
+import * as Permissions from 'expo-permissions'
+import * as ImagePicker from 'expo-image-picker'
+import { ImagePickerOptions } from 'expo-image-picker'
+import { COLORS, TOAST } from '../../constants'
+import { FormikProps } from 'formik'
 
 interface TakePictureProps {
   name?: string,
@@ -34,8 +34,8 @@ interface TakePictureProps {
 
 const TakePicture = (props: TakePictureProps) => {
 
-  const [image, setImage] = useState(props.image);
-  const [isImageMax, setImageMax] = useState(false);
+  const [image, setImage] = useState(props.image)
+  const [isImageMax, setImageMax] = useState(false)
 
   const styles = StyleSheet.create({
     ...baseStyles,
@@ -47,45 +47,45 @@ const TakePicture = (props: TakePictureProps) => {
       ...baseStyles.placeholder,
       backgroundColor: (image)? '#ffffff' : 'rgba(0,47,7,0.1)',
     }
-  });
+  })
 
   const handleCameraRollPermission = async () => {
-    let permission = true;
+    let permission = true
     if (Platform.OS !== 'web') {
-      const { status }  = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      const { status }  = await Permissions.askAsync(Permissions.CAMERA_ROLL)
       if (status !== 'granted') {
-        permission = false;
+        permission = false
         TOAST.ref.alertWithType(
           'error',
           'Access Denied',
-          'A permission to access the camera roll is necessary to perform this action.');
+          'A permission to access the camera roll is necessary to perform this action.')
       }
     }
 
-    return permission;
+    return permission
   }
 
   const handleCameraPermission = async () => {
-    let permission = true;
+    let permission = true
     if (Platform.OS !== 'web') {
-      const { status }  = await Permissions.askAsync(Permissions.CAMERA);
+      const { status }  = await Permissions.askAsync(Permissions.CAMERA)
       if (status !== 'granted') {
-        permission = false;
+        permission = false
         TOAST.ref.alertWithType(
           'error',
           'Access Denied',
-          'A permission to access the camera is necessary to perform this action.');
+          'A permission to access the camera is necessary to perform this action.')
       }
     }
 
-    return permission;
+    return permission
   }
 
   const pickImage = async (method: 'pick'|'take' = 'pick') => {
     try {
 
-      const cameraRollPermission = await handleCameraRollPermission();
-      const cameraPermission = (method === 'take')? await handleCameraPermission() : true;
+      const cameraRollPermission = await handleCameraRollPermission()
+      const cameraPermission = (method === 'take')? await handleCameraPermission() : true
 
       if (cameraRollPermission && cameraPermission) {
 
@@ -95,26 +95,26 @@ const TakePicture = (props: TakePictureProps) => {
           allowsEditing: false,
         }
 
-        let result: any = {};
+        let result: any = {}
         switch (method) {
           case 'pick':
-            result = await ImagePicker.launchImageLibraryAsync(options);
-            break;
+            result = await ImagePicker.launchImageLibraryAsync(options)
+            break
           case 'take':
-            result = await ImagePicker.launchCameraAsync(options);
-            break;
+            result = await ImagePicker.launchCameraAsync(options)
+            break
         }
 
         if (!result.cancelled) {
 
-          setImage(result.uri);
+          setImage(result.uri)
 
           if (props.formik && props.name) {
-            props.formik.values[props.name] = result.uri;
+            props.formik.values[props.name] = result.uri
           }
 
           if (props.onTake) {
-            props.onTake(result.uri);
+            props.onTake(result.uri)
           }
         }
       }
@@ -124,15 +124,15 @@ const TakePicture = (props: TakePictureProps) => {
       TOAST.ref.alertWithType(
           'error',
           'ERROR',
-          'An error just occurs in attempt to take or pick up an image.');
+          'An error just occurs in attempt to take or pick up an image.')
 
-      console.warn(error);
+      console.warn(error)
     }
   }
 
   const share = async () => {
     if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(image);
+      await Sharing.shareAsync(image)
     }
   }
 
@@ -149,22 +149,22 @@ const TakePicture = (props: TakePictureProps) => {
           text: "YES",
           style: "destructive",
           onPress: () => {
-            setImageMax(false);
-            setImage(null);
-            resetStatusBar();
+            setImageMax(false)
+            setImage(null)
+            resetStatusBar()
             if (props.formik?.values[props.name]) {
-              props.formik.values[props.name] = null;
+              props.formik.values[props.name] = null
             }
             if (props.onRemove) {
-              props.onRemove();
+              props.onRemove()
             }
           }}
       ],
       { cancelable: false }
-    );
+    )
   }
 
-  const { showActionSheetWithOptions } = useActionSheet();
+  const { showActionSheetWithOptions } = useActionSheet()
   const showOptions = () => {
     showActionSheetWithOptions(
       {
@@ -180,14 +180,14 @@ const TakePicture = (props: TakePictureProps) => {
       buttonIndex => {
         switch(buttonIndex) {
           case 0:
-            (async () => { await pickImage('take')})();
-            break;
+            (async () => { await pickImage('take')})()
+            break
           case 1:
-            (async () => { await pickImage('pick')})();
-            break;
+            (async () => { await pickImage('pick')})()
+            break
         }
       },
-    );
+    )
   }
 
   const showOptionsMax = () => {
@@ -210,39 +210,39 @@ const TakePicture = (props: TakePictureProps) => {
       buttonIndex => {
         switch(buttonIndex) {
           case 0:
-            (async () => { await pickImage('take')})();
-            break;
+            (async () => { await pickImage('take')})()
+            break
           case 1:
-            (async () => { await pickImage('pick')})();
-            break;
+            (async () => { await pickImage('pick')})()
+            break
           case 2:
-            (async () => { await share()})();
-            break;
+            (async () => { await share()})()
+            break
           case 3:
-            remove();
-            break;
+            remove()
+            break
         }
       },
-    );
+    )
   }
 
   const resetStatusBar = () => {
-    StatusBar.setHidden(false);
-    StatusBar.setBarStyle('dark-content');
+    StatusBar.setHidden(false)
+    StatusBar.setBarStyle('dark-content')
   }
 
   const handleTouch = () => {
     if (image) {
-      setImageMax(true);
-      StatusBar.setHidden(true);
+      setImageMax(true)
+      StatusBar.setHidden(true)
     } else {
-      showOptions();
+      showOptions()
     }
   }
 
   const renderImage = () => {
 
-    let render = null;
+    let render
     if (image) {
 
       render = (
@@ -258,7 +258,7 @@ const TakePicture = (props: TakePictureProps) => {
             style={styles.imagePlaceholder}
           />
         </>
-      );
+      )
 
     } else {
 
@@ -272,10 +272,10 @@ const TakePicture = (props: TakePictureProps) => {
           />
           <Text style={styles.label}>{props.title || 'Take Picture'}</Text>
         </>
-      );
+      )
     }
 
-    return render;
+    return render
   }
 
   return (
@@ -314,8 +314,8 @@ const TakePicture = (props: TakePictureProps) => {
               color='rgba(0,102,0,.7)'
               raised reverse
               onPress={() => {
-                setImageMax(false);
-                resetStatusBar();
+                setImageMax(false)
+                resetStatusBar()
               }}
             />
             <Icon
@@ -372,6 +372,6 @@ const baseStyles = StyleSheet.create({
     justifyContent: 'center',
     top: '50%',
   }
-});
+})
 
 export default TakePicture

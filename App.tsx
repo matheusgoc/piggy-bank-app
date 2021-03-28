@@ -1,14 +1,12 @@
-import 'react-native-gesture-handler';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from './store';
-import { ThemeProvider } from 'react-native-elements';
-import Loading from 'react-native-loading-spinner-overlay';
-import { COLORS, LOADING, THEME, TOAST } from './constants';
-import Persistor from './features/navigation/Persistor';
-import DropdownAlert from 'react-native-dropdownalert';
-import { StatusBar } from 'react-native';
-
+import 'react-native-gesture-handler'
+import React from 'react'
+import { Provider } from 'react-redux'
+import { store } from './store'
+import { ThemeProvider } from 'react-native-elements'
+import { COLORS, THEME, TOAST } from './constants'
+import Persistor from './features/navigation/Persistor'
+import DropdownAlert from 'react-native-dropdownalert'
+import { StatusBar } from 'react-native'
 
 const App = () => {
 
@@ -28,4 +26,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default App

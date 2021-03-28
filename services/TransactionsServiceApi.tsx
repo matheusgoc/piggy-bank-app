@@ -1,8 +1,8 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import FormData from 'form-data';
-import moment from 'moment';
-import TransactionsService from './TransactionsService';
-import { TransactionModel } from '../models/TransactionModel';
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import FormData from 'form-data'
+import moment from 'moment'
+import TransactionsService from './TransactionsService'
+import { TransactionModel } from '../models/TransactionModel'
 
 /**
  * TransactionsServiceApi
@@ -13,7 +13,7 @@ import { TransactionModel } from '../models/TransactionModel';
 export default class TransactionsServiceApi extends TransactionsService {
 
   constructor() {
-    super();
+    super()
   }
 
   /**
@@ -27,43 +27,43 @@ export default class TransactionsServiceApi extends TransactionsService {
 
     try {
 
-      const tz = moment(this.date).format('Z');
+      const tz = moment(this.date).format('Z')
       if (!year) {
 
         // set current year
-        year = moment(this.date).format('YYYY');
+        year = moment(this.date).format('YYYY')
       }
 
       if (!month) {
 
         // set current month
-        month = moment(this.date).format('MM');
+        month = moment(this.date).format('MM')
       }
 
       // get transactions and reports
-      let url = 'transactions/' + year + '/' + month + '/' + tz;
+      let url = 'transactions/' + year + '/' + month + '/' + tz
       if (limit) {
-        url += '/' + limit;
+        url += '/' + limit
       }
-      const res: AxiosResponse = await this.api.get(url);
+      const res: AxiosResponse = await this.api.get(url)
 
       // set transactions list
       const list = res.data.transactions.map((item): TransactionModel => {
-        return this.mapToStore(item);
-      });
-      this.set(list);
+        return this.mapToStore(item)
+      })
+      this.set(list)
 
       //set reports
-      this.reportService.setGeneral(res.data.reports.general);
-      this.reportService.setMonthly(res.data.reports.monthly);
+      this.reportService.setGeneral(res.data.reports.general)
+      this.reportService.setMonthly(res.data.reports.monthly)
 
-      return this.list;
+      return this.list
 
     } catch(error) {
 
-      const method = 'TransactionsServiceApi.load';
-      const msg = 'Unable to retrieve transactions from the server';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'TransactionsServiceApi.load'
+      const msg = 'Unable to retrieve transactions from the server'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 
@@ -79,42 +79,42 @@ export default class TransactionsServiceApi extends TransactionsService {
 
       // set that the receipt will not be removed case it is an update
       if (!transaction.id) {
-        transaction.isReceiptRemoved = false;
+        transaction.isReceiptRemoved = false
       }
 
       // get the url and the data in a proper format to be save
-      const url =  (transaction.id)? 'transactions/' + transaction.id : 'transactions';
-      let data = this.mapToApi(transaction);
+      const url =  (transaction.id)? 'transactions/' + transaction.id : 'transactions'
+      let data = this.mapToApi(transaction)
 
       // set the image using FormData to be sent along case it has been taken
-      let config: AxiosRequestConfig = null;
+      let config: AxiosRequestConfig = null
       if (transaction.isNewReceipt) {
 
-        data = this.createFormData(data, transaction.receipt);
+        data = this.createFormData(data, transaction.receipt)
         config = {headers: { 'Content-Type': 'multipart/form-data' }}
       }
 
       // make the request to save the transaction in the server
-      const res: AxiosResponse = await this.api.post(url, data, config);
+      const res: AxiosResponse = await this.api.post(url, data, config)
 
       // replace the transaction on the list
-      transaction = this.mapToStore(res.data);
-      this.replace(transaction);
+      transaction = this.mapToStore(res.data)
+      this.replace(transaction)
 
     } catch (error) {
 
       // remove transaction from the current list
-      this.removeFromList(transaction);
+      this.removeFromList(transaction)
 
       // throw an error message
-      const method = 'TransactionsServiceApi.save';
-      let msg = 'Unable to save the transaction due to a server error. Try again later!';
-      this.handleHttpError(method, msg, error, showError);
+      const method = 'TransactionsServiceApi.save'
+      let msg = 'Unable to save the transaction due to a server error. Try again later!'
+      this.handleHttpError(method, msg, error, showError)
 
     } finally {
 
       // take the transaction out of the lists
-      this.removeFromListToSave(transaction);
+      this.removeFromListToSave(transaction)
     }
   }
 
@@ -126,22 +126,22 @@ export default class TransactionsServiceApi extends TransactionsService {
    */
   private createFormData(data, receipt) {
 
-    const form = new FormData();
+    const form = new FormData()
 
     form.append('receipt', {
       uri: receipt,
       type: 'image/png',
       name: 'receipt.png',
-    });
+    })
 
     Object.keys(data).forEach(key => {
       if (key !== 'receipt') {
-        form.append(key, data[key] || '');
+        form.append(key, data[key] || '')
       }
-    });
+    })
 
-    return form;
-  };
+    return form
+  }
 
   /**
    * Persist all remaining transactions on the list to save
@@ -149,7 +149,7 @@ export default class TransactionsServiceApi extends TransactionsService {
   async saveAll():Promise<void> {
 
     for (let i = 0; i < this.listToSave.length; i++) {
-      await this.save(this.listToSave[i], false);
+      await this.save(this.listToSave[i], false)
     }
   }
 
@@ -161,14 +161,14 @@ export default class TransactionsServiceApi extends TransactionsService {
     try {
 
       if (transaction.id) {
-        await this.api.delete('transactions/' + transaction.id);
+        await this.api.delete('transactions/' + transaction.id)
       }
 
     } catch (error) {
 
-      const method = 'TransactionsServiceApi.delete';
-      let msg = 'Unable to remove the transaction due to a server error. Try again later!';
-      this.handleHttpError(method, msg, error);
+      const method = 'TransactionsServiceApi.delete'
+      let msg = 'Unable to remove the transaction due to a server error. Try again later!'
+      this.handleHttpError(method, msg, error)
     }
   }
 

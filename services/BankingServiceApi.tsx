@@ -1,8 +1,8 @@
-import BankingService from './BankingService';
-import { AxiosResponse } from 'axios';
-import { InstitutionModel } from '../models/InstitutionModel';
-import { AccountModel } from '../models/AccountModel';
-import { BankingTransactionModel } from '../models/BankingTransactionModel';
+import BankingService from './BankingService'
+import { AxiosResponse } from 'axios'
+import { InstitutionModel } from '../models/InstitutionModel'
+import { AccountModel } from '../models/AccountModel'
+import { BankingTransactionModel } from '../models/BankingTransactionModel'
 
 export default class BankingServiceApi extends BankingService {
 
@@ -91,7 +91,7 @@ export default class BankingServiceApi extends BankingService {
     try {
 
       await this.api.delete('banking/institutions/' + institution.id)
-      this.remove(index);
+      this.remove(index)
 
     } catch (error) {
 

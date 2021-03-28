@@ -1,19 +1,19 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useSelector } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader';
-import ReportsSavingsPlan from './ReportSavingsPlan';
-import ReportCategories from './ReportCategories';
-import { Divider } from 'react-native-elements';
-import { ReportModel } from '../../models/ReportModel';
-import { getGeneralReport, getMonthlyReport } from './ReportsSlice';
-import { COLORS } from '../../constants';
+import React from 'react'
+import { ScrollView, StyleSheet } from "react-native"
+import { useSelector } from 'react-redux'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import TransactionListHeader from '../../components/transaction-list-header/TransactionListHeader'
+import ReportsSavingsPlan from './ReportSavingsPlan'
+import ReportCategories from './ReportCategories'
+import { Divider } from 'react-native-elements'
+import { ReportModel } from '../../models/ReportModel'
+import { getGeneralReport, getMonthlyReport } from './ReportsSlice'
+import { COLORS } from '../../constants'
 
 const Reports = () => {
 
-  const monthlyReport: ReportModel = useSelector(getMonthlyReport);
-  const generalReport: ReportModel = useSelector(getGeneralReport);
+  const monthlyReport: ReportModel = useSelector(getMonthlyReport)
+  const generalReport: ReportModel = useSelector(getGeneralReport)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     height: '100%'
   }
-});
+})
 
 export default Reports

@@ -1,10 +1,10 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { FormikProps } from 'formik';
-import { Button } from 'react-native-elements';
-import { COLORS } from '../../constants';
-import InputField from '../../components/input-field/InputField';
+import React from 'react'
+import { SafeAreaView, StyleSheet, Text } from "react-native"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { FormikProps } from 'formik'
+import { Button } from 'react-native-elements'
+import { COLORS } from '../../constants'
+import InputField from '../../components/input-field/InputField'
 
 const ResetPasswordForm = (props: FormikProps<{email: string}>) => {
 
@@ -13,7 +13,7 @@ const ResetPasswordForm = (props: FormikProps<{email: string}>) => {
     isValid,
     touched,
     errors,
-  } = props;
+  } = props
 
   return (
     <SafeAreaView style={styles.root}>
@@ -41,7 +41,7 @@ const ResetPasswordForm = (props: FormikProps<{email: string}>) => {
           title='Next'
           disabled={!isValid}
           onPressOut={() => {
-            handleSubmit();
+            handleSubmit()
           }}
         />
       </KeyboardAwareScrollView>
@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 10,
   }
-});
+})
 
-export default ResetPasswordForm;
+export default ResetPasswordForm

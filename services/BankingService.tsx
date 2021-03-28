@@ -1,15 +1,15 @@
-import BaseService from './BaseService';
-import { InstitutionModel } from '../models/InstitutionModel';
+import BaseService from './BaseService'
+import { InstitutionModel } from '../models/InstitutionModel'
 import {
   setInstitutions,
   addInstitution,
   removeInstitution,
   setInstitutionIndex,
-} from '../features/banking/BankingSlice';
+} from '../features/banking/BankingSlice'
 
 export default class BankingService extends BaseService {
   constructor() {
-    super();
+    super()
   }
 
   set(institutions: InstitutionModel[]) {

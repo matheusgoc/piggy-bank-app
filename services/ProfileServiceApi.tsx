@@ -1,9 +1,9 @@
-import ProfileService from './ProfileService';
-import { ProfileModel } from '../models/ProfileModel';
-import moment from 'moment';
-import { HTTP_STATUS } from '../constants';
-import SyncService from './SyncService';
-import { RootNavigation } from '../helpers';
+import ProfileService from './ProfileService'
+import { ProfileModel } from '../models/ProfileModel'
+import moment from 'moment'
+import { HTTP_STATUS } from '../constants'
+import SyncService from './SyncService'
+import { RootNavigation } from '../helpers'
 
 /**
  * ProfileServiceApi
@@ -14,7 +14,7 @@ import { RootNavigation } from '../helpers';
 export default class ProfileServiceApi extends ProfileService {
 
   constructor(profile?: ProfileModel) {
-    super(profile);
+    super(profile)
   }
 
   /**
@@ -23,14 +23,14 @@ export default class ProfileServiceApi extends ProfileService {
   async load():Promise<void> {
     try {
 
-      const res = await this.api.get('profile');
-      this.mapToStore(res.data);
+      const res = await this.api.get('profile')
+      this.mapToStore(res.data)
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.load';
-      let msg = 'Server error in attempt to load profile';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'ProfileServiceApi.load'
+      let msg = 'Server error in attempt to load profile'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 
@@ -47,22 +47,22 @@ export default class ProfileServiceApi extends ProfileService {
         email,
         password,
         device: 'device'
-      });
+      })
 
       if (res.status === HTTP_STATUS.OK) {
-        this.setToken(res.data.token);
-        this.storeToken();
-        this.mapToStore(res.data.profile);
-        await SyncService.load(true);
+        this.setToken(res.data.token)
+        this.storeToken()
+        this.mapToStore(res.data.profile)
+        await SyncService.load(true)
       }
 
     } catch (error) {
-      const method = 'ProfileServiceApi.signIn';
-      let msg = 'The authentication has fail due to a server error!';
+      const method = 'ProfileServiceApi.signIn'
+      let msg = 'The authentication has fail due to a server error!'
       if (error.response && error.response.status == HTTP_STATUS.FORBIDDEN) {
-        msg = 'The email or password is invalid!';
+        msg = 'The email or password is invalid!'
       }
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -73,34 +73,34 @@ export default class ProfileServiceApi extends ProfileService {
 
     try {
 
-      let profileToSave = this.mapToApi();
-      let uri = 'profile';
+      let profileToSave = this.mapToApi()
+      let uri = 'profile'
 
       // update
       if (profileToSave['id']) {
 
-        delete(profileToSave['password']);
-        const res = await this.api.put(uri, profileToSave);
-        this.mapToStore(res.data);
+        delete(profileToSave['password'])
+        const res = await this.api.put(uri, profileToSave)
+        this.mapToStore(res.data)
 
       // create
       } else {
 
-        await this.api.post(uri, profileToSave);
-        this.profile = null;
-        this.store();
+        await this.api.post(uri, profileToSave)
+        this.profile = null
+        this.store()
       }
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.save';
-      let msg = 'Unable to save the profile due a server error. Try again later!';
+      const method = 'ProfileServiceApi.save'
+      let msg = 'Unable to save the profile due a server error. Try again later!'
       if (error.response && error.response.status == HTTP_STATUS.CONFLICT) {
-        msg = 'A profile with the same email already exists';
-        RootNavigation.goBack();
-        RootNavigation.goBack();
+        msg = 'A profile with the same email already exists'
+        RootNavigation.goBack()
+        RootNavigation.goBack()
       }
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -108,19 +108,19 @@ export default class ProfileServiceApi extends ProfileService {
   {
     try {
 
-      await this.api.patch('profile/reset-password', {email});
+      await this.api.patch('profile/reset-password', {email})
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.requestPIN';
-      let msg = 'Unable to request PIN to reset your password!';
+      const method = 'ProfileServiceApi.requestPIN'
+      let msg = 'Unable to request PIN to reset your password!'
       if (error.response) {
         switch (error.response.status) {
-          case HTTP_STATUS.FORBIDDEN: msg = 'The given email is not registered'; break;
+          case HTTP_STATUS.FORBIDDEN: msg = 'The given email is not registered'; break
         }
       }
 
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -128,19 +128,19 @@ export default class ProfileServiceApi extends ProfileService {
   {
     try {
 
-      await this.api.patch('profile/refresh-pin-time', {email, pin});
+      await this.api.patch('profile/refresh-pin-time', {email, pin})
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.confirmPIN';
-      let msg = 'Unable to confirm the PIN!';
+      const method = 'ProfileServiceApi.confirmPIN'
+      let msg = 'Unable to confirm the PIN!'
       if (error.response) {
         switch (error.response.status) {
-          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break;
-          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired.'; break;
+          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break
+          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired.'; break
         }
       }
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -148,19 +148,19 @@ export default class ProfileServiceApi extends ProfileService {
   {
     try {
 
-      await this.api.patch('profile/change-password-with-pin', {email, pin, password});
+      await this.api.patch('profile/change-password-with-pin', {email, pin, password})
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.changePasswordWithPIN';
-      let msg = 'Unable to change the password';
+      const method = 'ProfileServiceApi.changePasswordWithPIN'
+      let msg = 'Unable to change the password'
       if (error.response) {
         switch (error.response.status) {
-          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break;
-          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired'; break;
+          case HTTP_STATUS.UNAUTHORIZED: msg = 'The PIN is not valid'; break
+          case HTTP_STATUS.REQUEST_TIMEOUT: msg = 'The PIN has been expired'; break
         }
       }
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -171,18 +171,18 @@ export default class ProfileServiceApi extends ProfileService {
       await this.api.patch('profile/change-password', {
         password: oldPassword,
         new: newPassword
-      });
+      })
 
     } catch (error) {
 
-      const method = 'ProfileServiceApi.changePasswordWithPIN';
-      let msg = 'Unable to change the password';
+      const method = 'ProfileServiceApi.changePasswordWithPIN'
+      let msg = 'Unable to change the password'
       if (error.response) {
         switch (error.response.status) {
-          case HTTP_STATUS.FORBIDDEN: msg = 'The current password is not valid'; break;
+          case HTTP_STATUS.FORBIDDEN: msg = 'The current password is not valid'; break
         }
       }
-      this.handleHttpError(method, msg, error);
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -192,14 +192,14 @@ export default class ProfileServiceApi extends ProfileService {
   async syncFromServer():Promise<void> {
     try {
 
-      const res = await this.api.get('profile');
-      this.mapToStore(res.data);
+      const res = await this.api.get('profile')
+      this.mapToStore(res.data)
 
     } catch(error) {
 
-      const method = 'ProfileServiceApi.syncFromServer';
-      const msg = 'Unable to retrieve the profile from the server';
-      this.handleHttpError(method, msg, error);
+      const method = 'ProfileServiceApi.syncFromServer'
+      const msg = 'Unable to retrieve the profile from the server'
+      this.handleHttpError(method, msg, error)
     }
   }
 
@@ -248,7 +248,7 @@ export default class ProfileServiceApi extends ProfileService {
       targetTotalSavings: profile['target_total_savings'],
       targetMonthlySavings: profile['target_monthly_savings'],
       password: null,
-    });
-    this.store();
+    })
+    this.store()
   }
 }

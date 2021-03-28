@@ -1,17 +1,17 @@
-import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
-import Loading from 'react-native-loading-spinner-overlay';
-import { PersistGate } from "redux-persist/integration/react";
-import { persistor } from '../../persistor';
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import Navigation from './Navigation';
-import { LOADING } from '../../constants';
-import { isLoading } from './NavigationSlice';
+import React from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
+import Loading from 'react-native-loading-spinner-overlay'
+import { PersistGate } from "redux-persist/integration/react"
+import { persistor } from '../../persistor'
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
+import Navigation from './Navigation'
+import { LOADING } from '../../constants'
+import { isLoading } from './NavigationSlice'
 
 const Persistor = () => {
 
-  const loading = useSelector(isLoading);
+  const loading = useSelector(isLoading)
 
   return (
     <>

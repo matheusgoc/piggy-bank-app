@@ -1,22 +1,22 @@
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View } from "react-native";
-import moment from 'moment';
-import { TransactionModel } from '../../models/TransactionModel';
-import { COLORS } from '../../constants';
-import { Icon } from 'react-native-elements';
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, Text, View } from "react-native"
+import moment from 'moment'
+import { TransactionModel } from '../../models/TransactionModel'
+import { COLORS } from '../../constants'
+import { Icon } from 'react-native-elements'
 
 const TransactionsView = ({ route }) => {
 
-  const transaction: TransactionModel = route.params.transaction;
-  const type = (transaction.type === 'E')? 'Expense' : 'Income';
-  const category = transaction.category.name;
+  const transaction: TransactionModel = route.params.transaction
+  const type = (transaction.type === 'E')? 'Expense' : 'Income'
+  const category = transaction.category.name
   const amount = new Intl.NumberFormat(
     'en-US',
     { style: 'currency', currency: 'USD'}
-  ).format(transaction.amount);
-  const place = transaction.place || '---';
-  const date = moment(transaction.timestamp).format('MM-DD-YYYY[ at ]HH:mma');
+  ).format(transaction.amount)
+  const place = transaction.place || '---'
+  const date = moment(transaction.timestamp).format('MM-DD-YYYY[ at ]HH:mma')
   const description = transaction.description || '---'
 
   const styles = StyleSheet.create({
@@ -25,7 +25,7 @@ const TransactionsView = ({ route }) => {
       ...baseStyles.detailValue,
       color: (transaction.amount > 0)? COLORS.success : COLORS.error,
     }
-  });
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +62,7 @@ const TransactionsView = ({ route }) => {
 const detailValueStyle = {
   fontSize: 18,
   paddingVertical: 5,
-};
+}
 const baseStyles = StyleSheet.create({
   container: {
     margin: 0,
@@ -85,6 +85,6 @@ const baseStyles = StyleSheet.create({
   detailValue: {
     ...detailValueStyle,
   },
-});
+})
 
 export default TransactionsView

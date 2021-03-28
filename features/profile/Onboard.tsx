@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import Onboarding from 'react-native-onboarding-swiper';
-import { Image, OpaqueColorValue, Platform, StatusBar, Text, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
-import { useDispatch } from 'react-redux';
-import { setOnboard } from './ProfileSlice';
+import React, { useEffect } from 'react'
+import Onboarding from 'react-native-onboarding-swiper'
+import { Image, Platform, StatusBar, Text, View } from 'react-native'
+import { Button, Icon } from 'react-native-elements'
+import { useDispatch } from 'react-redux'
+import { setOnboard } from './ProfileSlice'
 
 export default function Onboard(props) {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (Platform.OS == 'android') {
@@ -33,8 +33,8 @@ export default function Onboard(props) {
         }}
         titleStyle={{ color: '#006600', fontWeight: 'bold', }}
         onPress={() => {
-          StatusBar.setBarStyle('dark-content');
-          props.navigation.navigate('Terms');
+          StatusBar.setBarStyle('dark-content')
+          props.navigation.navigate('Terms')
         }}
       />
       <Text style={{ color: '#ffffff', marginTop: 20, }}>
@@ -50,13 +50,13 @@ export default function Onboard(props) {
           textDecorationLine: 'underline',
         }}
         onPress={() => {
-          dispatch(setOnboard(false));
-          StatusBar.setBarStyle('dark-content');
-          props.navigation.navigate('SignIn');
+          dispatch(setOnboard(false))
+          StatusBar.setBarStyle('dark-content')
+          props.navigation.navigate('SignIn')
         }}
       />
     </View>
-  );
+  )
 
   return (
     <Onboarding

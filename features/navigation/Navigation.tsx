@@ -1,36 +1,36 @@
-import React from 'react';
-import { enableScreens } from 'react-native-screens';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { COLORS } from '../../constants';
-import { getToken, hasOnboard } from '../profile/ProfileSlice';
-import Onboard from '../profile/Onboard';
-import Profile from '../profile/Profile';
-import Terms from '../profile/Terms';
-import SignIn from '../profile/SignIn';
-import Savings from '../profile/Savings';
-import Password from '../profile/Password';
-import Main from './Main';
-import Transaction from '../transactions/Transaction';
-import TransactionsView from '../transactions/TransactionsView';
-import ResetPasswordEmail from '../profile/ResetPasswordEmail';
-import ResetPasswordPIN from '../profile/ResetPasswordPIN';
-import { RootNavigation } from '../../helpers';
-import AddInstitution from '../banking/AddInstitution';
-import AccountsList from '../banking/AccountsList';
-import BankingCalendar from '../banking/BankingCalendar';
-import BankingTransactionsList from '../banking/BankingTransactionsList';
-import BankingTransactionView from '../banking/BankingTransactionView';
-import { StyleSheet } from 'react-native';
-enableScreens();
+import React from 'react'
+import { enableScreens } from 'react-native-screens'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
+import { COLORS } from '../../constants'
+import { getToken, hasOnboard } from '../profile/ProfileSlice'
+import Onboard from '../profile/Onboard'
+import Profile from '../profile/Profile'
+import Terms from '../profile/Terms'
+import SignIn from '../profile/SignIn'
+import Savings from '../profile/Savings'
+import Password from '../profile/Password'
+import Main from './Main'
+import Transaction from '../transactions/Transaction'
+import TransactionsView from '../transactions/TransactionsView'
+import ResetPasswordEmail from '../profile/ResetPasswordEmail'
+import ResetPasswordPIN from '../profile/ResetPasswordPIN'
+import { RootNavigation } from '../../helpers'
+import AddInstitution from '../banking/AddInstitution'
+import AccountsList from '../banking/AccountsList'
+import BankingCalendar from '../banking/BankingCalendar'
+import BankingTransactionsList from '../banking/BankingTransactionsList'
+import BankingTransactionView from '../banking/BankingTransactionView'
+import { StyleSheet } from 'react-native'
+enableScreens()
 
 const Navigation = () => {
 
-  const onboard = useSelector(hasOnboard);
-  const token = useSelector(getToken);
+  const onboard = useSelector(hasOnboard)
+  const token = useSelector(getToken)
 
-  const RootStack = createStackNavigator();
+  const RootStack = createStackNavigator()
   const features = {
     main: (
       <RootStack.Screen
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Navigation;
+export default Navigation

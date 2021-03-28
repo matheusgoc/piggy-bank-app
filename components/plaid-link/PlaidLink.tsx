@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import WebView from 'react-native-webview';
-import URLSearchParams from '@ungap/url-search-params';
-import { PLAID_VIEW_URL } from '../../constants';
+import React from 'react'
+import WebView from 'react-native-webview'
+import URLSearchParams from '@ungap/url-search-params'
+import { PLAID_VIEW_URL } from '../../constants'
 
 interface PlaidLinkProps {
   linkToken: string,
@@ -13,16 +13,16 @@ interface PlaidLinkProps {
 
 const PlaidLink = (props: PlaidLinkProps) => {
 
-  const uri = PLAID_VIEW_URL + props.linkToken;
+  const uri = PLAID_VIEW_URL + props.linkToken
   const handleStateChange = (event: any) => {
 
-    const url: string = event.url;
-    const queryString: string = url.split(/\?(.+)?/,2)[1] || '';
-    const searchParams = new URLSearchParams(queryString);
-    const params = {};
+    const url: string = event.url
+    const queryString: string = url.split(/\?(.+)?/,2)[1] || ''
+    const searchParams = new URLSearchParams(queryString)
+    const params = {}
     searchParams.forEach((value, key) => {
-      params[key] = value;
-    });
+      params[key] = value
+    })
 
     if (url.startsWith('plaidlink://')) {
 
@@ -35,19 +35,19 @@ const PlaidLink = (props: PlaidLinkProps) => {
           'accounts' : searchParams.get('accounts'),
           'link_session_id' : searchParams.get('link_session_id'),
           ...params
-        });
+        })
 
       } else if (url.startsWith('plaidlink://event') && props.onEvent) {
 
-        props.onEvent(params);
+        props.onEvent(params)
 
       } else if (url.startsWith('plaidlink://error') && props.onError) {
 
-        props.onError(params);
+        props.onError(params)
 
       } else if (url.startsWith('plaidlink://exit') && props.onExit) {
 
-        props.onExit(params);
+        props.onExit(params)
       }
 
       return false
@@ -62,22 +62,22 @@ const PlaidLink = (props: PlaidLinkProps) => {
       onShouldStartLoadWithRequest={handleStateChange}
       originWhitelist={['https://*', 'plaidlink://*']}
       onError={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.warn('WebView error: ', nativeEvent);
+        const { nativeEvent } = syntheticEvent
+        console.warn('WebView error: ', nativeEvent)
       }}
       onLoad={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.log('WebView load: ', nativeEvent);
+        const { nativeEvent } = syntheticEvent
+        console.log('WebView load: ', nativeEvent)
       }}
       onHttpError={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
+        const { nativeEvent } = syntheticEvent
         console.warn(
           'WebView error status code: ',
           nativeEvent.statusCode,
-        );
+        )
       }}
     />
-  );
+  )
 }
 
-export default PlaidLink;
+export default PlaidLink

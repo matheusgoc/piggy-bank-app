@@ -7,8 +7,8 @@ import { COLORS, TOAST } from '../../constants'
 import { showLoading } from '../../helpers'
 import BankingServiceApi from '../../services/BankingServiceApi'
 import { InstitutionModel } from '../../models/InstitutionModel'
-import { getInstitutionIndex, getInstitutions } from '../../features/banking/BankingSlice';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { getInstitutionIndex, getInstitutions } from '../../features/banking/BankingSlice'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 const BankingHeader = (props: {height?:string|number}) => {
 
@@ -22,7 +22,7 @@ const BankingHeader = (props: {height?:string|number}) => {
       ...baseStyles.container,
       height: props.height ?? '10%',
     },
-  });
+  })
 
   const deleteInstitution = () => {
 
@@ -33,18 +33,18 @@ const BankingHeader = (props: {height?:string|number}) => {
         'success',
         'Remove Institution',
         `The ${institution.name} institution was removed!`,
-      );
+      )
       navigation.popToTop()
     }).catch(error => {
       TOAST.ref.alertWithType(
         'error',
         'Server Error',
         "Unable to remove an institution!",
-      );
+      )
       console.warn('AccountsList.deleteInstitution: ' + error.message)
     }).finally(() => {
       showLoading(false)
-    });
+    })
   }
 
   const handleInstitutionDelete = () => {

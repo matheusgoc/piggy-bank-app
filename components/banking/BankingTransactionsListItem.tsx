@@ -1,10 +1,10 @@
 import React from 'react'
-import { BankingTransactionModel } from '../../models/BankingTransactionModel';
-import moment from 'moment';
-import { formatCurrency } from '../../helpers';
-import { Avatar, Icon, ListItem } from 'react-native-elements';
-import { StyleSheet, Text, View } from 'react-native';
-import { COLORS } from '../../constants';
+import { BankingTransactionModel } from '../../models/BankingTransactionModel'
+import moment from 'moment'
+import { formatCurrency } from '../../helpers'
+import { Avatar, Icon, ListItem } from 'react-native-elements'
+import { StyleSheet, Text, View } from 'react-native'
+import { COLORS } from '../../constants'
 
 interface BankingListItemProps {
   transaction: BankingTransactionModel

@@ -1,6 +1,6 @@
 import React from 'react'
-import { ListItem } from 'react-native-elements';
-import ContentLoader, { Rect } from 'react-content-loader/native';
+import { ListItem } from 'react-native-elements'
+import ContentLoader, { Rect } from 'react-content-loader/native'
 
 const AccountListPlaceholder = ({index}) => (
   <ListItem topDivider={index > 0}>

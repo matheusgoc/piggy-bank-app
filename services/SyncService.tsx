@@ -1,59 +1,59 @@
-import BaseService from './BaseService';
-import CategoriesServiceApi from './CategoriesServiceApi';
-import { store } from '../store';
-import { getToken } from '../features/profile/ProfileSlice';
-import { showLoading } from '../helpers';
-import TransactionsServiceApi from './TransactionsServiceApi';
-import { setDeleteEnable } from '../features/transactions/TransactionsSlice';
-import moment from 'moment';
-import ProfileServiceApi from './ProfileServiceApi';
-import BankingServiceApi from './BankingServiceApi';
+import BaseService from './BaseService'
+import CategoriesServiceApi from './CategoriesServiceApi'
+import { store } from '../store'
+import { getToken } from '../features/profile/ProfileSlice'
+import { showLoading } from '../helpers'
+import TransactionsServiceApi from './TransactionsServiceApi'
+import { setDeleteEnable } from '../features/transactions/TransactionsSlice'
+import moment from 'moment'
+import ProfileServiceApi from './ProfileServiceApi'
+import BankingServiceApi from './BankingServiceApi'
 
 export default class SyncService extends BaseService{
 
-  private static hasLoad = false;
-  private static isLoading = false;
+  private static hasLoad = false
+  private static isLoading = false
   public static async load(reload = false): Promise<void> {
 
     // force reload
     if (reload) {
-      SyncService.hasLoad = false;
-      SyncService.isLoading = false;
+      SyncService.hasLoad = false
+      SyncService.isLoading = false
     }
 
     if (!SyncService.hasLoad && !SyncService.isLoading) {
 
-      SyncService.isLoading = true;
-      showLoading(true);
+      SyncService.isLoading = true
+      showLoading(true)
 
-      const token = getToken(store.getState());
-      const sync = new SyncService();
-      sync.dispatch(setDeleteEnable(false));
+      const token = getToken(store.getState())
+      const sync = new SyncService()
+      sync.dispatch(setDeleteEnable(false))
 
       try {
 
         // loads only when authenticated
         if (token) {
-          sync.setToken(token);
-          await sync.loadCategories();
-          await sync.loadTransactions();
-          await sync.loadInstitutions();
+          sync.setToken(token)
+          await sync.loadCategories()
+          await sync.loadTransactions()
+          await sync.loadInstitutions()
           if (!reload) {
-            await sync.loadProfile();
+            await sync.loadProfile()
           }
-          SyncService.hasLoad = true;
+          SyncService.hasLoad = true
         }
 
       } catch (error) {
 
-        const method = 'SyncService.load';
-        const msg = 'Error on loading data from server';
-        sync.handleHttpError(method, msg, error, false);
+        const method = 'SyncService.load'
+        const msg = 'Error on loading data from server'
+        sync.handleHttpError(method, msg, error, false)
 
       } finally {
 
-        SyncService.isLoading = false;
-        showLoading(false);
+        SyncService.isLoading = false
+        showLoading(false)
       }
     }
   }
@@ -61,61 +61,61 @@ export default class SyncService extends BaseService{
   private async loadProfile() {
     try {
 
-      const api = new ProfileServiceApi();
-      await api.load();
-      api.store();
+      const api = new ProfileServiceApi()
+      await api.load()
+      api.store()
 
     } catch (error) {
 
-      const method = 'SyncService.loadCategories';
-      let msg = 'Unable to load categories';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'SyncService.loadCategories'
+      let msg = 'Unable to load categories'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 
   private async loadCategories() {
     try {
 
-      const api = new CategoriesServiceApi();
-      await api.load();
-      api.store();
+      const api = new CategoriesServiceApi()
+      await api.load()
+      api.store()
 
     } catch (error) {
 
-      const method = 'SyncService.loadCategories';
-      let msg = 'Unable to load categories';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'SyncService.loadCategories'
+      let msg = 'Unable to load categories'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 
   private async loadTransactions() {
     try {
 
-      const api = new TransactionsServiceApi();
+      const api = new TransactionsServiceApi()
       if(!api.date) {
-        api.setDate(moment().startOf('month').toDate());
+        api.setDate(moment().startOf('month').toDate())
       }
-      await api.load();
+      await api.load()
 
     } catch (error) {
 
-      const method = 'SyncService.loadTransactions';
-      let msg = 'Unable to load transactions';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'SyncService.loadTransactions'
+      let msg = 'Unable to load transactions'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 
   private async loadInstitutions() {
     try {
 
-      const api = new BankingServiceApi();
-      await api.load();
+      const api = new BankingServiceApi()
+      await api.load()
 
     } catch (error) {
 
-      const method = 'SyncService.loadInstitutions';
-      let msg = 'Unable to load institutions';
-      this.handleHttpError(method, msg, error, false);
+      const method = 'SyncService.loadInstitutions'
+      let msg = 'Unable to load institutions'
+      this.handleHttpError(method, msg, error, false)
     }
   }
 }

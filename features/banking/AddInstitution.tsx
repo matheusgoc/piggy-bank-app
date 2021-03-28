@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { showLoading } from '../../helpers';
-import BankingServiceApi from '../../services/BankingServiceApi';
-import PlaidLink from '../../components/plaid-link/PlaidLink';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
-import * as WebBrowser from 'expo-web-browser';
-import { COLORS, TOAST } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { showLoading } from '../../helpers'
+import BankingServiceApi from '../../services/BankingServiceApi'
+import PlaidLink from '../../components/plaid-link/PlaidLink'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Button } from 'react-native-elements'
+import * as WebBrowser from 'expo-web-browser'
+import { COLORS, TOAST } from '../../constants'
+import { useNavigation } from '@react-navigation/native'
 
 const AddInstitution = () => {
 
@@ -41,7 +41,7 @@ const AddInstitution = () => {
         'success',
         'New Institution Add',
         `The ${institution.name} institution was add!`,
-      );
+      )
 
       navigation.goBack()
 
@@ -50,19 +50,19 @@ const AddInstitution = () => {
       // try to save up to 3 times when get an error
       if (attempts < 3) {
         handleConnect(params, ++attempts)
-        return;
+        return
       }
 
       TOAST.ref.alertWithType(
         'error',
         'Server Error',
         "Unable to add an institution!",
-      );
+      )
       console.warn('Transaction.handleConnect: ' + error.message)
 
     }).finally(() => {
       showLoading(false)
-    });
+    })
   }
 
   const handleExit = (params) => {
@@ -113,7 +113,7 @@ const AddInstitution = () => {
         )
       }
     </>
-  );
+  )
 }
 
 const style = StyleSheet.create({
@@ -134,6 +134,6 @@ const style = StyleSheet.create({
   infoButton: {
     textDecorationLine: 'underline',
   },
-});
+})
 
-export default AddInstitution;
+export default AddInstitution

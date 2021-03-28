@@ -6,7 +6,7 @@ import BankingListLabel from '../../components/banking/BankingListLabel'
 import { Button } from 'react-native-elements'
 import { COLORS } from '../../constants'
 import moment, { Moment } from 'moment'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
 
 interface CalendarObject {
   day: number,       // day of month (1-31)
@@ -48,7 +48,7 @@ const BankingCalender = (props) => {
 
       // same unique day selected
       if (day.dateString == days[0]) {
-        return;
+        return
       }
 
       //set period range
@@ -78,9 +78,9 @@ const BankingCalender = (props) => {
   })
 
   const next = () => {
-    const period = Object.keys(calendarPeriod);
-    const start = period[0];
-    const end = period[period.length - 1];
+    const period = Object.keys(calendarPeriod)
+    const start = period[0]
+    const end = period[period.length - 1]
     navigation.navigate('BankingTransactionsList', {accounts, start, end})
   }
 

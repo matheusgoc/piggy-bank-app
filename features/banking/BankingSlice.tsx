@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { InstitutionModel } from '../../models/InstitutionModel';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { InstitutionModel } from '../../models/InstitutionModel'
 
 export const BankingSlice = createSlice({
   name: 'banking',
@@ -22,7 +22,7 @@ export const BankingSlice = createSlice({
       state.index = action.payload
     }
   },
-});
+})
 
 //actions
 export const { addInstitution, setInstitutions, removeInstitution, setInstitutionIndex } = BankingSlice.actions

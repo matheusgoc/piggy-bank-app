@@ -1,5 +1,5 @@
 export class CategoryModel {
-  id: number = null;
-  name: string = '';
-  isNew: boolean = false;
+  id: number = null
+  name: string = ''
+  isNew: boolean = false
 }

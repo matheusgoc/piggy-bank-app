@@ -5,13 +5,13 @@ import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
 import { Button, ListItem } from 'react-native-elements'
 import { COLORS, TOAST } from '../../constants'
 import BankingServiceApi from '../../services/BankingServiceApi'
-import { AccountModel } from '../../models/AccountModel';
+import { AccountModel } from '../../models/AccountModel'
 import { getInstitutionIndex, getInstitutions } from './BankingSlice'
 import { useNavigation } from '@react-navigation/native'
 import AccountListPlaceholder from '../../components/banking/AccountListPlaceholder'
 import BankingHeader from '../../components/banking/BankingHeader'
 import BankingListLabel from '../../components/banking/BankingListLabel'
-import BankingEmptyState from '../../components/banking/BankingEmptyState';
+import BankingEmptyState from '../../components/banking/BankingEmptyState'
 
 const AccountsList = () => {
 
@@ -27,7 +27,7 @@ const AccountsList = () => {
     isLoading(true)
     const bankingServiceApi = new BankingServiceApi()
     bankingServiceApi.getAccounts(institution).then((accounts) => {
-      setAccounts(accounts);
+      setAccounts(accounts)
     }).catch(() => {
       TOAST.ref.alertWithType(
         'error',
@@ -40,7 +40,7 @@ const AccountsList = () => {
   }, [])
 
   const selectAccount = (account: AccountModel) => {
-    account.checked = !account.checked;
+    account.checked = !account.checked
     if (account.checked) {
       setSelectedAccountsCounter(selectedAccountsCounter + 1)
     } else {
@@ -75,7 +75,7 @@ const AccountsList = () => {
 
   const placeholder = Array(5).fill('').map((value, index) => (
     <AccountListPlaceholder index={index} />
-  ));
+  ))
 
   const list = (
     <>

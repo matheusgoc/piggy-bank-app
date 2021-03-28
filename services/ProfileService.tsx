@@ -1,10 +1,10 @@
-import BaseService, { IService } from './BaseService';
-import { getProfile, setProfile, setToken } from '../features/profile/ProfileSlice';
-import { store } from '../store';
-import { ProfileModel } from '../models/ProfileModel';
-import { ProfilePersonalInfoModel } from '../models/ProfilePersonalInfoModel';
-import { ProfileSavingsModel } from '../models/ProfileSavingsModel';
-import { ProfilePasswordModel } from '../models/ProfilePasswordModel';
+import BaseService, { IService } from './BaseService'
+import { getProfile, setProfile, setToken } from '../features/profile/ProfileSlice'
+import { store } from '../store'
+import { ProfileModel } from '../models/ProfileModel'
+import { ProfilePersonalInfoModel } from '../models/ProfilePersonalInfoModel'
+import { ProfileSavingsModel } from '../models/ProfileSavingsModel'
+import { ProfilePasswordModel } from '../models/ProfilePasswordModel'
 
 /**
  * ProfileService
@@ -14,7 +14,7 @@ import { ProfilePasswordModel } from '../models/ProfilePasswordModel';
  */
 export default class ProfileService extends BaseService implements IService {
 
-  protected profile: ProfileModel;
+  protected profile: ProfileModel
 
   /**
    * Generate a new profile
@@ -22,19 +22,19 @@ export default class ProfileService extends BaseService implements IService {
    * @param profile
    */
   constructor(profile?: ProfileModel) {
-    super();
-    this.set((profile)? profile : new ProfileModel());
+    super()
+    this.set((profile)? profile : new ProfileModel())
   }
 
   /**
    * Store the profile's data
    */
   store() {
-    const profile = this.get();
+    const profile = this.get()
     if (profile) {
-      profile.password = '';
+      profile.password = ''
     }
-    store.dispatch(setProfile(profile));
+    store.dispatch(setProfile(profile))
   }
 
   /**
@@ -42,14 +42,14 @@ export default class ProfileService extends BaseService implements IService {
    * @protected
    */
   protected storeToken() {
-    store.dispatch(setToken(BaseService.token));
+    store.dispatch(setToken(BaseService.token))
   }
 
   /**
    * Updates the current profile with the data stored
    */
   syncFromStore() {
-    this.set(getProfile(store.getState()));
+    this.set(getProfile(store.getState()))
   }
 
   /**
@@ -57,7 +57,7 @@ export default class ProfileService extends BaseService implements IService {
    */
   get(): ProfileModel {
 
-    return this.profile;
+    return this.profile
   }
 
   /**
@@ -65,8 +65,8 @@ export default class ProfileService extends BaseService implements IService {
    * @param profile
    */
   set(profile: ProfileModel): void {
-    this.profile = (profile)? {...this.profile,...profile} : new ProfileModel();
-    this.castBirthdayToDate();
+    this.profile = (profile)? {...this.profile,...profile} : new ProfileModel()
+    this.castBirthdayToDate()
   }
 
   /**
@@ -74,9 +74,9 @@ export default class ProfileService extends BaseService implements IService {
    * @param personalInfo
    */
   setPersonalInfo(personalInfo: ProfilePersonalInfoModel): void {
-    this.syncFromStore();
-    this.profile = {...this.profile,...personalInfo};
-    this.castBirthdayToDate();
+    this.syncFromStore()
+    this.profile = {...this.profile,...personalInfo}
+    this.castBirthdayToDate()
   }
 
   /**
@@ -84,8 +84,8 @@ export default class ProfileService extends BaseService implements IService {
    * @param savings
    */
   setSavings(savings: ProfileSavingsModel): void {
-    this.syncFromStore();
-    this.profile = {...this.profile,...savings};
+    this.syncFromStore()
+    this.profile = {...this.profile,...savings}
   }
 
   /**
@@ -93,8 +93,8 @@ export default class ProfileService extends BaseService implements IService {
    * @param profilePassword
    */
   setPassword(profilePassword: ProfilePasswordModel): void {
-    this.syncFromStore();
-    this.profile.password = profilePassword.password;
+    this.syncFromStore()
+    this.profile.password = profilePassword.password
   }
 
   /**
@@ -103,7 +103,7 @@ export default class ProfileService extends BaseService implements IService {
    */
   private castBirthdayToDate() {
     if(this.profile.birthday && typeof(this.profile.birthday) === 'string') {
-      this.profile.birthday = new Date(this.profile.birthday);
+      this.profile.birthday = new Date(this.profile.birthday)
     }
   }
 }
