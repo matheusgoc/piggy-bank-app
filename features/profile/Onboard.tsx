@@ -12,9 +12,11 @@ export default function Onboard(props) {
   useEffect(() => {
     if (Platform.OS == 'android') {
       StatusBar.setBackgroundColor('transparent')
+      StatusBar.setTranslucent(true)
     }
     StatusBar.setBarStyle('light-content')
     return () => {
+      StatusBar.setTranslucent(false)
       StatusBar.setBarStyle('dark-content')
     }
   }, [])
@@ -33,6 +35,7 @@ export default function Onboard(props) {
         }}
         titleStyle={{ color: '#006600', fontWeight: 'bold', }}
         onPress={() => {
+          StatusBar.setTranslucent(false)
           StatusBar.setBarStyle('dark-content')
           props.navigation.navigate('Terms')
         }}
@@ -51,6 +54,7 @@ export default function Onboard(props) {
         }}
         onPress={() => {
           dispatch(setOnboard(false))
+          StatusBar.setTranslucent(false)
           StatusBar.setBarStyle('dark-content')
           props.navigation.navigate('SignIn')
         }}
