@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Piggy Bank App",
-    "description": "Piggy Bank App is part of a final project called Personal Expenses Tracking App (PETA) from Illinois State University (ISU). It is a mobile App designed to make people gain control over their own expenses.",
-    "slug": "piggy-bank-app",
-    "version": "v1.1.0-alpha",
+    "name": "My Piggy Bank Tracker",
+    "description": "My Piggy Bank Tracker is part of a final project called Personal Expenses Tracking App (PETA) from Illinois State University (ISU). It is a mobile App designed to make people gain control over their own expenses.",
+    "slug": "my-piggy-bank-tracker",
+    "version": "1.1.0",
     "githubUrl": "https://github.com/matheusgoc/piggy-bank-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,18 +19,22 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.matheuscamara.PiggyBankApp",
-      "buildNumber": "2",
+      "bundleIdentifier": "com.matheuscamara.MyPiggyBankTracker",
+      "buildNumber": "4",
       "supportsTablet": false,
       "infoPlist": {
         "UIUserInterfaceStyle": "Light"
       }
     },
     "android": {
-      "package": "com.matheuscamara.PiggyBankApp",
-      "versionCode": 2
+      "package": "com.matheuscamara.MyPiggyBankTracker",
+      "versionCode": 4
     },
     "androidNavigationBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#ffffff"
+    },
+    "androidStatusBar": {
       "barStyle": "dark-content",
       "backgroundColor": "#ffffff"
     },
