@@ -1,5 +1,7 @@
 # Piggy Bank App
 
+_Current Version 1.1.0_
+
 Piggy Bank App is part of a final project called Personal Expenses Tracking App (PETA) 
 from Illinois State University (ISU). It is a mobile App designed to make people gain 
 control over their own expenses.
@@ -11,44 +13,49 @@ an easy and enjoyable tool to help people have more control over their outgoings
 and savings by allowing them to handle transactions over time and review their 
 spending through some reports, graphs, and statistical insights. 
 
-## Software
+## Stack
 
-This App adopts the last version of the following open-source software:
+This App adopts the following open-source libraries and frameworks:
 
-- [React Native Framework](https://reactnative.dev)
-- [React JavaScript Library](https://reactjs.org)
-- [React Redux](https://redux.js.org)
-- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-- [TypeScript](https://www.typescriptlang.org)
-- [JavaScript](https://developer.mozilla.org) 
+| Libraries and Frameworks                                                  | Versions    |
+| ------------------------------------------------------------------------- | ----------- |
+| [Expo](https://expo.io)                                                   | ^40.0.0     |
+| [React Native Framework](https://reactnative.dev)                         | sdk-40.0.1  |
+| [React JavaScript Library](https://reactjs.org)                           | ^16.13.1    |
+| [TypeScript](https://www.typescriptlang.org)                              | ~4.0.0      |
+| [React Redux](https://react-redux.js.org)                                 | ^7.2.1      |
+| [Redux Persist](https://github.com/rt2zz/redux-persist)                   | ^6.0.0      |
+| [Axios](https://github.com/axios/axios)                                   | ^0.20.0     |
+| [React Native Elements](https://reactnativeelements.com)                  | ^2.3.2      |
+| [Formik](https://formik.org)                                              | ^2.1.5      |
+| [Victory Native](https://formidable.com/open-source/victory/docs/native)  | ^35.0.1     |
 
 ## Run
 
-After cloning the code, you first need to install the `node` dependencies:
+After cloning the code, install the `node` dependencies:
 
 ### `npm install`
 
-Then, you can **run** the app in the development mode:
+Rename the file .env-example to .env and change the following attributes 
+
+- STORAGE_URL
+- API_URL
+
+or set them on `constants.ts` file.
+
+Then, **run** the app in the development mode:
 
 ### `npm start`
 
-The App will be available in your browser at 
-[http://localhost:3000](http://localhost:3000)
+The Expo server will be available in your browser at 
+[http://localhost:19002](http://localhost:19002)
 
-It has live-reload implemented, so it will reload 
-if you make any changes in the code
+Scan the QRCode and open the App through Expo Go Client.
 
-## Build
+## Debug
 
-If you want to generate a build to be deployed, execute the following script:
+To run on debug mode, install 
+[React Native Debugger](https://github.com/jhen0409/react-native-debugger),
+and run following command:
 
-### `npm run build`
-
-The code will be available at the `build` folder 
-and the App will be ready for production
-
-### `npm run eject`
-
-
-
-
+### `npm run debug`
